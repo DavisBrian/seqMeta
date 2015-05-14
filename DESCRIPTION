@@ -1,10 +1,12 @@
 Package: seqMeta
 Type: Package
 Title: Meta-Analysis of Region-Based Tests of Rare DNA Variants
-Version: 1.5
-Date: 2012-11-21
+Version: 1.5.0.9000
+Date: 2015-05-14
 Author: Arie Voorman, Jennifer Brody, Han Chen, Thomas Lumley
-Maintainer: Arie Voorman <arie.voorman@gmail.com>
+Maintainer: Brian Davis <Brian.Davis281@gmail.com>
+URL: https://github.com/DavisBrian/seqMeta
+BugReports: https://github.com/DavisBrian/seqMeta/issues
 Depends: R (>= 2.10), survival
 Imports: Matrix, coxme, CompQuadForm
 Suggests: SKAT, kinship2
