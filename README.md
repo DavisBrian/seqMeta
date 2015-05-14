@@ -4,7 +4,10 @@ seqMeta
 
 Meta-Analysis of Region-Based Tests of Rare DNA Variants
 
+Computes necessary information to meta analyze region-based tests for rare genetic vari- ants (e.g. SKAT, T1) in individual studies, and performs meta analysis.
+
 You can install:
+----------------
 
 -   the latest released version from CRAN with
 
