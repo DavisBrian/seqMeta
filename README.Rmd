@@ -1,0 +1,40 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+
+# seqMeta
+
+Meta-Analysis of Region-Based Tests of Rare DNA Variants
+
+
+You can install:
+
+* the latest released version from CRAN with
+
+    ```R
+    install.packages("seqMeta")
+    ````
+
+* the latest development version from github with
+
+    ```R
+    if (packageVersion("devtools") < 1.6) {
+      install.packages("devtools")
+    }
+    devtools::install_github("DavisBrian/seqMeta")
+    ```
+
+If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues). 
