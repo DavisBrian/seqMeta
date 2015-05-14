@@ -2,6 +2,8 @@
 seqMeta
 =======
 
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/seqMeta)](http://cran.r-project.org/web/packages/seqMeta)
+
 Meta-Analysis of Region-Based Tests of Rare DNA Variants
 
 Computes necessary information to meta analyze region-based tests for rare genetic vari- ants (e.g. SKAT, T1) in individual studies, and performs meta analysis.
