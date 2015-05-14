@@ -1,0 +1,103 @@
+\name{singlesnpMeta}
+\alias{singlesnpMeta}
+%- Also NEED an '\alias' for EACH other topic documented here.
+\title{
+Meta analyze single snp effects from multiple studies
+}
+\description{
+Takes as input `seqMeta` objects (from the \code{\link{prepScores}} function), and meta analyzes them.
+}
+\usage{
+singlesnpMeta(..., SNPInfo=NULL, snpNames = "Name", aggregateBy = "gene", 
+	studyBetas = TRUE, verbose = FALSE)
+}
+\arguments{
+  \item{\dots}{
+	\code{seqMeta} objects
+}
+  \item{SNPInfo}{
+	The SNP Info file.  This should contain the fields listed in snpNames and aggregateBy. Only SNPs in this table will be meta analyzed, so this may be used to restrict the analysis.
+	}
+    \item{snpNames}{
+	The field of SNPInfo where the SNP identifiers are found.  Default is 'Name'
+	}
+  \item{aggregateBy}{
+    The field of SNPInfo on which the skat results were aggregated.  Default is 'gene'. Though gene groupings are not explicitely required for single snp analysis, it is required to find where single snp information is stored in the seqMeta objects.
+  }
+  \item{studyBetas}{
+	Whether or not to include study-level effects in the output.
+  }	
+  \item{verbose}{
+  	logical. Whether progress bars should be printed.
+  }
+}
+\details{
+This function meta analyzes score tests for single variant effects. Though the test is formally a score test, coefficients and standard errors are also returned, which can be interpreted as a `one-step` approximation to the maximum likelihood estimates.
+}
+\value{
+a data frame with the gene, snp name, meta analysis.
+}
+\references{
+Lin, DY and Zeng, D. On the relative efficiency of using summary statistics versus individual-level data in meta-analysis. Biometrika. 2010.
+}
+\author{
+Arie Voorman, Jennifer Brody
+}
+\seealso{
+\code{\link{prepScores}}
+\code{\link{skatMeta}}
+\code{\link{skatOMeta}}
+}
+\examples{
+###load example data for two studies:
+### see ?seqMetaExample	
+data(seqMetaExample)
+
+
+####run on each study:
+cohort1 <- prepScores(Z=Z1, y~sex+bmi, SNPInfo = SNPInfo, data =pheno1)
+cohort2 <- prepScores(Z=Z2, y~sex+bmi, SNPInfo = SNPInfo, data =pheno2)
+
+#### combine results:
+out <- singlesnpMeta(cohort1, cohort2, SNPInfo = SNPInfo)
+head(out)
+
+\dontrun{
+##compare
+bigZ <- matrix(NA,2*n,nrow(SNPInfo))
+colnames(bigZ) <- SNPInfo$Name
+for(gene in unique(SNPInfo$gene)){
+	snp.names <- SNPInfo$Name[SNPInfo$gene == gene]
+	bigZ[1:n,SNPInfo$gene == gene][,
+		snp.names \%in\% colnames(Z1)] <- Z1[,
+		na.omit(match(snp.names,colnames(Z1)))]
+	bigZ[(n+1):(2*n),SNPInfo$gene == gene][,
+		snp.names \%in\% colnames(Z2)] <- Z2[,
+		na.omit(match(snp.names,colnames(Z2)))]
+}
+pheno <- rbind(pheno1[,c("y","sex","bmi")],pheno2[,c("y","sex","bmi")])
+out3 <- apply(bigZ,2,function(z){
+	if(any(!is.na(z))){
+		z[is.na(z)] <- mean(z,na.rm=TRUE)
+		mod <- lm(y ~ sex+bmi+c(rep(1,n),rep(0,n))+z,data=pheno)
+		beta <- mod$coef["z"]
+		se <- sqrt(vcov(mod)["z","z"])
+		p <- pchisq( (beta/se)^2,df=1,lower=F)
+		return(c(beta,se,p))
+	} else {
+		return(c(0,Inf,1))
+	}
+})
+out3 <- t(out3[,match(out$Name,colnames(out3))])
+
+##plot
+par(mfrow=c(2,2))
+plot(x=out3[,1],y=out$beta, xlab = "complete data (Wald)", 
+	ylab = "meta-analysis (Score)", main = "coefficients");abline(0,1)
+plot(x=out3[,2],y=out$se, xlab = "complete data (Wald)", y
+	lab = "meta-analysis (Score)", main = "standard errors");abline(0,1)
+plot(x=out3[,3],y=out$p, xlab = "complete data (Wald)", 
+	ylab = "meta-analysis (Score)", main = "p-values");abline(0,1)
+}
+}
+

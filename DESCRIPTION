@@ -1,0 +1,16 @@
+Package: seqMeta
+Type: Package
+Title: Meta-Analysis of Region-Based Tests of Rare DNA Variants
+Version: 1.5
+Date: 2012-11-21
+Author: Arie Voorman, Jennifer Brody, Han Chen, Thomas Lumley
+Maintainer: Arie Voorman <arie.voorman@gmail.com>
+Depends: R (>= 2.10), survival
+Imports: Matrix, coxme, CompQuadForm
+Suggests: SKAT, kinship2
+Description: Computes necessary information to meta analyze region-based tests for rare genetic variants (e.g. SKAT, T1) in individual studies, and performs meta analysis.
+License: GPL (>= 2)
+Packaged: 2014-10-28 05:06:58 UTC; arie
+NeedsCompilation: yes
+Repository: CRAN
+Date/Publication: 2014-10-28 08:11:22

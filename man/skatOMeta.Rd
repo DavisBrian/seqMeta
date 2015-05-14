@@ -1,0 +1,185 @@
+\name{skatOMeta}
+\alias{skatOMeta}
+%- Also NEED an '\alias' for EACH other topic documented here.
+\title{
+Combine SKAT-O analyses from one or more studies.
+}
+\description{
+Takes as input `seqMeta` objects (from e.g. \code{\link{prepScores}}), and meta analyzes them, using SKAT-O. See the package vignette for more extensive documentation.
+}
+\usage{
+skatOMeta(..., SNPInfo=NULL, skat.wts = function(maf){dbeta(maf,1,25)}, 
+	burden.wts = function(maf){as.numeric(maf <= 0.01) }, 
+	rho=c(0,1), method = c("integration", "saddlepoint", "liu"), 
+	snpNames = "Name", aggregateBy = "gene", mafRange = c(0,0.5), verbose=FALSE)
+}
+\arguments{
+  \item{\dots}{
+	seqMeta objects
+}
+  \item{SNPInfo}{
+	the SNP Info file.  This should contain 'Name' and 'gene' fields, which match the 'Name' and 'gene' fields of the SNP Info file used in each study. Only SNPs and genes in this table will be meta analyzed, so this may be used to restrict the analysis.
+		}
+  \item{skat.wts}{
+	Either a function to calculate testing weights for SKAT, or a character specifying a vector of weights in the SNPInfo file. For skatOMeta the default are the `beta' weights.
+	}
+  \item{burden.wts}{
+	Either a function to calculate weights for the burden test, or a character specifying a vector of weights in the SNPInfo file. For skatOMeta the default are the T1 weights.
+	}
+  \item{rho}{
+  	A sequence of values that specify combinations of SKAT and a burden test to be considered. Default is c(0,1), which considers SKAT and a burden test.
+  }		
+  \item{method}{
+	p-value calculation method. Should be one of 'saddlepoint', 'integration', or 'liu'.
+	}
+  \item{snpNames}{
+	The field of SNPInfo where the SNP identifiers are found.  Default is 'Name'
+	}
+  \item{aggregateBy}{
+    The field of SNPInfo on which the skat results were aggregated.  Default is 'gene'. For single snps which are intended only for single variant analyses, it is reccomended that they have a unique identifier in this field.  
+  }
+  \item{mafRange}{
+  	Range of MAF's to include in the analysis (endpoints included).  Default is all SNPs (0 <= MAF <= 0.5).
+  }
+  \item{verbose}{
+  	logical. Whether or not to print progress bars.
+  }
+}
+\details{
+\code{skatOMeta()} implements the SKAT-Optimal test, which picks the `best' combination of SKAT and a burden test, and then corrects for the flexibility afforded by this choice. Specifically, if the SKAT statistic is Q1, and the squared score for a burden test is Q2, SKAT-O considers tests of the form (1-rho)*Q1 + rho*Q2, where rho between 0 and 1. The values of rho are specified by the user using the argument \code{rho}. In the simplest form, which is the default, SKAT-O computes a SKAT test and a T1 test, and reports the minimum p-value, corrected for multiple testing. See the vignette or the accompanying references for more details.
+
+If there is a single variant in the gene, or the burden test is undefined (e.g. there are no rare alleles for the T1 test), SKAT is reported (i.e. rho=0).
+
+Note 1: the SKAT package uses the same weights for both SKAT and the burden test, which this function does not.
+
+Note 2: all studies must use coordinated SNP Info files - that is, the SNP names and gene definitions must be the same. 
+
+Note 3: The method of p-value calculation is much more important here than in SKAT.  The `integration' method is fast and typically accurate for p-values larger than 1e-9. The saddlepoint method is slower, but has higher relative accuracy.
+
+Note 4: Since p-value calculation can be slow for SKAT-O, and less accurate for small p-values, a reasonable alternative would be to first calculate SKAT and a burden test, and record the minimum p-value, which is a lower bound for the SKAT-O p-value. This can be done quickly and accurately. Then, one would only need to perform SKAT-O on the small subset of genes that are potentially interesting.
+
+
+Please see the package vignette for more details.
+}
+
+\value{
+a data frame with columns:
+\item{gene}{
+	Name of the gene.
+}
+\item{p}{
+	p-value of the SKAT-O test.
+}
+\item{pmin}{
+	The minimum of the p-values considered by SKAT-O (not corrected for multiple testing!).
+}
+\item{rho}{
+	The value of rho which gave the smallest p-value.
+}
+\item{cmaf}{
+	The cumulative minor allele frequency.
+}
+\item{nmiss}{
+	The number of `missing` SNPs. For a gene with a single SNP this is the number of individuals which do not contribute to the analysis, due to studies that did not report results for that SNP. For a gene with multiple SNPs, is totalled over the gene. 
+}
+\item{nsnps}{
+	The number of SNPs in the gene.
+}
+\item{errflag}{
+	An indicator of possible error: 0 suggests no error, > 0 indicates probable loss of accuracy.
+	}
+}
+\references{
+Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X. (2011) Rare Variant Association Testing for Sequencing Data Using the Sequence Kernel Association Test (SKAT). American Journal of Human Genetics.
+
+Lee, S. and Wu, M.C. and Lin, X. (2012) Optimal tests for rare variant effects in sequencing association studies. Biostatistics.
+
+}
+\author{
+Arie Voorman, Jennifer Brody
+}
+\seealso{
+\code{\link{skatMeta}}	
+\code{\link{prepScores}}
+\code{\link{burdenMeta}}
+\code{\link{singlesnpMeta}}
+}
+\examples{
+
+\dontrun{
+### load example data for 2 studies	
+data(skatExample)
+
+####run on each study:
+cohort1 <- prepScores(Z=Z1, y~sex+bmi, SNPInfo = SNPInfo, data =pheno1)
+cohort2 <- prepScores(Z=Z2, y~sex+bmi, SNPInfo = SNPInfo, kins=kins, data=pheno2)
+
+#### combine results:
+##skat-O with default settings:
+out1 <- skatOMeta(cohort1, cohort2, SNPInfo = SNPInfo, method = "int")
+head(out1)
+
+##skat-O, using a large number of combinations between SKAT and T1 tests:
+out2 <- skatOMeta(cohort1, cohort2, rho = seq(0,1,length=11),
+     SNPInfo = SNPInfo, method = "int")
+head(out2)
+
+#rho = 0 indicates SKAT gave the smaller p-value (or the T1 is undefined) 
+#rho=1 indicates the burden test was chosen
+# 0 < rho < 1 indicates some other value was chosen
+#notice that most of the time either the SKAT or T1 is chosen
+table(out2$rho)
+
+##skat-O with beta-weights used in the burden test:
+out3 <- skatOMeta(cohort1,cohort2, burden.wts = function(maf){dbeta(maf,1,25) }, 
+	rho=seq(0,1,length=11),SNPInfo = SNPInfo, method="int")
+head(out3)
+table(out3$rho)
+
+########################
+####binary data
+
+cohort1 <- prepScores(Z=Z1, ybin~1, family=binomial(), SNPInfo = SNPInfo, data =pheno1)
+out.bin <- skatOMeta(cohort1, SNPInfo = SNPInfo, method="int")
+head(out.bin)
+
+
+####################
+####survival data
+cohort1 <- prepCox(Z=Z1, Surv(time,status)~strata(sex)+bmi, SNPInfo = SNPInfo, 
+	data =pheno1)
+out.surv <- skatOMeta(cohort1, SNPInfo = SNPInfo, method="int")
+head(out.surv)
+
+##########################################
+###Compare with SKAT and T1 tests on their own:
+cohort1 <- prepScores(Z=Z1, y~sex+bmi, SNPInfo = SNPInfo, data =pheno1)
+cohort2 <- prepScores(Z=Z2, y~sex+bmi, SNPInfo = SNPInfo, kins=kins, data=pheno2)
+
+out.skat <- skatMeta(cohort1,cohort2,SNPInfo=SNPInfo)	
+out.t1 <- burdenMeta(cohort1,cohort2, wts= function(maf){as.numeric(maf <= 0.01)}, 
+	SNPInfo=SNPInfo)	
+
+#plot results 
+#We compare the minimum p-value of SKAT and T1, adjusting for multiple tests 
+#using the Sidak correction, to that of SKAT-O.
+#
+
+par(mfrow=c(1,3))
+pseq <- seq(0,1,length=100)
+plot(y=out.skat$p, x=out1$p,xlab="SKAT-O p-value", ylab="SKAT p-value", main ="SKAT-O vs SKAT")
+lines(y=pseq,x=1-(1-pseq)^2,col=2,lty=2, lwd=2)
+abline(0,1)
+plot(y=out.t1$p, x=out1$p,xlab="SKAT-O p-value", ylab="T1 p-value", main ="SKAT-O vs T1")	
+lines(y=pseq,x=1-(1-pseq)^2,col=2,lty=2, lwd=2)
+abline(0,1)
+plot(y=pmin(out.t1$p, out.skat$p,na.rm=T), x=out1$p,xlab="SKAT-O p-value", 
+	ylab="min(T1,SKAT) p-value", main ="min(T1,SKAT) vs SKAT-O")	
+lines(y=pseq,x=1-(1-pseq)^2,col=2,lty=2, lwd=2)
+abline(0,1)
+legend("bottomright", lwd=2,lty=2,col=2,legend="Bonferroni correction")	
+}
+
+
+}
+

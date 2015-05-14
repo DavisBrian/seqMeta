@@ -1,0 +1,6 @@
+export(prepCondScores, prepScores, prepScoresX, prepCox, skatMeta, burdenMeta, singlesnpMeta, skatOMeta)
+useDynLib(seqMeta)
+import(Matrix, CompQuadForm, survival)
+importFrom(coxme, lmekin)
+S3method(c, seqMeta)
+S3method(c, skatCohort)
