@@ -14,7 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 # seqMeta
-
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/seqMeta)](http://cran.r-project.org/web/packages/seqMeta)
 
 Meta-Analysis of Region-Based Tests of Rare DNA Variants
