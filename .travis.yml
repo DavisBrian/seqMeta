@@ -8,6 +8,10 @@ env:
  global:
    - CRAN: http://cran.rstudio.com
 
+os:
+  - linux
+  - osx
+
 notifications:
   email:
     on_success: change
