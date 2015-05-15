@@ -2,7 +2,7 @@
 seqMeta
 =======
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/seqMeta)](http://cran.r-project.org/web/packages/seqMeta)
+[![Build Status](https://travis-ci.org/DavisBrian/seqMeta.svg?branch=master)](https://travis-ci.org/DavisBrian/seqMeta) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/seqMeta)](http://cran.r-project.org/web/packages/seqMeta)
 
 Meta-Analysis of Region-Based Tests of Rare DNA Variants
 
