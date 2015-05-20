@@ -1,3 +1,4 @@
+# update this to be faster and cleaner
 prepScores <- function(Z, formula, family = gaussian(), SNPInfo=NULL, snpNames = "Name", aggregateBy = "gene", kins = NULL, sparse= TRUE, data=parent.frame(), verbose = FALSE){
 	#fit Null model
 	if(is.null(SNPInfo)){ 
