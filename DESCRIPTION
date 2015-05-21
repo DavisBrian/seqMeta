@@ -9,7 +9,8 @@ URL: https://github.com/DavisBrian/seqMeta
 BugReports: https://github.com/DavisBrian/seqMeta/issues
 Depends: R (>= 2.10), survival
 Imports: Matrix, coxme, CompQuadForm
-Suggests: SKAT, kinship2
+Suggests: SKAT, kinship2,
+    testthat
 Description: Computes necessary information to meta analyze region-based tests for rare genetic variants (e.g. SKAT, T1) in individual studies, and performs meta analysis.
 License: GPL (>= 2)
 Packaged: 2014-10-28 05:06:58 UTC; arie
