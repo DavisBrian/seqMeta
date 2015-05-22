@@ -245,21 +245,6 @@ create_seqMeta <- function(re, scores, maf , m, SNPInfo, snpNames, aggregateBy) 
   scores_si <- fill_values(scores_si, scores)
   scores_split   <-   split(scores_si, SNPInfo[ , aggregateBy])
   
-  
-#   res <- data.frame(SNPInfo[ , c(aggregateBy, snpNames)], maf=-1, scores=0, stringsAsFactors=FALSE)
-#   
-#   midx <- which(res[ , snpNames] %in% names(maf))
-#   res[midx, "maf"]<- maf[match(res[midx, snpNames], names(maf))]
-#   
-#   
-#   sidx <- which(res[ , snpNames] %in% names(scores))
-#   res[midx, "scores"]<- maf[match(res[midx, snpNames], names(scores))]
-# 
-#   
-#   #split into genes
-#   scores_split   <-   split(res$scores, res[ , aggregateBy])
-#   maf_split   <- 	split(res$maf, res[ , aggregateBy])
-  
   ##aggregate
   for(k in 1:length(re)){
     re[[k]] <- list("scores"=scores_split[[k]], "cov"=re[[k]], "n"=m$n, "maf"=maf_split[[k]], "sey"=m$sey ) 
