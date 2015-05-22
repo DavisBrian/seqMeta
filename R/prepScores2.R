@@ -1,3 +1,4 @@
+library(Matrix)
 # prepSNPInfo
 #' @export
 prepSNPInfo <- function(snpinfo, snpNames, aggregateBy, wt1=NULL, wt2=NULL) {
@@ -153,7 +154,7 @@ check_dropped_subjects <- function(res, formula) {
 }
 
 # check_format_skat
-check_format_skat <- function(Z, SNPInfo, data, snpNames, kins){
+check_inputs <- function(Z, SNPInfo, data, snpNames, kins){
   if(nrow(data) != nrow(Z)) {
     stop("Number of genotypes is not equal to number of phenotypes!")
   }
@@ -266,7 +267,7 @@ prepScores2 <- function(Z, formula, type="continuous", SNPInfo=NULL, snpNames="N
     SNPInfo <- prepSNPInfo(SNPInfo, snpNames, aggregateBy)
   }
   
-  check_format_skat(Z, SNPInfo, data, snpNames, kins)
+  check_inputs(Z, SNPInfo, data, snpNames, kins)
   
   m <- create_model(formula, type, kins=kins, sparse=sparse, data=data) 
   
