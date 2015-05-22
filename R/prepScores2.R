@@ -223,24 +223,46 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, kins) {
   re
 }
 
+
+
+fill_values <- function(x, r) { 
+  cmn <- intersect(names(x), names(r)) 
+  idx <- which(names(x) %in% names(r[cmn]))
+  x[idx]<- r[names(x)[idx]]
+  x
+}
+
+
 create_seqMeta <- function(re, scores, maf , m, SNPInfo, snpNames, aggregateBy) {
   
-  res <- data.frame(SNPInfo[ , c(aggregateBy, snpNames)], maf=-1, scores=0, stringsAsFactors=FALSE)
-  
-  midx <- which(res[ , snpNames] %in% names(maf))
-  res[midx, "maf"]<- maf[match(res[midx, snpNames], names(maf))]
-  
-  sidx <- which(res[ , snpNames] %in% names(scores))
-  res[midx, "scores"]<- maf[match(res[midx, snpNames], names(scores))]
+  maf_si <- rep_len(-1, nrow(SNPInfo))
+  names(maf_si) <- SNPInfo[ , snpNames]  
+  maf_si <- fill_values(maf_si, maf)
+  maf_split   <-   split(maf_si, SNPInfo[ , aggregateBy])
 
+  scores_si <- rep_len(0, nrow(SNPInfo))
+  names(scores_si) <- SNPInfo[ , snpNames]  
+  scores_si <- fill_values(scores_si, scores)
+  scores_split   <-   split(scores_si, SNPInfo[ , aggregateBy])
   
-  #split into genes
-  scores_split   <-   split(res$scores, res[ , aggregateBy])
-  maf_split   <- 	split(res$maf, res[ , aggregateBy])
+  
+#   res <- data.frame(SNPInfo[ , c(aggregateBy, snpNames)], maf=-1, scores=0, stringsAsFactors=FALSE)
+#   
+#   midx <- which(res[ , snpNames] %in% names(maf))
+#   res[midx, "maf"]<- maf[match(res[midx, snpNames], names(maf))]
+#   
+#   
+#   sidx <- which(res[ , snpNames] %in% names(scores))
+#   res[midx, "scores"]<- maf[match(res[midx, snpNames], names(scores))]
+# 
+#   
+#   #split into genes
+#   scores_split   <-   split(res$scores, res[ , aggregateBy])
+#   maf_split   <- 	split(res$maf, res[ , aggregateBy])
   
   ##aggregate
   for(k in 1:length(re)){
-    re[[k]] <- list("scores"=scores[[k]], "cov"=re[[k]], "n"=m$n, "maf"=maf[[k]], "sey"=m$sey ) 
+    re[[k]] <- list("scores"=scores_split[[k]], "cov"=re[[k]], "n"=m$n, "maf"=maf_split[[k]], "sey"=m$sey ) 
   }
   
   attr(re,"family") <-  m$family
