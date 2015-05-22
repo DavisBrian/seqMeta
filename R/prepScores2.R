@@ -88,6 +88,12 @@ impute_to_mean <- function(Z) {
 # prepPhenotype
 create_model <- function(formula, type="continuous", kins=NULL, sparse=TRUE, data=parent.frame()) {
   
+  fam <- if (type == "continuous") {
+    "gaussian"    
+  } else if (type == "binary") {
+    "binomial"
+  }
+    
   if(!is.null(kins)){
     if (type != "continuous") {
       stop("Family data is currently only supported for continuous outcomes.")
@@ -118,27 +124,21 @@ create_model <- function(formula, type="continuous", kins=NULL, sparse=TRUE, dat
     tX1_Om_i <- crossprod(X1, Om_i)
     AX1 <- with(svd(tX1_Om_i%*%X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(v[, d > 0,drop=FALSE])))%*%tX1_Om_i
     #    AX1 <- with(svd(t(X1)%*%Om_i%*%X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(v[, d > 0,drop=FALSE])))%*%t(X1)%*%Om_i    
-
+    
     check_dropped_subjects(res, formula)
     list(res=res, family="gaussian", n=nrow(X1), sey=sqrt(s2), sef=sef, X1=X1, AX1=AX1, Om_i=Om_i)
   } else {
-    
-    if (type == "continuous") {
-      fam <- "gaussian"
-      nullmodel <- glm(formula=formula, family=fam, data=data)
-      sey <- sqrt(var(res)*(nrow(X1)-1)/(nrow(X1)-ncol(X1)) )
-    } else if (type == "binary") {
-      fam <- "binomial"
-      nullmodel <- glm(formula=formula, family="binomial", data=data)
-      sey <- 1
-    }
-    
+    nullmodel <- glm(formula=formula, family=fam, data=data)
+    res <- residuals(nullmodel, type = "response")  
+    check_dropped_subjects(res, formula) 
     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
     X1 <- sef*model.matrix(nullmodel) 
-    res <- residuals(nullmodel, type = "response")  
-    AX1 <- with(svd(X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(u[, d > 0,drop=FALSE]))) 
-    
-    check_dropped_subjects(res, formula)    
+    AX1 <- with(svd(X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(u[, d > 0,drop=FALSE])))     
+    sey <- if (type == "continuous") {
+      sqrt(var(res)*(nrow(X1) - 1)/(nrow(X1) - ncol(X1)) )
+    } else if (type == "binary") {
+      1
+    }    
     list(res=res, family=fam, n=nrow(X1), sey=sey, sef=sef, X1=X1, AX1=AX1)
   }  
 }
@@ -225,7 +225,7 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, kins) {
 
 create_seqMeta <- function(re, scores, maf , m, SNPInfo, snpNames, aggregateBy) {
   
-  res <- data.frame(SNPinfo[ , c(aggregateBy, snpNames)], maf=-1, scores=0, stringsAsFactors=FALSE)
+  res <- data.frame(SNPInfo[ , c(aggregateBy, snpNames)], maf=-1, scores=0, stringsAsFactors=FALSE)
   
   midx <- which(res[ , snpNames] %in% names(maf))
   res[midx, "maf"]<- maf[match(res[midx, snpNames], names(maf))]
@@ -249,7 +249,7 @@ create_seqMeta <- function(re, scores, maf , m, SNPInfo, snpNames, aggregateBy) 
 }
 
 
-prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="Name", aggregateBy="gene", kins=NULL, sparse=TRUE, data=parent.frame(), verbose=FALSE) {
+prepScores2 <- function(Z, formula, type="continuous", SNPInfo=NULL, snpNames="Name", aggregateBy="gene", kins=NULL, sparse=TRUE, data=parent.frame(), verbose=FALSE) {
   
   if(is.null(SNPInfo)){ 
     warning("No SNP Info file provided: loading the Illumina HumanExome BeadChip. See ?SNPInfo for more details")
@@ -261,7 +261,7 @@ prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="N
   
   check_format_skat(Z, SNPInfo, data, snpNames, kins)
   
-  m <- create_model(formula=formula, family=family, kins=kins, sparse=sparse, data=data) 
+  m <- create_model(formula, type, kins=kins, sparse=sparse, data=data) 
   
   maf <- calculate_maf(Z)
   Z <- impute_to_mean(Z)  
