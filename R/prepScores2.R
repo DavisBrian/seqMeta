@@ -256,7 +256,7 @@ create_seqMeta <- function(re, scores, maf , m, SNPInfo, snpNames, aggregateBy) 
   return(re)  
 }
 
-
+#' @export
 prepScores2 <- function(Z, formula, type="continuous", SNPInfo=NULL, snpNames="Name", aggregateBy="gene", kins=NULL, sparse=TRUE, data=parent.frame(), verbose=FALSE) {
   
   if(is.null(SNPInfo)){ 
