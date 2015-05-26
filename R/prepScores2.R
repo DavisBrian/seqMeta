@@ -208,7 +208,7 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, kins) {
     if(length(inds) > 0L) {
       mcov <- matrix(0,length(snp.names),length(snp.names), dimnames=list(snp.names, snp.names))
       Z0 <- m$sef*Z[, inds, drop=FALSE]
-      Z0 <- impute_to_mean(Z0)     # not sure how Z0 can have missing values
+#      Z0 <- impute_to_mean(Z0)     # not sure how Z0 can have missing values
       if(!is.null(kins)){
         tZ0_Omi <- crossprod(Z0%*%m$Om_i)
         mcov[inds, inds] <- as.matrix(tZ0_Omi%*%Z0 - (tZ0_Omi%*%X1)%*%(AX1%*%Z0))
