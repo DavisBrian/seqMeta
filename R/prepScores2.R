@@ -205,58 +205,63 @@ impute_to_mean <- function(Z) {
 # prepPhenotype
 create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, data=parent.frame()) {
   
-  if (is.function(family)) {
-    family <- family$family
+  if (!is.character(family) || is.function(family) || is.family(family)) {
+    fam <- family$family   
+  } else {
+    fam=family
   }
-    
+  if (is.null(fam)) {
+    print(fam)
+    stop("'family' not recognized")
+  }
+  
   if(!is.null(kins)){
-    if (family != "gaussian") {
+    if (fam != "gaussian") {
       stop("Family data is currently only supported for continuous outcomes.")
     } 
     if(sparse){
       kins[kins < 2^{-5}] <- 0
       kins <- forceSymmetric(kins)
     }
-    data$.id <- if(is.null(colnames(kins))){
+    data$id <- if(is.null(colnames(kins))){
       1:ncol(kins)
     } else {
       colnames(kins)
     }    
     
-    nullmodel <- lmekin(formula=update(formula, '~.+ (1|.id)'), data=data, varlist = 2*kins,method="REML")  
+    nullmodel <- lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")  
     
     nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)   
     SIGMA <- nullmodel$theta[1] * 2 * kins + nullmodel$theta[2] * Diagonal(nrow(kins))   
     s2 <- sum(nullmodel$theta)
     
     #rotate data:
+    nullmodel$family$var <- function(x){1}
     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
     X1 <- sef*model.matrix(lm(formula,data=data)) 
-    nullmodel$family$var <- function(x){1}
     res <- as.vector(nullmodel$res)* s2 / nullmodel$theta[2]  
     Om_i <- solve(SIGMA/s2)
     # optimize calculations
-    tX1_Om_i <- crossprod(X1, Om_i)
-    AX1 <- with(svd(tX1_Om_i%*%X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(v[, d > 0,drop=FALSE])))%*%tX1_Om_i
-    #    AX1 <- with(svd(t(X1)%*%Om_i%*%X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(v[, d > 0,drop=FALSE])))%*%t(X1)%*%Om_i    
+     tX1_Om_i <- crossprod(X1, Om_i)
+     AX1 <- with(svd(tX1_Om_i%*%X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(v[, d > 0,drop=FALSE])))%*%tX1_Om_i
     
     check_dropped_subjects(res, formula)
-    list(res=res, family="gaussian", n=nrow(X1), sey=sqrt(s2), sef=sef, X1=X1, AX1=AX1, Om_i=Om_i)
+    list(res=res, family=fam, n=nrow(X1), sey=sqrt(s2), sef=sef, X1=X1, AX1=AX1, Om_i=Om_i)
   } else {
-    nullmodel <- glm(formula=formula, family=family, data=data)
+    nullmodel <- glm(formula=formula, family=fam, data=data)
     res <- residuals(nullmodel, type = "response")  
     check_dropped_subjects(res, formula) 
     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
     X1 <- sef*model.matrix(nullmodel) 
     AX1 <- with(svd(X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(u[, d > 0,drop=FALSE])))     
-    sey <- if (family == "gaussian") {
+    sey <- if (fam == "gaussian") {
       sqrt(var(res)*(nrow(X1) - 1)/(nrow(X1) - ncol(X1)) )
-    } else if (family == "binomial") {
+    } else if (fam == "binomial") {
       1
     } else {
       stop("Only family type 'binomial' and 'gaussian' are currently supported.")
     }   
-    list(res=res, family=family, n=nrow(X1), sey=sey, sef=sef, X1=X1, AX1=AX1)
+    list(res=res, family=fam, n=nrow(X1), sey=sey, sef=sef, X1=X1, AX1=AX1)
   }  
 }
 
@@ -268,6 +273,8 @@ check_dropped_subjects <- function(res, formula) {
   }
   invisible(NULL)  
 }
+
+is.family <- function(x) {"family" %in% class(x)}
 
 # check_format_skat
 check_inputs <- function(Z, SNPInfo, data, snpNames, kins){
@@ -326,7 +333,7 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, kins) {
       Z0 <- m$sef*Z[, inds, drop=FALSE]
 #      Z0 <- impute_to_mean(Z0)     # not sure how Z0 can have missing values
       if(!is.null(kins)){
-        tZ0_Omi <- crossprod(Z0%*%m$Om_i)
+        tZ0_Omi <- crossprod(Z0, m$Om_i)
         mcov[inds, inds] <- as.matrix(tZ0_Omi%*%Z0 - (tZ0_Omi%*%X1)%*%(AX1%*%Z0))
       } else {
         mcov[inds, inds] <- crossprod(Z0) - crossprod(Z0,X1)%*%(AX1%*%Z0)

@@ -1,4 +1,4 @@
-export(prepCondScores, prepScores, prepScoresX, prepCox, skatMeta, burdenMeta, singlesnpMeta, skatOMeta)
+export(prepCondScores, prepScores, prepScoresX, prepCox, skatMeta, burdenMeta, singlesnpMeta, skatOMeta, prepScores2)
 useDynLib(seqMeta)
 import(Matrix, CompQuadForm, survival)
 importFrom(coxme, lmekin)

@@ -7,7 +7,7 @@ Author: Arie Voorman, Jennifer Brody, Han Chen, Thomas Lumley
 Maintainer: Brian Davis <Brian.Davis281@gmail.com>
 URL: https://github.com/DavisBrian/seqMeta
 BugReports: https://github.com/DavisBrian/seqMeta/issues
-Depends: R (>= 2.10), survival
+Depends: R (>= 3.1.0), survival
 Imports: Matrix, coxme, CompQuadForm
 Suggests: SKAT, kinship2,
     testthat
