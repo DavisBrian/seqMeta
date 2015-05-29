@@ -6,7 +6,7 @@
 \usage{
 prepScores2(Z, formula, family = "gaussian", SNPInfo = NULL,
   snpNames = "Name", aggregateBy = "gene", kins = NULL, sparse = TRUE,
-  data = parent.frame(), verbose = FALSE)
+  data = parent.frame(), male = NULL, verbose = FALSE)
 }
 \arguments{
 \item{Z}{A genotype matrix (dosage matrix) - rows correspond to individuals

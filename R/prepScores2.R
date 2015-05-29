@@ -91,7 +91,7 @@
 #' 
 #' @seealso \code{\link[seqMeta]{skatMeta}} \code{\link[seqMeta]{burdenMeta}} \code{\link[seqMeta]{singlesnpMeta}} \code{\link[seqMeta]{skatOMeta}} \code{\link[survival]{coxph}}
 #' @export
-prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="Name", aggregateBy="gene", kins=NULL, sparse=TRUE, data=parent.frame(), verbose=FALSE) {
+prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="Name", aggregateBy="gene", kins=NULL, sparse=TRUE, data=parent.frame(), male=NULL, verbose=FALSE) {
   
   if(is.null(SNPInfo)){ 
     warning("No SNP Info file provided: loading the Illumina HumanExome BeadChip. See ?SNPInfo for more details")
@@ -101,12 +101,27 @@ prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="N
     SNPInfo <- prepSNPInfo(SNPInfo, snpNames, aggregateBy)
   }
   
+  if (!is.null(male)) {
+    cl <- match.call()
+    male <- eval(cl$male, data)
+    if (anyNA(male)) {
+      stop("Missing data not allowed in 'male'")
+    }
+    if(!all(male %in% c(0,1))) {
+      stop("`male' must be coded as 0/1 or T/F")
+    }
+    if(length(male) != nrow(Z)) {
+      stop("`male' not the same length as nrows genotype")
+    }
+    male <- as.logical(male)
+  } 
+  
   check_inputs(Z, SNPInfo, data, snpNames, kins)
   
   m <- create_model(formula, family, kins=kins, sparse=sparse, data=data) 
   
-  maf <- calculate_maf(Z)
-  Z <- impute_to_mean(Z)  
+  maf <- calculate_maf(Z, male)
+  Z <- impute_to_mean(Z, male)  
   scores <- colSums(m$res*Z)  
   
   re <- calculate_cov(Z, m, SNPInfo, snpNames, aggregateBy, kins)
@@ -181,14 +196,20 @@ prepGenotype <- function(Z) {
 }
 
 # inpute to mean
-impute_to_mean <- function(Z) {
+impute_to_mean <- function(Z, male=NULL) {
   
   if (!is.matrix(Z)) {
     Z <- as.matrix(Z)
   }
   
   if (anyNA(Z)) {
-    MZ <- colMeans(Z, na.rm=TRUE)
+    if (is.null(male)) {
+      MZ <- colMeans(Z, na.rm=TRUE)    
+    } else {
+      MZ <- (colSums(Z[male, ],na.rm=TRUE) + 2*colSums(Z[!male, ],na.rm=TRUE))/
+        (colSums(!is.na(Z[male, ])) + 2*colSums(!is.na(Z[!male,])))
+      
+    }
     allNA <- which(is.nan(MZ))
     Z[ , allNA] <- 0
     MZ[allNA] <- 0
@@ -300,13 +321,28 @@ check_inputs <- function(Z, SNPInfo, data, snpNames, kins){
   invisible(NULL)
 }
 
-calculate_maf <- function(Z) {
+# calculate_maf <- function(Z) {
+#   
+#   MeanZ <- colMeans(Z, na.rm=TRUE)
+#   maf <- MeanZ/2
+# 
+#   #differentiate all missing from monomorphic
+#   maf[which(is.nan(MeanZ))] <- -1
+#   
+#   maf
+# }
+calculate_maf <- function(Z, male=NULL) {
   
-  MeanZ <- colMeans(Z, na.rm=TRUE)
-  maf <- MeanZ/2
-
+  if (is.null(male)) {
+    maf <- colMeans(Z, na.rm=TRUE)/2.0
+  } else {
+    male <- as.logical(male)
+    maf <- (colSums(Z[male, ],na.rm=TRUE)/2 + colSums(Z[!male, ],na.rm=TRUE))/
+      (colSums(!is.na(Z[male, ])) + 2*colSums(!is.na(Z[!male,])))    
+  }
+  
   #differentiate all missing from monomorphic
-  maf[which(is.nan(MeanZ))] <- -1
+  maf[is.nan(maf)] <- -1
   
   maf
 }
