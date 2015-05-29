@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# seqMeta 1.5.0.9000
+## seqMeta 1.5.0.9000
 
 * Migrated to git / github
 * Minimum R version moved to 3.1.0
