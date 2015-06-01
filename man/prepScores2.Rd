@@ -39,6 +39,9 @@ kinship matrices (defaults to TRUE).}
 
 \item{data}{data frame in which to find variables in the formula}
 
+\item{male}{For analyzing the X chromosome, with prepScoresX, 'male' is the
+gender vector (0/1 or F/T) indicating female/male. See details.}
+
 \item{verbose}{logical. whether or not to print the progress bar.}
 }
 \value{

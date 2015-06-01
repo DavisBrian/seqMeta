@@ -31,6 +31,8 @@
 #'   family=gaussian(). See lmekin and the kinship2 package for more details.
 #' @param sparse  whether or not to use a sparse Matrix approximation for dense 
 #'   kinship matrices (defaults to TRUE).
+#' @param male For analyzing the X chromosome, with prepScoresX, 'male' is the 
+#'   gender vector (0/1 or F/T) indicating female/male. See details.
 #' @param verbose  logical. whether or not to print the progress bar.
 #'   
 #' @details This function computes the neccesary information to meta analyze 
