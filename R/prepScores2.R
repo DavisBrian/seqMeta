@@ -197,7 +197,7 @@ prepGenotype <- function(Z) {
   Z 
 }
 
-# inpute to mean
+# impute to mean
 impute_to_mean <- function(Z, male=NULL) {
   
   if (!is.matrix(Z)) {

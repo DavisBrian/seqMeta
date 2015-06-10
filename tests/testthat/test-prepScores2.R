@@ -32,7 +32,7 @@ test_that("prepScores2 equals prepScores (binomial)", {
 })
 
 ###############
-##SAME TESTS but for X
+## SAME TESTS but for X
 ###############
 test_that("prepScores2 equals prepScoresX (gaussian w/o family)", {
   ps <- prepScoresX(Z=Z1, y~sex+bmi, male=pheno1$sex-1, SNPInfo = SNPInfo, data =pheno1)
@@ -60,3 +60,17 @@ test_that("prepScores2 equals prepScoresX (binomial)", {
   expect_equal(ps2a, ps)
   expect_equal(ps2b, ps)
 })
+
+
+###############
+## SAME TESTS but for Survival
+###############
+
+
+
+###############
+## Missing values
+###############
+# test missing all missing genotypes in a snp gives the same as if the snp was removed from the genotype matrix
+
+
