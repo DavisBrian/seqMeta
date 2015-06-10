@@ -4,7 +4,10 @@ skatOMeta <- function(..., SNPInfo=NULL, skat.wts = function(maf){dbeta(maf,1,25
 		warning("No SNP Info file provided: loading the Illumina HumanExome BeadChip. See ?SNPInfo for more details")
 		load(paste(find.package("seqMeta"), "data", "SNPInfo.rda",sep = "/"))
 		aggregateBy = "SKATgene"
+	} else {
+	  SNPInfo <- prepSNPInfo(SNPInfo, snpNames, aggregateBy, wt1=skat.wts, wt2=burden.wts)
 	}
+	
 	
 	if(any(rho >1 | rho < 0 ) ) stop("rho must be between 0 and 1")
 	method <- match.arg(method)

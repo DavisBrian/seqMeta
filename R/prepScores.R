@@ -196,7 +196,10 @@ prepScoresX <- function(Z, formula, male, family = gaussian(), SNPInfo=NULL, snp
     warning("No SNP Info file provided: loading the Illumina HumanExome BeadChip. See ?SNPInfo for more details")
     load(paste(find.package("skatMeta"), "data", "SNPInfo.rda",sep = "/"))
     aggregateBy = "SKATgene"
-  } 
+  } else {
+    SNPInfo <- prepSNPInfo(SNPInfo, snpNames, aggregateBy)
+  }
+  
   
   cl <- match.call()
   
