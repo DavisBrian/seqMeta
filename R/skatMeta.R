@@ -4,7 +4,10 @@ skatMeta <- function(..., SNPInfo=NULL, wts = function(maf){dbeta(maf,1,25)}, me
 		warning("No SNP Info file provided: loading the Illumina HumanExome BeadChip. See ?SNPInfo for more details")
 		load(paste(find.package("seqMeta"), "data", "SNPInfo.rda",sep = "/"))
 		aggregateBy = "SKATgene"
+	} else {
+	  SNPInfo <- prepSNPInfo(SNPInfo, snpNames, aggregateBy, wt1=wts)
 	}
+	
 	genelist <- na.omit(unique(SNPInfo[,aggregateBy]))
 	cohortNames <- lapply(cl[[2]],as.character)
 	ncohort <- length(cohortNames)
