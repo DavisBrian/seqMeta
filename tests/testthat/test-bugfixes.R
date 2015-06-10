@@ -103,29 +103,35 @@ data(seqMetaExample)
 ## Duplicated SNP in snpinfo gene pulls from the genotype matrix twice
 
 test_that("Duplicated SNPS in snpinfo gene only get counted once)", {
-  ps <- prepScores(Z=Z1, y~sex+bmi, SNPInfo = SNPInfo, data =pheno1)
-  ps2a <- prepScores2(Z=Z1, y~sex+bmi, family="gaussian", SNPInfo = SNPInfo, data =pheno1)
-  ps2b <- prepScores2(Z=Z1, y~sex+bmi, family=gaussian(), SNPInfo = SNPInfo, data =pheno1)
+  si <- SNPInfo[SNPInfo$gene %in% "gene1", ]
+  si_dups <- rbind(si, si[1,])
   
-  expect_equal(ps2a, ps)
-  expect_equal(ps2b, ps)
+  snps_gene1 <- as.character(intersect(colnames(Z1), si$Name))
+  Zgene1 <- Z1[ , snps_gene1]
+  
+  cohort1 <- prepScores(Z=Zgene1, y~sex+bmi, SNPInfo = si, data =pheno1)
+  cohort2 <- prepScores(Z=Zgene1, y~sex+bmi, SNPInfo = si_dups, data =pheno1)
+  expect_equal(cohort1, cohort2)
+  expect_equal(length(cohort1$gene1$scores), 15)
+  expect_equal(length(cohort2$gene1$scores), 15)
+  expect_equal(length(cohort1$gene1$maf), 15)
+  expect_equal(length(cohort2$gene1$maf), 15)
+  expect_equal(nrow(cohort1$gene1$cov), 15)
+  expect_equal(nrow(cohort2$gene1$cov), 15)
+  
+  
+  cohort1b <- prepScores(Z=Zgene1, ybin~1, family=binomial(), SNPInfo = si, data =pheno1)
+  cohort2b <- prepScores(Z=Zgene1, ybin~1, family=binomial(), SNPInfo = si_dups, data =pheno1)
+  expect_equal(cohort1b, cohort2b)
+  expect_equal(length(cohort1b$gene1$scores), 15)
+  expect_equal(length(cohort2b$gene1$scores), 15)
+  expect_equal(length(cohort1b$gene1$maf), 15)
+  expect_equal(length(cohort2b$gene1$maf), 15)
+  expect_equal(nrow(cohort1b$gene1$cov), 15)
+  expect_equal(nrow(cohort2b$gene1$cov), 15)
 })
 
 
-# si <- SNPInfo[SNPInfo$gene %in% "gene1", ]
-# si_dups <- rbind(si, si[1,])
-# 
-# snps_gene1 <- as.character(intersect(colnames(Z1), si$Name))
-# 
-# 
-# 
-# prepScores(Z=Z1[ , snps_gene1], y~sex+bmi, SNPInfo = si, data =pheno1)
-# prepScores(Z=Z1[ , snps_gene1], y~sex+bmi, SNPInfo = si_dups, data =pheno1)
-# 
-# 
-# prepScores(Z=Z1[ , snps_gene1], ybin~1, family=binomial(), SNPInfo=si, data=pheno1)
-# prepScores(Z=Z1[ , snps_gene1], ybin~1, family=binomial(), SNPInfo=si_dups, data=pheno1)
-# 
 # 
 # prepScoresX(Z=Z1[ , snps_gene1], ybin~1, male=pheno1$sex-1, family=binomial(), SNPInfo=si, data=pheno1)
 # prepScoresX(Z=Z1[ , snps_gene1], ybin~1, male=pheno1$sex-1, family=binomial(), SNPInfo=si_dups, data=pheno1)
@@ -134,3 +140,9 @@ test_that("Duplicated SNPS in snpinfo gene only get counted once)", {
 # prepCox(Z=Z1[ , snps_gene1], Surv(time,status)~strata(sex)+bmi, SNPInfo = si, data =pheno1)
 # prepCox(Z=Z1[ , snps_gene1], Surv(time,status)~strata(sex)+bmi, SNPInfo = si_dups, data =pheno1)
 # 
+#
+# singlesnpMeta 
+# skatMeta
+# burdenMeta
+# skatOMeta
+
