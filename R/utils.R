@@ -39,3 +39,37 @@ prepSNPInfo <- function(snpinfo, snpNames, aggregateBy, wt1=NULL, wt2=NULL) {
   
   snpinfo[idx, cols]
 }
+
+
+# is_monomorphic
+is_monomorphic <- function(x, tolerance = .Machine$double.eps ^ 0.5) {
+ 
+  caf <- colMeans(x, na.rm=TRUE)
+  caf[is.na(caf)] <- -1
+  
+  caf1 <- rep(FALSE, ncol(x))
+  names(caf1) <- colnames(x)
+  caf1_idx <- which(caf > 1-tolerance & caf < 1+tolerance)
+  if (length(caf1_idx) > 0) {
+    tmp <- apply(x[ , caf1_idx, drop=FALSE], 2, function(x) all(na.omit(x) == 1))
+    caf1[names(tmp)] <- tmp    
+  }
+  
+  (caf == 0 | caf1 | caf == 2)
+}
+
+monomorphic_snps <- function(x, tolerance = .Machine$double.eps ^ 0.5) {
+  monos <- is_monomorphic(x, tolerance)
+  names(monos[monos])
+}
+
+
+is_mono <- function(Z) {
+  apply(Z, 2, function(x) {
+    y <- na.omit(x)
+    if (length(y) == 0) {
+      FALSE
+    } else {
+      (all(y == 0) | all(y == 1) | all(y == 2))}
+  })
+}

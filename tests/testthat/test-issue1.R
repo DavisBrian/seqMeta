@@ -6,7 +6,6 @@ context("Issue 1")
 # TBD
 # - prepScores2 prepCox equivalent
 
-library(seqMeta)
 data(seqMetaExample)
 
 test_that("Original prep functions duplicated SNPS in snpinfo gene only get counted once)", {

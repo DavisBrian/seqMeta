@@ -98,8 +98,10 @@ prepScores <- function(Z, formula, family = gaussian(), SNPInfo=NULL, snpNames =
 	
 	if(verbose) close(pb)
 	
-	#deal with monomorphic SNPs
-	scores[maf == 0] <- 0
+	#deal with monomorphic SNPs (Fix issue #2 bd)
+	monos <- monomorphic_snps(Z)
+	scores[names(scores) %in% monos] <- 0
+# 	scores[maf == 0] <- 0
 	
 	#differentiate missing from monomorphic:
 	maf[!(SNPInfo[,snpNames] %in% colnames(Z))] <- -1
@@ -144,6 +146,10 @@ prepScores <- function(Z, formula, family = gaussian(), SNPInfo=NULL, snpNames =
 				assign("pb.i", get("pb.i",env)+1,env)
 				if(get("pb.i", env)%%ceiling(ngenes/100) == 0) setTxtProgressBar(get("pb",env),get("pb.i",env))		  
 		}
+    # set monomorphic inds to 0
+    mono_snps <- intersect(snp.names, monos)
+		mcov[mono_snps , ] <- 0
+		mcov[ , mono_snps] <- 0
 		return(forceSymmetric(Matrix(mcov,sparse=TRUE)))
 	},simplify = FALSE)
 	sey = sqrt(var(res)*(nrow(X1)-1)/(nrow(X1)-ncol(X1)) )

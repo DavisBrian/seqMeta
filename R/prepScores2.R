@@ -123,10 +123,12 @@ prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="N
   m <- create_model(formula, family, kins=kins, sparse=sparse, data=data) 
   
   maf <- calculate_maf(Z, male)
+  monos <- monomorphic_snps(Z)
   Z <- impute_to_mean(Z, male)  
-  scores <- colSums(m$res*Z)  
+  scores <- colSums(m$res*Z) 
+  scores[monos] <- 0
   
-  re <- calculate_cov(Z, m, SNPInfo, snpNames, aggregateBy, kins)
+  re <- calculate_cov(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins)
   
   create_seqMeta(re, scores, maf, m, SNPInfo, snpNames, aggregateBy) 
 }
@@ -315,7 +317,7 @@ calculate_scores <- function(Z, m) {
   scores  
 }
 
-calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, kins) {
+calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
   ##get matrices for projection
   X1 <- m$X1
   AX1 <- m$AX1
@@ -326,14 +328,17 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, kins) {
     if(length(inds) > 0L) {
       mcov <- matrix(0,length(snp.names),length(snp.names), dimnames=list(snp.names, snp.names))
       Z0 <- m$sef*Z[, inds, drop=FALSE]
-#      Z0 <- impute_to_mean(Z0)     # not sure how Z0 can have missing values
+      #      Z0 <- impute_to_mean(Z0)     # not sure how Z0 can have missing values
       if(!is.null(kins)){
         tZ0_Omi <- crossprod(Z0, m$Om_i)
         mcov[inds, inds] <- as.matrix(tZ0_Omi%*%Z0 - (tZ0_Omi%*%X1)%*%(AX1%*%Z0))
       } else {
         mcov[inds, inds] <- crossprod(Z0) - crossprod(Z0,X1)%*%(AX1%*%Z0)
       }
-      forceSymmetric(Matrix(mcov,sparse=TRUE))
+      mono_snps <- intersect(inds, monos)
+      mcov[mono_snps , ] <- 0
+      mcov[ , mono_snps] <- 0
+      forceSymmetric(Matrix(mcov,sparse=TRUE))     
     } else{
       Matrix(0, nrow=length(snp.names), ncol=length(snp.names), dimnames=list(snp.names, snp.names), sparse=TRUE)
     }
