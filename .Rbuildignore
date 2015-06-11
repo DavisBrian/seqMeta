@@ -1,9 +1,11 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
+^appveyor\.yml$
 ^README.Rmd$
 ^NEWS.Rmd$
 ^NEWS.md$
 ^NEWS.html
 ^cran-comments\.md$
 ^seqMeta_1.5.0.9000.tar.gz$
+^revdep$

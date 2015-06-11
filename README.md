@@ -2,7 +2,7 @@
 seqMeta
 =======
 
-[![Build Status](https://travis-ci.org/DavisBrian/seqMeta.svg?branch=master)](https://travis-ci.org/DavisBrian)
+[![Build Status](https://travis-ci.org/DavisBrian/seqMeta.svg?branch=master)](https://travis-ci.org/DavisBrian)[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/DavisBrian/seqMeta?branch=master)](https://ci.appveyor.com/project/DavisBrian/seqMeta)
 
 Meta-Analysis of Region-Based Tests of Rare DNA Variants
 
@@ -18,6 +18,12 @@ You can install:
       install.packages("devtools")
     }
     devtools::install_github("DavisBrian/seqMeta")
+    ```
+
+-   or download seqMeta\_1.5.0.9000.tar.gz and run
+
+    ``` r
+    install.packages("/path/to/file/seqMeta_1.5.0.9000.tar.gz", type = "source")
     ```
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues).
