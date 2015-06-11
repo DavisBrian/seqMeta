@@ -1,16 +1,17 @@
 # Sample .travis.yml for R projects
 
-language: r
+language: c
 warnings_are_errors: true
 sudo: required
+
+os:
+  - linux
+  - osx
 
 env:
  global:
    - CRAN: http://cran.rstudio.com
 
-os:
-  - linux
-  - osx
 
 notifications:
   email:
