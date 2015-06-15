@@ -1,5 +1,4 @@
-<!-- NEWS.md is generated from NEWS.Rmd. Please edit that file -->
-seqMeta 1.5.0.9000
+seqMeta 1.5.0.9011
 ==================
 
 -   Migrated to git / github
