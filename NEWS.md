@@ -3,7 +3,11 @@ seqMeta 1.5.0.9011
 
 -   Migrated to git / github
 -   Minimum R version moved to 3.1.0
--   Added automated tests to test prepSNPInfo and prepScores2
+-   Fixed issue \#1 - (Duplicated SNP in snpinfo gene pulls from the genotype matrix twice)
+-   Fixed issue \#2 - (Monomorphic snps with maf != 0 handled incorrectly )
+-   Added automated tests for prepSNPInfo and prepScores2
+-   Added new function prepScores2
+
 
 New Function
 ------------

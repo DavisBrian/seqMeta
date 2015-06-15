@@ -128,13 +128,15 @@ prepScores <- function(Z, formula, family = gaussian(), SNPInfo=NULL, snpNames =
 		inds <- match(snp.names,colnames(Z))
 		mcov <- matrix(0,length(snp.names),length(snp.names))
 		if(length(na.omit(inds)) > 0){
-			Z0 <- sqrt(nullmodel$family$var(nullmodel$fitted))*as.matrix(Z[,na.omit(inds),drop=FALSE])
+		  Z0 <- as.matrix(Z[,na.omit(inds),drop=FALSE])
+#			Z0 <- sqrt(nullmodel$family$var(nullmodel$fitted))*as.matrix(Z[,na.omit(inds),drop=FALSE])
 			if(any(is.na(Z0))) Z0 <- apply(Z0,2,function(z){
 			  if(all(is.na(z))) z <- rep(0,length(z))
        			mz <- mean(z, na.rm=TRUE)
 				z[is.na(z)] <- mz
 				z
 			})
+			Z0 <- sqrt(nullmodel$family$var(nullmodel$fitted))*Z0
 			if(!is.null(kins)){
 				mcov[!is.na(inds), !is.na(inds)] <- as.matrix(t(Z0)%*%Om_i%*%Z0 - (t(Z0)%*%Om_i%*%X1)%*%(AX1%*%Z0))
 			} else {
@@ -338,7 +340,8 @@ prepScoresX <- function(Z, formula, male, family = gaussian(), SNPInfo=NULL, snp
     inds <- match(snp.names,colnames(Z))
     mcov <- matrix(0,length(snp.names),length(snp.names))
     if(length(na.omit(inds)) > 0){
-      Z0 <- sqrt(nullmodel$family$var(nullmodel$fitted))*as.matrix(Z[,na.omit(inds),drop=FALSE])
+      Z0 <- as.matrix(Z[,na.omit(inds),drop=FALSE])
+#       Z0 <- sqrt(nullmodel$family$var(nullmodel$fitted))*as.matrix(Z[,na.omit(inds),drop=FALSE])
       if(any(is.na(Z0))) Z0 <- apply(Z0,2,function(z){
         naz <- is.na(z)
         if(any(naz)){
@@ -352,7 +355,7 @@ prepScoresX <- function(Z, formula, male, family = gaussian(), SNPInfo=NULL, snp
         }
         z
       })
-      Z0 <- Z0
+      Z0 <- sqrt(nullmodel$family$var(nullmodel$fitted))*Z0
       if(!is.null(kins)){
         mcov[!is.na(inds), !is.na(inds)] <- as.matrix(t(Z0)%*%Om_i%*%Z0 - (t(Z0)%*%Om_i%*%X1)%*%(AX1%*%Z0))
       } else {
