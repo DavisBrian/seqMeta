@@ -34,13 +34,15 @@ You can install:
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues).
 
-seqMeta 1.5.0.9000
+seqMeta 1.5.0.9011
 ------------------
 
 -   Migrated to git / github
 -   Minimum R version moved to 3.1.0
--   Fixed issue \#1 - (Duplicated SNP in snpinfo gene pulls from the genotype matrix twice)
--   Fixed issue \#2 - (Monomorphic snps with maf != 0 handled incorrectly )
+-   Fixed issue \#1 - Duplicated SNP in snpinfo gene pulls from the genotype matrix twice.
+-   Fixed issue \#2 - Monomorphic snps with caf != 0 handled incorrectly.
+-   Fixed issue \#4 - Replaced `any(is.na(Z))` with `anyNA(Z)`
+-   Fixed issue \#5 - Range test now checks that genotypes are [0, 2].
 -   Added new function prepScores2
 
 ### prepScores2

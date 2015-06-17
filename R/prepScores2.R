@@ -184,6 +184,7 @@ impute_to_mean <- function(Z, male=NULL) {
   }
 }
 
+
 # prepPhenotype
 create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, data=parent.frame()) {
   
