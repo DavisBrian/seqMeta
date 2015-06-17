@@ -14,7 +14,7 @@ You can install:
 -   the latest released version from CRAN with
 
     ``` r
-    install.packages("dplyr")
+    install.packages("seqMeta")
     ```
 
 -   the latest development version for testing by downloading seqMeta\_1.5.0.9XXX.tar.gz and running
@@ -41,6 +41,7 @@ seqMeta 1.5.0.9011
 -   Minimum R version moved to 3.1.0
 -   Fixed issue \#1 - Duplicated SNP in snpinfo gene pulls from the genotype matrix twice.
 -   Fixed issue \#2 - Monomorphic snps with caf != 0 handled incorrectly.
+-   Fixed issue \#3 - Binomial models when genotypes imputed outside of seqMeta did not match when models were imputed by seqMeta. Very slight differences in the covariance structure.
 -   Fixed issue \#4 - Replaced `any(is.na(Z))` with `anyNA(Z)`
 -   Fixed issue \#5 - Range test now checks that genotypes are [0, 2].
 -   Added new function prepScores2
