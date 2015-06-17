@@ -6,10 +6,22 @@ seqMeta
 
 Meta-Analysis of Region-Based Tests of Rare DNA Variants
 
-Computes necessary information to meta analyze region-based tests for rare genetic vari- ants (e.g. SKAT, T1) in individual studies, and performs meta analysis.
+Computes necessary information to meta analyze region-based tests for rare genetic variants (e.g. SKAT, T1) in individual studies, and performs meta analysis.
 
 You can install:
 ----------------
+
+-   the latest released version from CRAN with
+
+    ``` r
+    install.packages("dplyr")
+    ```
+
+-   the latest development version for testing by downloading seqMeta\_1.5.0.9XXX.tar.gz and running
+
+    ``` r
+    install.packages("/path/to/file/seqMeta_1.5.0.9XXX.tar.gz", type = "source")
+    ```
 
 -   the latest development version from github with
 
@@ -18,12 +30,6 @@ You can install:
       install.packages("devtools")
     }
     devtools::install_github("DavisBrian/seqMeta")
-    ```
-
--   or download seqMeta\_1.5.0.9000.tar.gz and run
-
-    ``` r
-    install.packages("/path/to/file/seqMeta_1.5.0.9000.tar.gz", type = "source")
     ```
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues).
@@ -35,7 +41,6 @@ seqMeta 1.5.0.9000
 -   Minimum R version moved to 3.1.0
 -   Fixed issue \#1 - (Duplicated SNP in snpinfo gene pulls from the genotype matrix twice)
 -   Fixed issue \#2 - (Monomorphic snps with maf != 0 handled incorrectly )
--   Added automated tests for prepSNPInfo and prepScores2
 -   Added new function prepScores2
 
 ### prepScores2
