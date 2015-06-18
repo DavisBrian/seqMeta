@@ -74,18 +74,18 @@ bigZ <- matrix(NA,2*n,nrow(SNPInfo))
 colnames(bigZ) <- SNPInfo$Name
 
 for(gene in unique(SNPInfo$gene)) {
-snp.names <- SNPInfo$Name[SNPInfo$gene == gene]
-bigZ[1:n,SNPInfo$gene == gene][ , snp.names \\\%in\\\% colnames(Z1)] <-
+   snp.names <- SNPInfo$Name[SNPInfo$gene == gene]
+     bigZ[1:n,SNPInfo$gene == gene][ , snp.names \\\%in\\\% colnames(Z1)] <-
                    Z1[ , na.omit(match(snp.names,colnames(Z1)))]
-bigZ[(n+1):(2*n),SNPInfo$gene == gene][ , snp.names \\\%in\\\% colnames(Z2)] <-
+     bigZ[(n+1):(2*n),SNPInfo$gene == gene][ , snp.names \\\%in\\\% colnames(Z2)] <-
                    Z2[ , na.omit(match(snp.names,colnames(Z2)))]
 }
 
-pheno <- rbind(pheno1[,c("y","sex","bmi")],pheno2[,c("y","sex","bmi")])
-burden.p <- c(by(SNPInfo$Name, SNPInfo$gene,function(snp.names) {
-inds <- match(snp.names,colnames(bigZ)) burden <- rowSums(bigZ[,na.omit(inds)],na.rm=TRUE)
-mod <- lm(y~burden + gl(2,nrow(pheno1)),data=pheno)
-summary(mod)$coef[2,4]
+pheno <- rbind(pheno1[, c("y","sex","bmi")],pheno2[,c("y","sex","bmi")])
+burden.p <- c(by(SNPInfo$Name, SNPInfo$gene, function(snp.names) {
+   inds <- match(snp.names,colnames(bigZ)) burden <- rowSums(bigZ[,na.omit(inds)],na.rm=TRUE)
+   mod <- lm(y~burden + gl(2,nrow(pheno1)),data=pheno)
+   summary(mod)$coef[2,4]
 }))
 
 head(cbind(out$p,burden.p))

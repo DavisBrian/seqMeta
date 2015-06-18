@@ -52,12 +52,12 @@ an object of class 'seqMeta'. This is a list, not meant for human
   names of the list correspond to gene names. Each element in the list
   contains
 
-  \describe{
-   \item{scores}{The scores (y-yhat)^t g}
-   \item{cov}{The variance of the scores. When no covariates are used, this
-   is the LD matrix.}
-   \item{n}{The number of subjects} \item{maf}{The minor allele frequency}
-   \item{sey}{The residual standard error.} }
+  \item{scores}{The scores (y-yhat)^t g}
+  \item{cov}{The variance of the scores. When no covariates are used, this is
+  the LD matrix.}
+  \item{n}{The number of subjects}
+  \item{maf}{The minor allele frequency}
+  \item{sey}{The residual standard error.}
 }
 \description{
 This function is replacement for prepScores and prepScoresX and

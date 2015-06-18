@@ -50,36 +50,36 @@
 #' bigZ <- matrix(NA,2*n,nrow(SNPInfo))
 #' colnames(bigZ) <- SNPInfo$Name
 #' for(gene in unique(SNPInfo$gene)) {
-#' snp.names <- SNPInfo$Name[SNPInfo$gene == gene]
-#' bigZ[1:n,SNPInfo$gene == gene][, snp.names \%in\% colnames(Z1)] <- 
-#'      Z1[, na.omit(match(snp.names,colnames(Z1)))]
-#' bigZ[(n+1):(2*n),SNPInfo$gene == gene][, snp.names \%in\% colnames(Z2)] <- 
-#'      Z2[, na.omit(match(snp.names,colnames(Z2)))]
+#'    snp.names <- SNPInfo$Name[SNPInfo$gene == gene]
+#'      bigZ[1:n,SNPInfo$gene == gene][, snp.names \%in\% colnames(Z1)] <- 
+#'              Z1[, na.omit(match(snp.names,colnames(Z1)))]
+#'      bigZ[(n+1):(2*n),SNPInfo$gene == gene][, snp.names \%in\% colnames(Z2)] <- 
+#'              Z2[, na.omit(match(snp.names,colnames(Z2)))]
 #' }
 #' 
-#' pheno <- rbind(pheno1[,c("y","sex","bmi")],pheno2[,c("y","sex","bmi")])
+#' pheno <- rbind(pheno1[ ,c("y","sex","bmi")], pheno2[ , c("y","sex","bmi")])
 #' out3 <- apply(bigZ, 2, function(z) {
-#' if(any(!is.na(z))) {
-#'  z[is.na(z)] <- mean(z,na.rm=TRUE)
-#'  mod <- lm(y ~ sex+bmi+c(rep(1,n),rep(0,n))+z,data=pheno)
-#'  beta <- mod$coef["z"]
-#'  se <- sqrt(vcov(mod)["z","z"])
-#'  p <- pchisq( (beta/se)^2,df=1,lower=F)
-#'  return(c(beta,se,p))
-#'  } else {
-#'  return(c(0,Inf,1))
-#'  }
-#'  })
+#'          if(any(!is.na(z))) {
+#'            z[is.na(z)] <- mean(z,na.rm=TRUE)
+#'            mod <- lm(y ~ sex+bmi+c(rep(1,n),rep(0,n))+z, data=pheno)
+#'            beta <- mod$coef["z"]
+#'            se <- sqrt(vcov(mod)["z", "z"])
+#'            p <- pchisq( (beta/se)^2,df=1,lower=F)
+#'            return(c(beta,se,p))
+#'          } else {
+#'            return(c(0,Inf,1))
+#'          }
+#'  }) 
 #'  out3 <- t(out3[,match(out$Name,colnames(out3))])
 #'  
 #'  ##plot
 #'  par(mfrow=c(2,2))
-#'  plot(x=out3[,1],y=out$beta, xlab = "complete data (Wald)", 
-#'       ylab = "meta-analysis (Score)", main = "coefficients");abline(0,1)
-#'  plot(x=out3[,2],y=out$se, xlab = "complete data (Wald)", 
-#'       ylab = "meta-analysis (Score)", main = "standard errors");abline(0,1)
-#'  plot(x=out3[,3],y=out$p, xlab = "complete data (Wald)", 
-#'       ylab = "meta-analysis (Score)", main = "p-values");abline(0,1)
+#'  plot(x=out3[,1],y=out$beta, xlab="complete data (Wald)", 
+#'       ylab="meta-analysis (Score)", main="coefficients"); abline(0,1)
+#'  plot(x=out3[,2],y=out$se, xlab="complete data (Wald)", 
+#'       ylab="meta-analysis (Score)", main="standard errors"); abline(0,1)
+#'  plot(x=out3[,3],y=out$p, xlab="complete data (Wald)", 
+#'       ylab="meta-analysis (Score)", main="p-values"); abline(0,1)
 #'  }
 #' @export
 singlesnpMeta <- function(..., SNPInfo=NULL, snpNames="Name", aggregateBy="gene", studyBetas=TRUE, verbose=FALSE) {
