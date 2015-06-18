@@ -43,10 +43,13 @@
 #' adjustments
 #' 
 #' ####run on each study:
-#' cohort1.adj <- prepCondScores(Z=Z1, y~sex+bmi, SNPInfo = SNPInfo, adjustments=adjustments, data =pheno1)
-#' cohort2.adj <- prepCondScores(Z=Z2, y~sex+bmi, SNPInfo = SNPInfo, adjustments=adjustments, kins=kins, data=pheno2)
+#' cohort1.adj <- prepCondScores(Z=Z1, y~sex+bmi, SNPInfo = SNPInfo, 
+#'                 adjustments=adjustments, data =pheno1)
+#' cohort2.adj <- prepCondScores(Z=Z2, y~sex+bmi, SNPInfo = SNPInfo, 
+#'                 adjustments=adjustments, kins=kins, data=pheno2)
 #' 
-#' SNPInfo.sub <- subset(SNPInfo, (SNPInfo$gene \%in\% adjustments$gene) & !(SNPInfo$Name \%in\% adjustments$Name) )
+#' SNPInfo.sub <- subset(SNPInfo, (SNPInfo$gene \%in\% adjustments$gene) & 
+#'                                 !(SNPInfo$Name \%in\% adjustments$Name) )
 #' 
 #' #skat
 #' out.skat <- skatMeta(cohort1.adj,cohort2.adj, SNPInfo = SNPInfo.sub)

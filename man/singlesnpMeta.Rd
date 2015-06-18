@@ -59,8 +59,10 @@ bigZ <- matrix(NA,2*n,nrow(SNPInfo))
 colnames(bigZ) <- SNPInfo$Name
 for(gene in unique(SNPInfo$gene)) {
 snp.names <- SNPInfo$Name[SNPInfo$gene == gene]
-bigZ[1:n,SNPInfo$gene == gene][, snp.names \\\%in\\\% colnames(Z1)] <- Z1[, na.omit(match(snp.names,colnames(Z1)))]
-bigZ[(n+1):(2*n),SNPInfo$gene == gene][, snp.names \\\%in\\\% colnames(Z2)] <- Z2[, na.omit(match(snp.names,colnames(Z2)))]
+bigZ[1:n,SNPInfo$gene == gene][, snp.names \\\%in\\\% colnames(Z1)] <-
+     Z1[, na.omit(match(snp.names,colnames(Z1)))]
+bigZ[(n+1):(2*n),SNPInfo$gene == gene][, snp.names \\\%in\\\% colnames(Z2)] <-
+     Z2[, na.omit(match(snp.names,colnames(Z2)))]
 }
 
 pheno <- rbind(pheno1[,c("y","sex","bmi")],pheno2[,c("y","sex","bmi")])
@@ -80,9 +82,12 @@ if(any(!is.na(z))) {
 
  ##plot
  par(mfrow=c(2,2))
- plot(x=out3[,1],y=out$beta, xlab = "complete data (Wald)", ylab = "meta-analysis (Score)", main = "coefficients");abline(0,1)
- plot(x=out3[,2],y=out$se, xlab = "complete data (Wald)", ylab = "meta-analysis (Score)", main = "standard errors");abline(0,1)
- plot(x=out3[,3],y=out$p, xlab = "complete data (Wald)", ylab = "meta-analysis (Score)", main = "p-values");abline(0,1)
+ plot(x=out3[,1],y=out$beta, xlab = "complete data (Wald)",
+      ylab = "meta-analysis (Score)", main = "coefficients");abline(0,1)
+ plot(x=out3[,2],y=out$se, xlab = "complete data (Wald)",
+      ylab = "meta-analysis (Score)", main = "standard errors");abline(0,1)
+ plot(x=out3[,3],y=out$p, xlab = "complete data (Wald)",
+      ylab = "meta-analysis (Score)", main = "p-values");abline(0,1)
  }
 }
 \author{
