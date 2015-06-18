@@ -70,7 +70,7 @@
 #'   
 #'   Please see the package vignette for more details.
 #'   
-#' @author Arie Voorman, Jennifer Brody
+#' @author Brian Davis, Arie Voorman, Jennifer Brody
 #'   
 #' @references Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X.
 #'   (2011) Rare Variant Association Testing for Sequencing Data Using the

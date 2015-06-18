@@ -81,7 +81,7 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' ### see ?seqMetaExample	
+#' ### load example data for 2 studies
 #' data(seqMetaExample)
 #' 
 #' ####run on each study:

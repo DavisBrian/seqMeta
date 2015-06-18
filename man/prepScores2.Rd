@@ -116,7 +116,7 @@ For survival models, the signed likelihood ratio statistic is used
   Please see the package vignette for more details.
 }
 \author{
-Arie Voorman, Jennifer Brody
+Brian Davis, Arie Voorman, Jennifer Brody
 }
 \references{
 Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X.
