@@ -15,16 +15,18 @@ names of this matrix should correspond to SNP names in the SNP information
 file.}
 
 \item{formula}{Base formula, of the kind used in glm() - typically of the
-form y~covariate1 + covariate2.}
+form y~covariate1 + covariate2. For Cox models, the formula follows that of
+the coxph() function.}
 
 \item{family}{either 'gaussian', for continuous data, or 'binomial' for 0/1
-outcomes. Binary outcomes are not currently supported for family data.}
+outcomes. Binary outcomes are not currently supported for family data. See
+Details.}
 
 \item{SNPInfo}{SNP Info file - must contain fields given in 'snpName' and
 'aggregateBy'.}
 
 \item{snpNames}{The field of SNPInfo where the SNP identifiers are found.
-Default is 'Name'}
+Default is 'Name'.  See Details.}
 
 \item{aggregateBy}{The field of SNPInfo on which the skat results were
 aggregated. Default is 'gene'. For single snps which are intended only for
@@ -32,15 +34,15 @@ single variant analyses, it is recomended that they have a unique
 identifier in this field.}
 
 \item{kins}{the kinship matrix for related individuals. Only supported for
-family=gaussian(). See lmekin and the kinship2 package for more details.}
+family=gaussian(). See lmekin in the kinship2 package for more details.}
 
 \item{sparse}{whether or not to use a sparse Matrix approximation for dense
 kinship matrices (defaults to TRUE).}
 
 \item{data}{data frame in which to find variables in the formula}
 
-\item{male}{For analyzing the X chromosome, with prepScoresX, 'male' is the
-gender vector (0/1 or F/T) indicating female/male. See details.}
+\item{male}{For analyzing the X chromosome, with prepScoresX, `male' is the
+gender (0/1 or F/T) indicating female/male. See details.}
 
 \item{verbose}{logical. whether or not to print the progress bar.}
 }
@@ -51,17 +53,17 @@ an object of class 'seqMeta'. This is a list, not meant for human
   contains
 
   \describe{
-  \item{scores}{The scores (y-yhat)^t g}
-  \item{cov}{The variance of the scores. When no covariates are used, this is the LD matrix.}
-  \item{n}{The number of subjects}
-  \item{maf}{The minor allele frequency}
-  \item{sey}{The residual standard error.}
-  }
+   \item{scores}{The scores (y-yhat)^t g}
+   \item{cov}{The variance of the scores. When no covariates are used, this
+   is the LD matrix.}
+   \item{n}{The number of subjects} \item{maf}{The minor allele frequency}
+   \item{sey}{The residual standard error.} }
 }
 \description{
-This function computes and organizes the neccesary output to
-  efficiently meta-analyze SKAT and other tests. Note that the tests are
-  *not* computed by these functions. The output must be passed to one of
+This function is replacement for prepScores and prepScoresX and
+  computes and organizes the neccesary output to efficiently meta-analyze
+  SKAT and other tests. Note that the tests are *not* computed by these
+  functions. The output must be passed to one of
   \code{\link[seqMeta]{skatMeta}}, \code{\link[seqMeta]{burdenMeta}}, or
   \code{\link[seqMeta]{singlesnpMeta}}.
 
@@ -70,10 +72,17 @@ This function computes and organizes the neccesary output to
   facilitate meta analysis of whole genomes or exomes.
 }
 \details{
-This function computes the neccesary information to meta analyze
-  SKAT analyses: the individual SNP scores, their MAF, and a covariance
-  matrix for each unit of aggregation. Note that the SKAT test is *not*
-  calculated by this function. The output must be passed to one of
+This function is a drop in replacement for prepScores and
+  prepScoresX.  If male is passed as a parameter the results will be the same
+  as if prepScoresX had been called.  If male is not passed the results will
+  be the same as if prepScores was called.  Unlike prepScores and prepScoresX
+  the family parameter is a character string and not a function.  Internally
+  it will convert it to a function.
+
+  This function computes the neccesary information to meta analyze SKAT
+  analyses: the individual SNP scores, their MAF, and a covariance matrix for
+  each unit of aggregation. Note that the SKAT test is *not* calculated by
+  this function. The output must be passed to one of
   \code{\link[seqMeta]{skatMeta}}, \code{\link[seqMeta]{burdenMeta}}, or
   \code{\link[seqMeta]{singlesnpMeta}}.
 
@@ -99,7 +108,7 @@ This function computes the neccesary information to meta analyze
   object to a function for meta-analysis.
 }
 \note{
-For \code{prepCox}, the signed likelihood ratio statistic is used
+For survival models, the signed likelihood ratio statistic is used
   instead of the score, as the score test is anti-conservative for
   proportional hazards regression. The code for this routine is based on the
   \code{coxph.fit} function from the \code{survival} package.
@@ -110,13 +119,23 @@ For \code{prepCox}, the signed likelihood ratio statistic is used
 Arie Voorman, Jennifer Brody
 }
 \references{
-Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X. (2011) Rare Variant Association Testing for Sequencing Data Using the Sequence Kernel Association Test (SKAT). American Journal of Human Genetics.
+Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X.
+  (2011) Rare Variant Association Testing for Sequencing Data Using the
+  Sequence Kernel Association Test (SKAT). American Journal of Human
+  Genetics.
 
-Chen H, Meigs JB, Dupuis J. Sequence Kernel Association Test for Quantitative Traits in Family Samples. Genetic Epidemiology. (To appear)
+  Chen H, Meigs JB, Dupuis J. Sequence Kernel Association Test for
+  Quantitative Traits in Family Samples. Genetic Epidemiology. (To appear)
 
-Lin, DY and Zeng, D. On the relative efficiency of using summary statistics versus individual-level data in meta-analysis. Biometrika. 2010.
+  Lin, DY and Zeng, D. On the relative efficiency of using summary statistics
+  versus individual-level data in meta-analysis. Biometrika. 2010.
 }
 \seealso{
-\code{\link[seqMeta]{skatMeta}} \code{\link[seqMeta]{burdenMeta}} \code{\link[seqMeta]{singlesnpMeta}} \code{\link[seqMeta]{skatOMeta}} \code{\link[survival]{coxph}}
+\code{\link[seqMeta]{prepScores}}
+\code{\link[seqMeta]{prepScoresX}}
+\code{\link[seqMeta]{skatMeta}}
+\code{\link[seqMeta]{burdenMeta}}
+\code{\link[seqMeta]{singlesnpMeta}}
+\code{\link[seqMeta]{skatOMeta}}
 }
 
