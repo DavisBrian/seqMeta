@@ -9,7 +9,7 @@
 #'   to analyze with snp
 #' @inheritParams prepScores
 #'   
-#' @details 	This function has the same syntax as \code{\link{prepCondScores}},
+#' @details This function has the same syntax as \code{\link{prepCondScores}},
 #'   but requires an extra argument `adjustments`. This is a data frame of the
 #'   same format as the SNPInfo, i.e. with a `snpNames` and `aggregateBy`
 #'   columns. The function works by looping through the genes in the adjustment
