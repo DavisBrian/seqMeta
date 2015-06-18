@@ -1,3 +1,5 @@
+#' @rdname prepScores
+#' @export
 prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "gene", data=parent.frame(), verbose =FALSE){
   #require(survival)
   env <- environment()

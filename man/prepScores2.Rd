@@ -28,8 +28,8 @@ Default is 'Name'}
 
 \item{aggregateBy}{The field of SNPInfo on which the skat results were
 aggregated. Default is 'gene'. For single snps which are intended only for
-single variant analyses, it is reccomended that they have a unique
-identifier in this field. for the SNP identifier is found.  See Details.}
+single variant analyses, it is recomended that they have a unique
+identifier in this field.}
 
 \item{kins}{the kinship matrix for related individuals. Only supported for
 family=gaussian(). See lmekin and the kinship2 package for more details.}

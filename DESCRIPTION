@@ -2,18 +2,39 @@ Package: seqMeta
 Type: Package
 Title: Meta-Analysis of Region-Based Tests of Rare DNA Variants
 Version: 1.5.0.9011
-Date: 2015-05-14
+Date: 2015-06-14
 Author: Arie Voorman, Jennifer Brody, Han Chen, Thomas Lumley
 Maintainer: Brian Davis <Brian.Davis281@gmail.com>
 URL: https://github.com/DavisBrian/seqMeta
 BugReports: https://github.com/DavisBrian/seqMeta/issues
-Depends: R (>= 3.1.0), survival
-Imports: Matrix, coxme, CompQuadForm
-Suggests: SKAT, kinship2,
+Depends:
+    R (>= 3.1.0),
+    survival
+Imports:
+    Matrix,
+    coxme,
+    CompQuadForm
+Suggests:
+    SKAT,
+    kinship2,
     testthat
-Description: Computes necessary information to meta analyze region-based tests for rare genetic variants (e.g. SKAT, T1) in individual studies, and performs meta analysis.
+Description: Computes necessary information to meta analyze region-based
+    tests for rare genetic variants (e.g. SKAT, T1) in individual studies, and
+    performs meta analysis.
 License: GPL (>= 2)
-Packaged: 2014-10-28 05:06:58 UTC; arie
 NeedsCompilation: yes
-Repository: CRAN
-Date/Publication: 2014-10-28 08:11:22
+Collate:
+    'burdenMeta.R'
+    'c.seqMeta.R'
+    'check_format_skat.R'
+    'coxlr.fit.R'
+    'pchisqsum2.R'
+    'prepAdjust.R'
+    'prepScores.R'
+    'prepCox.R'
+    'prepScores2.R'
+    'seqMeta.R'
+    'singlesnpMeta.R'
+    'skatMeta.R'
+    'skatOMeta.R'
+    'utils.R'
