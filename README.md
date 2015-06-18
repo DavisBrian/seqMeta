@@ -17,10 +17,10 @@ You can install:
     install.packages("seqMeta")
     ```
 
--   the latest development version for testing by downloading seqMeta\_1.5.0.9XXX.tar.gz and running
+-   the latest development version for testing by downloading seqMeta\_1.5.0.9021.tar.gz and running
 
     ``` r
-    install.packages("/path/to/file/seqMeta_1.5.0.9XXX.tar.gz", type = "source")
+    install.packages("/path/to/file/seqMeta_1.5.0.9021.tar.gz", type = "source")
     ```
 
 -   the latest development version from github with
@@ -34,10 +34,11 @@ You can install:
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues).
 
-seqMeta 1.5.0.9011
+seqMeta 1.5.0.9021
 ------------------
 
 -   Migrated to git / github
+    -   Bug Reports and Feature Requests should be submitted [github](https://github.com/DavisBrian/seqMeta/issues).
 -   Minimum R version moved to 3.1.0
 -   Fixed issue \#1 - Duplicated SNP in snpinfo gene pulls from the genotype matrix twice.
 -   Fixed issue \#2 - Monomorphic snps with caf != 0 handled incorrectly.
@@ -78,6 +79,4 @@ prepScores2 is a drop in replacement for prepScores and prepScoresX. The only di
 -   add back verbose option to `prepScores2`
 -   prepScores2 support for Survival
 -   check kins and Z are in the same order?
--   need to verify `impute_to_mean` code does NOT make a copy of the genotype matrix if it is a matrix
--   test real `binomial` cases
 -   test real kinship cases
