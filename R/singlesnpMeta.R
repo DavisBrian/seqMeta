@@ -82,7 +82,7 @@
 #'       ylab = "meta-analysis (Score)", main = "p-values");abline(0,1)
 #'  }
 #' @export
-singlesnpMeta <- function(..., SNPInfo=NULL, snpNames = "Name", aggregateBy = "gene", studyBetas = TRUE, verbose = FALSE) {
+singlesnpMeta <- function(..., SNPInfo=NULL, snpNames="Name", aggregateBy="gene", studyBetas=TRUE, verbose=FALSE) {
 	cl <- match.call(expand.dots=FALSE)
 	if(is.null(SNPInfo)){ 
 		warning("No SNP Info file provided: loading the Illumina HumanExome BeadChip. See ?SNPInfo for more details")
