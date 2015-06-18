@@ -104,10 +104,10 @@ bigZ <- matrix(NA,2*n,nrow(SNPInfo))
 colnames(bigZ) <- SNPInfo$Name
 
 for(gene in unique(SNPInfo$gene)) {
-snp.names <- SNPInfo$Name[SNPInfo$gene == gene]
-bigZ[1:n,SNPInfo$gene == gene][ , snp.names \\\%in\\\% colnames(Z1)] <-
+ snp.names <- SNPInfo$Name[SNPInfo$gene == gene]
+   bigZ[1:n,SNPInfo$gene == gene][ , snp.names \\\%in\\\% colnames(Z1)] <-
                    Z1[ , na.omit(match(snp.names,colnames(Z1)))]
-bigZ[(n+1):(2*n),SNPInfo$gene == gene][ , snp.names \\\%in\\\% colnames(Z2)] <-
+   bigZ[(n+1):(2*n),SNPInfo$gene == gene][ , snp.names \\\%in\\\% colnames(Z2)] <-
                    Z2[ , na.omit(match(snp.names,colnames(Z2)))]
 }
 
