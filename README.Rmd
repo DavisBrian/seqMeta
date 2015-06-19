@@ -50,6 +50,8 @@ If you encounter a clear bug, please file a minimal reproducible example on [git
 * Fixed issue #3 - Binomial models when genotypes imputed outside of seqMeta did not match when models were imputed by seqMeta.  Very slight differences in the covariance structure.
 * Fixed issue #4 - Replaced `any(is.na(Z))` with `anyNA(Z)`
 * Fixed issue #5 - Range test now checks that genotypes are [0, 2].
+* Fixed issue #6 - SNPInfo is seqMetaExamples has incorrect type of snpNames and aggregateBy.
+* Automatically convert (with warning) aggregateBy and snpName columns to type character
 * Added new function prepScores2
 
 ### prepScores2

@@ -1,6 +1,15 @@
 # prepSNPInfo
 prepSNPInfo <- function(snpinfo, snpNames, aggregateBy, wt1=NULL, wt2=NULL) {
   
+  if(!is.character(SNPInfo[ , snpNames])) {
+    SNPInfo[ , snpNames] <- as.character(SNPInfo[ , snpNames])
+    warning("Converting snpNames column to character")
+  }
+  if(!is.character(SNPInfo[ , aggregateBy])) {
+    SNPInfo[ , aggregateBy] <- as.character(SNPInfo[ , aggregateBy])
+    warning("Converting aggregateBy column to character")
+  }
+  
   dups <- duplicated(snpinfo[ , c(aggregateBy, snpNames)])
   snp_na <- is.na(snpinfo[ , snpNames])
   gene_na <- is.na(snpinfo[ , aggregateBy])

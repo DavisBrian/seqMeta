@@ -47,7 +47,8 @@ pheno1 <-  data.frame("y" = rnorm(n), "sex"=rep(1:2,(n/2)), "bmi"=rnorm(n,25,2),
 	"ybin" = rbinom(n,1,.5), "time"=rpois(n,5), "status"=rbinom(n,1,.9))
 
 genes <- paste0("gene",1:k)
-SNPInfo <- data.frame("Name" =1:(d+50) + 1e6, "gene" = sort(sample(genes,d+50,replace=T)))
+SNPInfo <-data.frame("Name"=as.character(1:(d+50) + 1e6), "gene" = sort(sample(genes,d+50,replace=T)), stringsAsFactors = FALSE)
+#SNPInfo <- data.frame("Name" =1:(d+50) + 1e6, "gene" = sort(sample(genes,d+50,replace=T)))
 
 #####Second cohort of family data:
 # 150 families of size 4
