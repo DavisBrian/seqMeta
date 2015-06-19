@@ -132,7 +132,7 @@ test_that("duplicated SNPS in snpinfo gene only get counted once - prepScoresX b
   expect_equal(nrow(cohort2b$gene1$cov), 15)
   
   # test prepScores2 equivalency
-  ps2b <- prepScores2(Z=Zgene1, ybin~1, male=pheno1$sex-1, family=binomial(), SNPInfo=si, data=pheno1)
+  ps2b <- prepScores2(Z=Zgene1, ybin~1, male=pheno1$sex-1, family="binomial", SNPInfo=si, data=pheno1)
   expect_equal(ps2b, cohort1b)
 })
 
@@ -219,8 +219,8 @@ test_that("duplicated SNPS in snpinfo gene only get counted once - prepScores2 g
 })
  
 test_that("duplicated SNPS in snpinfo gene only get counted once - prepScores2 binomial)", { 
-  cohort1b <- prepScores2(Z=Zgene1, ybin~1, family=binomial(), SNPInfo=si, data=pheno1)
-  cohort2b <- prepScores2(Z=Zgene1, ybin~1, family=binomial(), SNPInfo=si_dups, data=pheno1)
+  cohort1b <- prepScores2(Z=Zgene1, ybin~1, family="binomial", SNPInfo=si, data=pheno1)
+  cohort2b <- prepScores2(Z=Zgene1, ybin~1, family="binomial", SNPInfo=si_dups, data=pheno1)
   expect_equal(length(cohort1b), 1)
   expect_equal(length(cohort2b), 1)
   expect_equal(cohort1b, cohort2b)
@@ -276,8 +276,8 @@ test_that("duplicated SNPS in snpinfo gene only get counted once - prepScores2 g
 })
 
 test_that("duplicated SNPS in snpinfo gene only get counted once - prepScores2 binomial w/ kinship)", {
-  cohort1b <- prepScores2(Z=Zgene1, ybin~1, male=pheno1$sex-1, family=binomial(), SNPInfo=si, data=pheno1)
-  cohort2b <- prepScores2(Z=Zgene1, ybin~1, male=pheno1$sex-1, family=binomial(), SNPInfo=si_dups, data=pheno1)
+  cohort1b <- prepScores2(Z=Zgene1, ybin~1, male=pheno1$sex-1, family="binomial", SNPInfo=si, data=pheno1)
+  cohort2b <- prepScores2(Z=Zgene1, ybin~1, male=pheno1$sex-1, family="binomial", SNPInfo=si_dups, data=pheno1)
   expect_equal(length(cohort1b), 1)
   expect_equal(length(cohort2b), 1)
   expect_equal(cohort1b, cohort2b)

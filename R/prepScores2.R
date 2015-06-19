@@ -124,12 +124,30 @@ prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="N
   maf <- calculate_maf(Z, male)
   monos <- monomorphic_snps(Z)
   Z <- impute_to_mean(Z, male)  
-  scores <- colSums(m$res*Z) 
-  scores[monos] <- 0
+  
+  if (m$family == "cox") {
+    zlrt <- rep.int(0, ncol(Z))
+    names(zlrt) <- colnames(Z)
+    dat <- cbind(0, m$X)
+    for(j in 1:ncol(Z)) {
+      dat[ , 1] <- Z[ , j]
+      model<- coxlr.fit(dat, m$y, m$strata, NULL, init=c(0,m$coef), coxph.control(iter.max=100), NULL,"efron", m$rn)
+      zlrt[j] <- sign(coef(model)[1])*sqrt(2*diff(model$loglik))
+    }
+    #  zlrt[is.na(zlrt)] <- 0
+    zlrt[monos] <- 0
+  } else {
+    scores <- colSums(m$res*Z) 
+    scores[monos] <- 0    
+  }
   
   re <- calculate_cov(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins)
   
-  create_seqMeta(re, scores, maf, m, SNPInfo, snpNames, aggregateBy) 
+  if (m$family == "cox") {
+    create_seqMeta(re, zlrt, maf, m, SNPInfo, snpNames, aggregateBy) 
+  } else {
+    create_seqMeta(re, scores, maf, m, SNPInfo, snpNames, aggregateBy)     
+  }
 }
 
 
@@ -187,14 +205,14 @@ impute_to_mean <- function(Z, male=NULL) {
 # prepPhenotype
 create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, data=parent.frame()) {
   
-  if (!is.character(family) || is.function(family) || is.family(family)) {
-    fam <- family$family   
+  if (!is.character(family)) {
+    stop("family must be a character string.  Only family type 'gaussian', 'binomial', and 'cox' are currently supported.")
   } else {
-    fam=family
-  }
-  if (is.null(fam)) {
-    print(fam)
-    stop("'family' not recognized")
+    if (family == "gaussian" || family == "binomial" || family == "cox") {
+      fam=family       
+    } else {
+      stop("Unknown family type.  Only 'gaussian', 'binomial', and 'cox' are currently supported.")
+    }
   }
   
   if(!is.null(kins)){
@@ -224,12 +242,12 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     res <- as.vector(nullmodel$res)* s2 / nullmodel$theta[2]  
     Om_i <- solve(SIGMA/s2)
     # optimize calculations
-     tX1_Om_i <- crossprod(X1, Om_i)
-     AX1 <- with(svd(tX1_Om_i%*%X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(v[, d > 0,drop=FALSE])))%*%tX1_Om_i
+    tX1_Om_i <- crossprod(X1, Om_i)
+    AX1 <- with(svd(tX1_Om_i%*%X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(v[, d > 0,drop=FALSE])))%*%tX1_Om_i
     
     check_dropped_subjects(res, formula)
     list(res=res, family=fam, n=nrow(X1), sey=sqrt(s2), sef=sef, X1=X1, AX1=AX1, Om_i=Om_i)
-  } else {
+  } else if (fam == "binomial" || fam == "gaussian") {
     nullmodel <- glm(formula=formula, family=fam, data=data)
     res <- residuals(nullmodel, type = "response")  
     check_dropped_subjects(res, formula) 
@@ -244,8 +262,79 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
       stop("Only family type 'binomial' and 'gaussian' are currently supported.")
     }   
     list(res=res, family=fam, n=nrow(X1), sey=sey, sef=sef, X1=X1, AX1=AX1)
-  }  
+  } else if (fam == "cox") {
+    nullmodel <- coxph(formula=formula, data=data)
+    strata <- eval(parse(text=rownames(attr(nullmodel$terms, "factors"))[attr(nullmodel$terms, "specials")$strata]), envir=data) # necessary for stratified analysis - 2014-10-07 - HC
+    X <- model.matrix(nullmodel, data)
+    rn <- row.names(model.frame(nullmodel,data=data))
+    nullcoef <- coef(nullmodel)
+    
+    list(X=X, family=fam, n=nrow(X), sey=1, y=nullmodel$y, strata=strata, rn=rn, coef=nullcoef)
+  } else {
+    stop("Unknown family type.  Only 'gaussian', 'binomial', and 'cox' are currently supported.")
+  }
 }
+# create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, data=parent.frame()) {
+#   
+#   if (!is.character(family) || is.function(family) || is.family(family)) {
+#     fam <- family$family   
+#   } else {
+#     fam=family
+#   }
+#   if (is.null(fam)) {
+#     print(fam)
+#     stop("'family' not recognized")
+#   }
+#   
+#   if(!is.null(kins)){
+#     if (fam != "gaussian") {
+#       stop("Family data is currently only supported for continuous outcomes.")
+#     } 
+#     if(sparse){
+#       kins[kins < 2^{-5}] <- 0
+#       kins <- forceSymmetric(kins)
+#     }
+#     data$id <- if(is.null(colnames(kins))){
+#       1:ncol(kins)
+#     } else {
+#       colnames(kins)
+#     }    
+#     
+#     nullmodel <- lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")  
+#     
+#     nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)   
+#     SIGMA <- nullmodel$theta[1] * 2 * kins + nullmodel$theta[2] * Diagonal(nrow(kins))   
+#     s2 <- sum(nullmodel$theta)
+#     
+#     #rotate data:
+#     nullmodel$family$var <- function(x){1}
+#     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
+#     X1 <- sef*model.matrix(lm(formula,data=data)) 
+#     res <- as.vector(nullmodel$res)* s2 / nullmodel$theta[2]  
+#     Om_i <- solve(SIGMA/s2)
+#     # optimize calculations
+#      tX1_Om_i <- crossprod(X1, Om_i)
+#      AX1 <- with(svd(tX1_Om_i%*%X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(v[, d > 0,drop=FALSE])))%*%tX1_Om_i
+#     
+#     check_dropped_subjects(res, formula)
+#     list(res=res, family=fam, n=nrow(X1), sey=sqrt(s2), sef=sef, X1=X1, AX1=AX1, Om_i=Om_i)
+#   } else {
+#     nullmodel <- glm(formula=formula, family=fam, data=data)
+#     res <- residuals(nullmodel, type = "response")  
+#     check_dropped_subjects(res, formula) 
+#     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
+#     X1 <- sef*model.matrix(nullmodel) 
+#     AX1 <- with(svd(X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(u[, d > 0,drop=FALSE])))     
+#     sey <- if (fam == "gaussian") {
+#       sqrt(var(res)*(nrow(X1) - 1)/(nrow(X1) - ncol(X1)) )
+#     } else if (fam == "binomial") {
+#       1
+#     } else {
+#       stop("Only family type 'binomial' and 'gaussian' are currently supported.")
+#     }   
+#     list(res=res, family=fam, n=nrow(X1), sey=sey, sef=sef, X1=X1, AX1=AX1)
+#   }  
+# }
 
 check_dropped_subjects <- function(res, formula) {
   if (!is.null(na.action(res))) { 
@@ -308,43 +397,78 @@ calculate_maf <- function(Z, male=NULL) {
   maf
 }
 
-calculate_scores <- function(Z, m) {
+calculate_scores <- function(Z, m, monos) {
   
-  scores <- colSums(m$res*Z)
-  scores[is.na(scores)] <- 0
-  names(scores) <- colnames(Z)
+  if (m$family == "cox") {
+    scores <- rep.int(0, ncol(Z))
+    names(scores) <- colnames(Z)
+    dat <- cbind(0, m$X)
+    for(j in 1:ncol(Z)) {
+      dat[ , 1] <- Z[ , j]
+      model<- coxlr.fit(dat, m$y, m$strata, NULL, init=c(0,m$coef), coxph.control(iter.max=100), NULL,"efron", m$rn)
+      scores[j] <- sign(coef(model)[1])*sqrt(2*diff(model$loglik))
+    }
+    #  scores[is.na(scores)] <- 0
+  } else {
+    scores <- colSums(m$res*Z) 
+  }
+  scores[monos] <- 0
   
   scores  
 }
 
 calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
-  ##get matrices for projection
-  X1 <- m$X1
-  AX1 <- m$AX1
   
-  ##get covariance matrices:
-  re <- tapply(SNPInfo[, snpNames], SNPInfo[, aggregateBy],function(snp.names){
-    inds <- intersect(snp.names, colnames(Z))
-    if(length(inds) > 0L) {
+  if (m$family == "cox") {
+    X <- m$X
+    re <- tapply(SNPInfo[, snpNames], SNPInfo[, aggregateBy],function(snp.names){
+      inds <- intersect(snp.names,colnames(Z))
       mcov <- matrix(0,length(snp.names),length(snp.names), dimnames=list(snp.names, snp.names))
-      Z0 <- m$sef*Z[, inds, drop=FALSE]
-      #      Z0 <- impute_to_mean(Z0)     # not sure how Z0 can have missing values
-      if(!is.null(kins)){
-        tZ0_Omi <- crossprod(Z0, m$Om_i)
-        mcov[inds, inds] <- as.matrix(tZ0_Omi%*%Z0 - (tZ0_Omi%*%X1)%*%(AX1%*%Z0))
-      } else {
-        mcov[inds, inds] <- crossprod(Z0) - crossprod(Z0,X1)%*%(AX1%*%Z0)
+      if(length(inds) > 0L){
+        Z0 <- Z[, inds,drop=FALSE]
+        zvar <- apply(Z0,2,var)
+        mod1 <- coxlr.fit(cbind(Z0[,zvar !=0],X), m$y, m$strata, NULL,
+                          init=c(rep(0,ncol(Z0[,zvar !=0,drop=FALSE])),m$coef),coxph.control(iter.max=0),NULL,"efron",m$rn)
+        mcov[inds[zvar !=0], inds[zvar !=0]] <- tryCatch(
+          ginv_s(mod1$var[1:sum(zvar !=0),1:sum(zvar !=0),drop=FALSE]),
+          error=function(e){
+            cov(Z0[m$y[,"status"]==1,zvar !=0,drop=FALSE])*(sum(m$y[,"status"]==1)-1)
+          })
       }
-      mono_snps <- intersect(inds, monos)
-      mcov[mono_snps , ] <- 0
-      mcov[ , mono_snps] <- 0
-      forceSymmetric(Matrix(mcov,sparse=TRUE))     
-    } else{
-      Matrix(0, nrow=length(snp.names), ncol=length(snp.names), dimnames=list(snp.names, snp.names), sparse=TRUE)
-    }
-  },simplify = FALSE)
-  
-  re
+      return(forceSymmetric(Matrix(mcov,sparse=TRUE)))
+    },simplify = FALSE)
+    
+    re
+    
+  } else {
+    ##get matrices for projection
+    X1 <- m$X1
+    AX1 <- m$AX1
+    
+    ##get covariance matrices:
+    re <- tapply(SNPInfo[, snpNames], SNPInfo[, aggregateBy],function(snp.names){
+      inds <- intersect(snp.names, colnames(Z))
+      if(length(inds) > 0L) {
+        mcov <- matrix(0,length(snp.names),length(snp.names), dimnames=list(snp.names, snp.names))
+        Z0 <- m$sef*Z[, inds, drop=FALSE]
+        #      Z0 <- impute_to_mean(Z0)     # not sure how Z0 can have missing values
+        if(!is.null(kins)){
+          tZ0_Omi <- crossprod(Z0, m$Om_i)
+          mcov[inds, inds] <- as.matrix(tZ0_Omi%*%Z0 - (tZ0_Omi%*%X1)%*%(AX1%*%Z0))
+        } else {
+          mcov[inds, inds] <- crossprod(Z0) - crossprod(Z0,X1)%*%(AX1%*%Z0)
+        }
+        mono_snps <- intersect(inds, monos)
+        mcov[mono_snps , ] <- 0
+        mcov[ , mono_snps] <- 0
+        forceSymmetric(Matrix(mcov,sparse=TRUE))     
+      } else{
+        Matrix(0, nrow=length(snp.names), ncol=length(snp.names), dimnames=list(snp.names, snp.names), sparse=TRUE)
+      }
+    },simplify = FALSE)
+    
+    re
+  }
 }
 
 fill_values <- function(x, r) { 
@@ -365,6 +489,12 @@ create_seqMeta <- function(re, scores, maf , m, SNPInfo, snpNames, aggregateBy) 
   names(scores_si) <- SNPInfo[ , snpNames]  
   scores_si <- fill_values(scores_si, scores)
   scores_split   <-   split(scores_si, SNPInfo[ , aggregateBy])
+  
+  if(m$family == "cox") {
+    for(k in 1:length(re)){
+      scores_split[[k]] <- scores_split[[k]]*sqrt(diag(re[[k]]))
+    }
+  }
   
   ##aggregate
   for(k in 1:length(re)){

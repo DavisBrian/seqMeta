@@ -144,7 +144,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores binomial
   expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
   
   # test prepScores2 equivalency
-  ps2 <- prepScores2(Z=Zgene1, ybin~1, family=binomial(), SNPInfo=si, data=pheno1)
+  ps2 <- prepScores2(Z=Zgene1, ybin~1, family="binomial", SNPInfo=si, data=pheno1)
   expect_equal(ps2, cohort1)
 })
 
@@ -250,7 +250,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 gaussia
 })
 
 test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 binomial)", {
-  cohort1 <- prepScores2(Z=Zgene1, ybin~1, family=binomial(), SNPInfo=si, data=pheno1)
+  cohort1 <- prepScores2(Z=Zgene1, ybin~1, family="binomial", SNPInfo=si, data=pheno1)
   
   # check maf
   expect_equal(cohort1$gene1$maf[monos[1]], 0, check.attributes=FALSE)
