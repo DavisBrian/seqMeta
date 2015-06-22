@@ -1,12 +1,12 @@
 # prepSNPInfo
 prepSNPInfo <- function(snpinfo, snpNames, aggregateBy, wt1=NULL, wt2=NULL) {
   
-  if(!is.character(SNPInfo[ , snpNames])) {
-    SNPInfo[ , snpNames] <- as.character(SNPInfo[ , snpNames])
+  if(!is.character(snpinfo[ , snpNames])) {
+    snpinfo[ , snpNames] <- as.character(snpinfo[ , snpNames])
     warning("Converting snpNames column to character")
   }
-  if(!is.character(SNPInfo[ , aggregateBy])) {
-    SNPInfo[ , aggregateBy] <- as.character(SNPInfo[ , aggregateBy])
+  if(!is.character(snpinfo[ , aggregateBy])) {
+    snpinfo[ , aggregateBy] <- as.character(snpinfo[ , aggregateBy])
     warning("Converting aggregateBy column to character")
   }
   

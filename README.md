@@ -17,10 +17,10 @@ You can install:
     install.packages("seqMeta")
     ```
 
--   the latest development version for testing by downloading seqMeta\_1.5.0.9026.tar.gz and running
+-   the latest development version for testing by downloading seqMeta\_1.5.0.9028.tar.gz and running
 
     ``` r
-    install.packages("/path/to/file/seqMeta_1.5.0.9026.tar.gz", type = "source")
+    install.packages("/path/to/file/seqMeta_1.5.0.9028.tar.gz", type = "source")
     ```
 
 -   the latest development version from github with
@@ -34,7 +34,7 @@ You can install:
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues).
 
-seqMeta 1.5.0.9026
+seqMeta 1.5.0.9028
 ------------------
 
 -   Migrated to git / github
@@ -45,13 +45,13 @@ seqMeta 1.5.0.9026
 -   Binomial models when genotypes imputed outside of seqMeta did not match when models were imputed by seqMeta. Very slight differences in the covariance structure.
 -   Replaced `any(is.na(Z))` with `anyNA(Z)`
 -   Range test now checks that genotypes are [0, 2].
--   SNPInfo is seqMetaExamples had incorrect type of snpNames and aggregateBy.
+-   SNPInfo in seqMetaExamples had incorrect type of snpNames and aggregateBy.
 -   Automatically convert (with warning) aggregateBy and snpName columns to type character if they are not already.
 -   Added new function prepScores2
 
 ### prepScores2
 
-prepScores2 is a drop in replacement for prepScores, prepScoresX and prepCox. The only difference is the family argument should be text. `gaussian()` becomes `"gaussian"`, `binomial()` becomes `"binomial"` and `"cox"` is used for survival models.
+prepScores2 is a drop in replacement for prepScores, prepScoresX and prepCox. The only difference is the family argument should be text. `gaussian()` becomes `"gaussian"`, `binomial()` becomes `"binomial"` and `"cox"` is used for survival models. prepScores2 is much faster in cases where genotype imputation occurs.
 
 -   enforces assumption that when a gene is being anlyzed the same snp can only be in that gene once (same snp can still be in multiple genes or in the same gene in SNPInfo)
 -   Reorganized code
