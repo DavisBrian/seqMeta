@@ -18,9 +18,10 @@ file.}
 form y~covariate1 + covariate2. For Cox models, the formula follows that of
 the coxph() function.}
 
-\item{family}{either 'gaussian', for continuous data, or 'binomial' for 0/1
-outcomes. Binary outcomes are not currently supported for family data. See
-Details.}
+\item{family}{either 'gaussian', for continuous data, 'binomial' for 0/1
+outcomes or 'cox' for survival models.  Family data not currently supported
+for binomial or survival outcomes. Male also not supported for survival
+outcomes.See Details.}
 
 \item{SNPInfo}{SNP Info file - must contain fields given in 'snpName' and
 'aggregateBy'.}
@@ -60,10 +61,10 @@ an object of class 'seqMeta'. This is a list, not meant for human
   \item{sey}{The residual standard error.}
 }
 \description{
-This function is replacement for prepScores and prepScoresX and
-  computes and organizes the neccesary output to efficiently meta-analyze
-  SKAT and other tests. Note that the tests are *not* computed by these
-  functions. The output must be passed to one of
+This function is replacement for prepScores, prepScoresX and
+  prepCox. It computes and organizes the neccesary output to efficiently
+  meta-analyze SKAT and other tests. Note that the tests are *not* computed
+  by these functions. The output must be passed to one of
   \code{\link[seqMeta]{skatMeta}}, \code{\link[seqMeta]{burdenMeta}}, or
   \code{\link[seqMeta]{singlesnpMeta}}.
 
@@ -72,12 +73,12 @@ This function is replacement for prepScores and prepScoresX and
   facilitate meta analysis of whole genomes or exomes.
 }
 \details{
-This function is a drop in replacement for prepScores and
-  prepScoresX.  If male is passed as a parameter the results will be the same
-  as if prepScoresX had been called.  If male is not passed the results will
-  be the same as if prepScores was called.  Unlike prepScores and prepScoresX
-  the family parameter is a character string and not a function.  Internally
-  it will convert it to a function.
+This function is a drop in replacement for prepScores, prepScoresX,
+  and prepCox. If family is 'cox' then the call is equivalent to prepCox and
+  an error will occur if either male or kins is provided.  When family is
+  'gaussian' or 'binomial' and male is not provided then the call is
+  equivalent to prepScores.  Whereas if male is provided then the call is
+  equivalent to prepScoresX.
 
   This function computes the neccesary information to meta analyze SKAT
   analyses: the individual SNP scores, their MAF, and a covariance matrix for
@@ -133,6 +134,7 @@ Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X.
 \seealso{
 \code{\link[seqMeta]{prepScores}}
 \code{\link[seqMeta]{prepScoresX}}
+\code{\link[seqMeta]{prepCox}}
 \code{\link[seqMeta]{skatMeta}}
 \code{\link[seqMeta]{burdenMeta}}
 \code{\link[seqMeta]{singlesnpMeta}}

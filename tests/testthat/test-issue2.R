@@ -149,7 +149,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores binomial
 })
 
 test_that("Monomophic snps (all 3 cases) handled correctly - prepCox)", {
-  cohort1 <- prepCox(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, SNPInfo=si, data =pheno1)
+  cohort1 <- prepCox(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, SNPInfo=si, data=pheno1)
   
   # check maf
   expect_equal(cohort1$gene1$maf[monos[1]], 0, check.attributes=FALSE)
@@ -195,10 +195,9 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepCox)", {
   expect_true(is.infinite(out[out$Name == monos[3], "se"]))
   expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
   
-  # [TBD: test prepScores2 equivalency - NOT SUPPORTED YET]
-  #   ps2b <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, SNPInfo=si, data =pheno1)
-  #   expect_equal(ps2b, cohort1b)
-  
+  #test prepScores2 equivalency
+  ps2 <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si, data =pheno1)
+  expect_equivalent(ps2, cohort1)
 })
 
 test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 gaussian)", {
@@ -296,3 +295,52 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 binomia
   expect_true(is.infinite(out[out$Name == monos[3], "se"]))
   expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
 })
+
+test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 survival)", {
+  cohort1 <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si, data =pheno1)
+  
+  # check maf
+  expect_equal(cohort1$gene1$maf[monos[1]], 0, check.attributes=FALSE)
+  expect_equal(cohort1$gene1$maf[monos[2]], 0.5, check.attributes=FALSE)
+  expect_equal(cohort1$gene1$maf[monos[3]], 1, check.attributes=FALSE)
+  
+  # check scores
+  expect_true(cohort1$gene1$scores[monos[1]] == 0)
+  expect_true(cohort1$gene1$scores[monos[2]] == 0)
+  expect_true(cohort1$gene1$scores[monos[3]] == 0)
+  
+  # check cov
+  expect_true(all(cohort1$gene1$cov[ , monos[1]] == 0))
+  expect_true(all(cohort1$gene1$cov[ monos[1], ] == 0))
+  expect_true(all(cohort1$gene1$cov[ , monos[2]] == 0))
+  expect_true(all(cohort1$gene1$cov[ monos[2], ] == 0))
+  expect_true(all(cohort1$gene1$cov[ , monos[3]] == 0))
+  expect_true(all(cohort1$gene1$cov[ monos[3], ] == 0))
+  
+  
+  out <- singlesnpMeta(cohort1, SNPInfo=si)
+  expect_true(out[out$Name == monos[1], "maf"] == 0)
+  expect_true(out[out$Name == monos[1], "caf"] == 0)
+  expect_true(is.na(out[out$Name == monos[1], "p"]))
+  expect_true(is.na(out[out$Name == monos[1], "beta"]))
+  expect_true(is.na(out[out$Name == monos[1], "beta.cohort1"]))
+  expect_true(is.infinite(out[out$Name == monos[1], "se"]))
+  expect_true(is.infinite(out[out$Name == monos[1], "se.cohort1"])) 
+  
+  expect_true(out[out$Name == monos[2], "maf"] == 0.5)
+  expect_true(out[out$Name == monos[2], "caf"] == 0.5)
+  expect_true(is.na(out[out$Name == monos[2], "p"]))
+  expect_true(is.na(out[out$Name == monos[2], "beta"]))
+  expect_true(is.na(out[out$Name == monos[2], "beta.cohort1"]))
+  expect_true(is.infinite(out[out$Name == monos[2], "se"]))
+  expect_true(is.infinite(out[out$Name == monos[2], "se.cohort1"])) 
+  
+  expect_true(out[out$Name == monos[3], "maf"] == 0)
+  expect_true(out[out$Name == monos[3], "caf"] == 1)
+  expect_true(is.na(out[out$Name == monos[3], "p"]))
+  expect_true(is.na(out[out$Name == monos[3], "beta"]))
+  expect_true(is.na(out[out$Name == monos[3], "beta.cohort1"]))
+  expect_true(is.infinite(out[out$Name == monos[3], "se"]))
+  expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
+})
+

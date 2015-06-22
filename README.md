@@ -47,11 +47,13 @@ seqMeta 1.5.0.9021
 -   Fixed issue \#5 - Range test now checks that genotypes are [0, 2].
 -   Fixed issue \#6 - SNPInfo is seqMetaExamples has incorrect type of snpNames and aggregateBy.
 -   Automatically convert (with warning) aggregateBy and snpName columns to type character
+-   Replaced `any(is.na(Z))` with `anyNA(Z)` in checks
+-   Replaced `range` with `min` and `max` in checks
 -   Added new function prepScores2
 
 ### prepScores2
 
-prepScores2 is a drop in replacement for prepScores and prepScoresX. The only difference is the family argument should be text. `gaussian()` becomes `"gaussian"`. Although the former will **temporarily** still work. Eventually I'd like to merge prepCox into this function as 90+% of the code is the same.
+prepScores2 is a drop in replacement for prepScores, prepScoresX and prepCox. The only difference is the family argument should be text. `gaussian()` becomes `"gaussian"`, `binomial()` becomes `"binomial"` and `"cox"` is used for survival models.
 
 -   enforces assumption that when a gene is being anlyzed the same snp can only be in that gene once (same snp can still be in multiple genes or in the same gene in SNPInfo)
 -   Reorganized code
@@ -74,11 +76,3 @@ prepScores2 is a drop in replacement for prepScores and prepScoresX. The only di
 -   Added Warning Messages for:
     -   Removing missing snps and genes from SNPInfo
     -   Removing duplicated snp-gene pairs
-
-### Todo
-
--   change genotype documentation to "matrix or an object which can be coerced to one with as.matrix"
--   add back verbose option to `prepScores2`
--   prepScores2 support for Survival
--   check kins and Z are in the same order?
--   test real kinship cases

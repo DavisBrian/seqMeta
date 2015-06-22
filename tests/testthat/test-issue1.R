@@ -172,9 +172,9 @@ test_that("duplicated SNPS in snpinfo gene only get counted once - prepCox)", {
   sO2 <- skatMeta(cohort2, SNPInfo=si_dups)
   expect_equal(sO1, sO2)
   
-  # [TBD: test prepScores2 equivalency - NOT SUPPORTED YET]
-#   ps2b <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, SNPInfo=si, data=pheno1)
-#   expect_equal(ps2b, cohort1b)
+  # test prepScores2 equivalency
+   ps2 <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si, data=pheno1)
+   expect_equivalent(ps2, cohort1)
 })
 
 test_that("duplicated SNPS in snpinfo gene only get counted once - prepScores2 gaussian)", {
@@ -293,6 +293,43 @@ test_that("duplicated SNPS in snpinfo gene only get counted once - prepScores2 b
   expect_equal(ps, cohort2b)
 })
 
-# test_that("duplicated SNPS in snpinfo gene only get counted once - prepScores2 survival)", {
-#   # TBD - NOT SUPPORTED YET
-# })
+test_that("duplicated SNPS in snpinfo gene only get counted once - prepScores2 survival)", {
+  cohort1 <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si, data=pheno1)
+  cohort2 <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si_dups, data=pheno1)
+  expect_equal(length(cohort1), 1)
+  expect_equal(length(cohort2), 1)
+  expect_equal(cohort1, cohort2)
+  
+  expect_equal(length(cohort1$gene1$scores), 15)
+  expect_equal(length(cohort2$gene1$scores), 15)
+  expect_equal(length(cohort1$gene1$maf), 15)
+  expect_equal(length(cohort2$gene1$maf), 15)
+  expect_equal(nrow(cohort1$gene1$cov), 15)
+  expect_equal(nrow(cohort2$gene1$cov), 15)
+  
+  # singlesnpMeta 
+  single1 <- singlesnpMeta(cohort1, SNPInfo=si, studyBetas=FALSE)
+  single2 <- singlesnpMeta(cohort2, SNPInfo=si_dups, studyBetas=FALSE)
+  expect_equal(single1, single2)
+  expect_equal(nrow(single1), 15)
+  expect_equal(nrow(single2), 15)
+  
+  # burdenMeta
+  b1 <- burdenMeta(cohort1, SNPInfo=si)
+  b2 <- burdenMeta(cohort2, SNPInfo=si_dups)
+  expect_equal(b1, b2)
+  
+  # skatMeta
+  s1 <- skatMeta(cohort1, SNPInfo=si)
+  s2 <- skatMeta(cohort2, SNPInfo=si_dups)
+  expect_equal(s1, s2)
+  
+  # skatOMeta
+  sO1 <- skatMeta(cohort1, SNPInfo=si)
+  sO2 <- skatMeta(cohort2, SNPInfo=si_dups)
+  expect_equal(sO1, sO2)
+  
+  # test prepScores2 equivalency
+  pcox <- prepCox(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, SNPInfo=si, data=pheno1)
+  expect_equivalent(pcox, cohort2)
+})

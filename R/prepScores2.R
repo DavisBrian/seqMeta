@@ -1,9 +1,9 @@
 #' @title Prepare scores for region based (meta) analysis
 #'   
-#' @description This function is replacement for prepScores and prepScoresX and 
-#'   computes and organizes the neccesary output to efficiently meta-analyze 
-#'   SKAT and other tests. Note that the tests are *not* computed by these 
-#'   functions. The output must be passed to one of 
+#' @description This function is a replacement for prepScores, prepScoresX and
+#'   prepCox. It computes and organizes the neccesary output to efficiently
+#'   meta-analyze SKAT and other tests. Note that the tests are *not* computed
+#'   by these functions. The output must be passed to one of 
 #'   \code{\link[seqMeta]{skatMeta}}, \code{\link[seqMeta]{burdenMeta}}, or 
 #'   \code{\link[seqMeta]{singlesnpMeta}}.
 #'   
@@ -11,17 +11,18 @@
 #'   functions are intended to operate on many genes, e.g. a whole exome, to 
 #'   facilitate meta analysis of whole genomes or exomes.
 #'   
-#' @param family either 'gaussian', for continuous data, or 'binomial' for 0/1 
-#'   outcomes. Binary outcomes are not currently supported for family data. See
-#'   Details.
+#' @param family either 'gaussian', for continuous data, 'binomial' for 0/1 
+#'   outcomes or 'cox' for survival models.  Family data not currently supported
+#'   for binomial or survival outcomes. Male also not supported for survival
+#'   outcomes. See Details.
 #' @inheritParams prepScores
 #'   
-#' @details This function is a drop in replacement for prepScores and 
-#'   prepScoresX.  If male is passed as a parameter the results will be the same
-#'   as if prepScoresX had been called.  If male is not passed the results will 
-#'   be the same as if prepScores was called.  Unlike prepScores and prepScoresX
-#'   the family parameter is a character string and not a function.  Internally
-#'   it will convert it to a function.
+#' @details This function is a drop in replacement for prepScores, prepScoresX, 
+#'   and prepCox. If family is 'cox' then the call is equivalent to prepCox and 
+#'   an error will occur if either male or kins is provided.  When family is
+#'   'gaussian' or 'binomial' and male is not provided then the call is
+#'   equivalent to prepScores.  Whereas if male is provided then the call is
+#'   equivalent to prepScoresX.
 #'   
 #'   This function computes the neccesary information to meta analyze SKAT 
 #'   analyses: the individual SNP scores, their MAF, and a covariance matrix for
@@ -86,6 +87,7 @@
 #' @seealso 
 #' \code{\link[seqMeta]{prepScores}} 
 #' \code{\link[seqMeta]{prepScoresX}}
+#' \code{\link[seqMeta]{prepCox}}
 #' \code{\link[seqMeta]{skatMeta}} 
 #' \code{\link[seqMeta]{burdenMeta}}
 #' \code{\link[seqMeta]{singlesnpMeta}} 
@@ -102,28 +104,21 @@ prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="N
     SNPInfo <- prepSNPInfo(SNPInfo, snpNames, aggregateBy)
   }
   
+  check_inputs(Z, SNPInfo, data, snpNames, family, kins, male)
+  
   if (!is.null(male)) {
     cl <- match.call()
     male <- eval(cl$male, data)
-    if (anyNA(male)) {
-      stop("Missing data not allowed in 'male'")
-    }
-    if(!all(male %in% c(0,1))) {
-      stop("`male' must be coded as 0/1 or T/F")
-    }
-    if(length(male) != nrow(Z)) {
-      stop("`male' not the same length as nrows genotype")
-    }
     male <- as.logical(male)
   } 
-  
-  check_inputs(Z, SNPInfo, data, snpNames, kins)
   
   m <- create_model(formula, family, kins=kins, sparse=sparse, data=data) 
   
   maf <- calculate_maf(Z, male)
   monos <- monomorphic_snps(Z)
   Z <- impute_to_mean(Z, male)  
+
+  re <- calculate_cov(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins)
   
   if (m$family == "cox") {
     zlrt <- rep.int(0, ncol(Z))
@@ -136,16 +131,10 @@ prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="N
     }
     #  zlrt[is.na(zlrt)] <- 0
     zlrt[monos] <- 0
-  } else {
-    scores <- colSums(m$res*Z) 
-    scores[monos] <- 0    
-  }
-  
-  re <- calculate_cov(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins)
-  
-  if (m$family == "cox") {
     create_seqMeta(re, zlrt, maf, m, SNPInfo, snpNames, aggregateBy) 
   } else {
+    scores <- colSums(m$res*Z) 
+    scores[monos] <- 0   
     create_seqMeta(re, scores, maf, m, SNPInfo, snpNames, aggregateBy)     
   }
 }
@@ -347,8 +336,26 @@ check_dropped_subjects <- function(res, formula) {
 
 is.family <- function(x) {"family" %in% class(x)}
 
-# check_format_skat
-check_inputs <- function(Z, SNPInfo, data, snpNames, kins){
+# check_format_skat  (Z, SNPInfo, data, snpNames, family, kins, male)
+check_inputs <- function(Z, SNPInfo, data, snpNames, family, kins, male){
+
+  if (!is.character(family)) {
+    stop("family must be a character string.  Only family type 'gaussian', 'binomial', and 'cox' are currently supported.")
+  } else {
+    if (family == "gaussian" || family == "binomial" || family == "cox") {
+      if (family == "cox" || family == "binomial") {
+        if (!is.null(kins)) {
+          stop("Kinship matrix for related individuals only supported for family='gaussian'")
+        }
+      } 
+      if (family == "cox" && !is.null(male)) {
+        stop("'male' unsupported with family='cox'.  See prepScoresX")
+      }
+    } else {
+      stop("Unknown family type.  Only 'gaussian', 'binomial', and 'cox' are currently supported.")
+    }
+  }
+  
   if(nrow(data) != nrow(Z)) {
     stop("Number of genotypes is not equal to number of phenotypes!")
   }
@@ -359,6 +366,18 @@ check_inputs <- function(Z, SNPInfo, data, snpNames, kins){
     }
   }
 
+  if (!is.null(male)) {
+    if (anyNA(male)) {
+      stop("Missing data not allowed in 'male'")
+    }
+    if(!all(male %in% c(0,1))) {
+      stop("`male' must be coded as 0/1 or T/F")
+    }
+    if(length(male) != nrow(Z)) {
+      stop("`male' not the same length as nrows genotype")
+    }
+  } 
+  
   snps <- intersect(colnames(Z), SNPInfo[, snpNames])
   nsnps <- length(snps)
   if(nsnps == 0L) {
@@ -371,16 +390,6 @@ check_inputs <- function(Z, SNPInfo, data, snpNames, kins){
   invisible(NULL)
 }
 
-# calculate_maf <- function(Z) {
-#   
-#   MeanZ <- colMeans(Z, na.rm=TRUE)
-#   maf <- MeanZ/2
-# 
-#   #differentiate all missing from monomorphic
-#   maf[which(is.nan(MeanZ))] <- -1
-#   
-#   maf
-# }
 calculate_maf <- function(Z, male=NULL) {
   
   if (is.null(male)) {
@@ -397,45 +406,30 @@ calculate_maf <- function(Z, male=NULL) {
   maf
 }
 
-calculate_scores <- function(Z, m, monos) {
-  
-  if (m$family == "cox") {
-    scores <- rep.int(0, ncol(Z))
-    names(scores) <- colnames(Z)
-    dat <- cbind(0, m$X)
-    for(j in 1:ncol(Z)) {
-      dat[ , 1] <- Z[ , j]
-      model<- coxlr.fit(dat, m$y, m$strata, NULL, init=c(0,m$coef), coxph.control(iter.max=100), NULL,"efron", m$rn)
-      scores[j] <- sign(coef(model)[1])*sqrt(2*diff(model$loglik))
-    }
-    #  scores[is.na(scores)] <- 0
-  } else {
-    scores <- colSums(m$res*Z) 
-  }
-  scores[monos] <- 0
-  
-  scores  
-}
-
+# the two tapply statements could easily be combined but then you would have a logical
+# check for each gene as to which calculation to use.  
 calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
   
   if (m$family == "cox") {
     X <- m$X
     re <- tapply(SNPInfo[, snpNames], SNPInfo[, aggregateBy],function(snp.names){
       inds <- intersect(snp.names,colnames(Z))
-      mcov <- matrix(0,length(snp.names),length(snp.names), dimnames=list(snp.names, snp.names))
       if(length(inds) > 0L){
-        Z0 <- Z[, inds,drop=FALSE]
-        zvar <- apply(Z0,2,var)
-        mod1 <- coxlr.fit(cbind(Z0[,zvar !=0],X), m$y, m$strata, NULL,
-                          init=c(rep(0,ncol(Z0[,zvar !=0,drop=FALSE])),m$coef),coxph.control(iter.max=0),NULL,"efron",m$rn)
-        mcov[inds[zvar !=0], inds[zvar !=0]] <- tryCatch(
-          ginv_s(mod1$var[1:sum(zvar !=0),1:sum(zvar !=0),drop=FALSE]),
+        mcov <- matrix(0,length(snp.names),length(snp.names), dimnames=list(snp.names, snp.names))
+        Z0 <- Z[, inds, drop=FALSE]
+        zvar <- apply(Z0, 2, var)
+        mod1 <- coxlr.fit(cbind(Z0[,zvar != 0 ],X), m$y, m$strata, NULL,
+                          init=c(rep(0, ncol(Z0[,zvar !=0, drop=FALSE])), m$coef),
+                          coxph.control(iter.max=0), NULL, "efron", m$rn)
+        mcov[inds[zvar != 0], inds[zvar != 0]] <- 
+          tryCatch(ginv_s(mod1$var[1:sum(zvar != 0), 1:sum(zvar != 0), drop=FALSE]),
           error=function(e){
             cov(Z0[m$y[,"status"]==1,zvar !=0,drop=FALSE])*(sum(m$y[,"status"]==1)-1)
           })
+        forceSymmetric(Matrix(mcov,sparse=TRUE))
+      } else {
+        Matrix(0, nrow=length(snp.names), ncol=length(snp.names), dimnames=list(snp.names, snp.names), sparse=TRUE)
       }
-      return(forceSymmetric(Matrix(mcov,sparse=TRUE)))
     },simplify = FALSE)
     
     re
@@ -444,14 +438,12 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
     ##get matrices for projection
     X1 <- m$X1
     AX1 <- m$AX1
-    
     ##get covariance matrices:
     re <- tapply(SNPInfo[, snpNames], SNPInfo[, aggregateBy],function(snp.names){
       inds <- intersect(snp.names, colnames(Z))
       if(length(inds) > 0L) {
         mcov <- matrix(0,length(snp.names),length(snp.names), dimnames=list(snp.names, snp.names))
         Z0 <- m$sef*Z[, inds, drop=FALSE]
-        #      Z0 <- impute_to_mean(Z0)     # not sure how Z0 can have missing values
         if(!is.null(kins)){
           tZ0_Omi <- crossprod(Z0, m$Om_i)
           mcov[inds, inds] <- as.matrix(tZ0_Omi%*%Z0 - (tZ0_Omi%*%X1)%*%(AX1%*%Z0))
