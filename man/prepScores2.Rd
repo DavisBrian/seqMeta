@@ -21,7 +21,7 @@ the coxph() function.}
 \item{family}{either 'gaussian', for continuous data, 'binomial' for 0/1
 outcomes or 'cox' for survival models.  Family data not currently supported
 for binomial or survival outcomes. Male also not supported for survival
-outcomes.See Details.}
+outcomes. See Details.}
 
 \item{SNPInfo}{SNP Info file - must contain fields given in 'snpName' and
 'aggregateBy'.}
@@ -61,7 +61,7 @@ an object of class 'seqMeta'. This is a list, not meant for human
   \item{sey}{The residual standard error.}
 }
 \description{
-This function is replacement for prepScores, prepScoresX and
+This function is a replacement for prepScores, prepScoresX and
   prepCox. It computes and organizes the neccesary output to efficiently
   meta-analyze SKAT and other tests. Note that the tests are *not* computed
   by these functions. The output must be passed to one of

@@ -14,7 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 # seqMeta
-[![Build Status](https://travis-ci.org/DavisBrian/seqMeta.svg?branch=master)](https://travis-ci.org/DavisBrian)[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/DavisBrian/seqMeta?branch=master)](https://ci.appveyor.com/project/DavisBrian/seqMeta)
+[![Build Status](https://travis-ci.org/DavisBrian/seqMeta.svg?branch=master)](https://travis-ci.org/DavisBrian)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/DavisBrian/seqMeta?branch=master)](https://ci.appveyor.com/project/DavisBrian/seqMeta)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/seqMeta)](http://cran.r-project.org/web/packages/seqMeta)
 
 Meta-Analysis of Region-Based Tests of Rare DNA Variants
 
@@ -25,9 +27,9 @@ Computes necessary information to meta analyze region-based tests for rare genet
 ```R
 install.packages("seqMeta")
 ```
-* the latest development version for testing by downloading seqMeta_1.5.0.9021.tar.gz and running 
+* the latest development version for testing by downloading seqMeta_1.5.0.9026.tar.gz and running 
     ```R
-    install.packages("/path/to/file/seqMeta_1.5.0.9021.tar.gz", type = "source")
+    install.packages("/path/to/file/seqMeta_1.5.0.9026.tar.gz", type = "source")
     ```
 
 * the latest development version from github with
@@ -40,20 +42,18 @@ install.packages("seqMeta")
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues). 
 
-## seqMeta 1.5.0.9021
+## seqMeta 1.5.0.9026
 
 * Migrated to git / github
     + Bug Reports and Feature Requests should be submitted [github](https://github.com/DavisBrian/seqMeta/issues).
 * Minimum R version moved to 3.1.0
-* Fixed issue #1 - Duplicated SNP in snpinfo gene pulls from the genotype matrix twice.
-* Fixed issue #2 - Monomorphic snps with caf != 0 handled incorrectly.
-* Fixed issue #3 - Binomial models when genotypes imputed outside of seqMeta did not match when models were imputed by seqMeta.  Very slight differences in the covariance structure.
-* Fixed issue #4 - Replaced `any(is.na(Z))` with `anyNA(Z)`
-* Fixed issue #5 - Range test now checks that genotypes are [0, 2].
-* Fixed issue #6 - SNPInfo is seqMetaExamples has incorrect type of snpNames and aggregateBy.
-* Automatically convert (with warning) aggregateBy and snpName columns to type character
-* Replaced `any(is.na(Z))` with `anyNA(Z)` in checks
-* Replaced `range` with `min` and `max` in checks
+* Duplicated SNP in snpinfo gene no longer pulls from the genotype matrix twice.
+* Monomorphic snps with caf != 0 were handled incorrectly.
+* Binomial models when genotypes imputed outside of seqMeta did not match when models were imputed by seqMeta.  Very slight differences in the covariance structure.
+* Replaced `any(is.na(Z))` with `anyNA(Z)`
+* Range test now checks that genotypes are [0, 2].
+* SNPInfo is seqMetaExamples had incorrect type of snpNames and aggregateBy.
+* Automatically convert (with warning) aggregateBy and snpName columns to type character if they are not already.
 * Added new function prepScores2
 
 ### prepScores2
