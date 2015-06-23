@@ -17,17 +17,11 @@ You can install:
     install.packages("seqMeta")
     ```
 
-<<<<<<< HEAD
--   the latest development version for testing by downloading seqMeta\_1.5.0.9028.tar.gz and running
-
-    ``` r
-    install.packages("/path/to/file/seqMeta_1.5.0.9028.tar.gz", type = "source")
-=======
--   the latest development version for testing by downloading seqMeta\_1.5.0.9027.tar.gz and running
+-   the latest development version for testing by downloading seqMeta\_1.5.0.9029.tar.gz and running \`\`\`R install.packages("/path/to/file/seqMeta\_1.5.0.9028.tar.gz", type = "source")
+-   the latest development version for testing by downloading seqMeta\_1.5.0.9029.tar.gz and running
 
     ``` r
     install.packages("/path/to/file/seqMeta_1.5.0.9027.tar.gz", type = "source")
->>>>>>> 1ae41ddf68a4ed270a4b82ac33a81b725ba6f2b2
     ```
 
 -   the latest development version from github with
@@ -41,11 +35,7 @@ You can install:
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues).
 
-<<<<<<< HEAD
-seqMeta 1.5.0.9028
-=======
-seqMeta 1.5.0.9027
->>>>>>> 1ae41ddf68a4ed270a4b82ac33a81b725ba6f2b2
+seqMeta 1.5.0.9029
 ------------------
 
 -   Migrated to git / github

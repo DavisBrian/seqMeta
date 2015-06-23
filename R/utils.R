@@ -2,11 +2,7 @@
 prepSNPInfo <- function(snpinfo, snpNames, aggregateBy, wt1=NULL, wt2=NULL) {
   
   if(!is.character(snpinfo[ , snpNames])) {
-<<<<<<< HEAD
     snpinfo[ , snpNames] <- as.character(snpinfo[ , snpNames])
-=======
-    SNPInfo[ , snpNames] <- as.character(snpinfo[ , snpNames])
->>>>>>> 1ae41ddf68a4ed270a4b82ac33a81b725ba6f2b2
     warning("Converting snpNames column to character")
   }
   if(!is.character(snpinfo[ , aggregateBy])) {
