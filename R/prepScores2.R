@@ -129,7 +129,7 @@ prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="N
       model<- coxlr.fit(dat, m$y, m$strata, NULL, init=c(0,m$coef), coxph.control(iter.max=100), NULL,"efron", m$rn)
       zlrt[j] <- sign(coef(model)[1])*sqrt(2*diff(model$loglik))
     }
-    #  zlrt[is.na(zlrt)] <- 0
+    zlrt[is.na(zlrt)] <- 0
     zlrt[monos] <- 0
     create_seqMeta(re, zlrt, maf, m, SNPInfo, snpNames, aggregateBy) 
   } else {
