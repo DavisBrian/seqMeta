@@ -4,6 +4,8 @@ language: r
 warnings_are_errors: true
 sudo: required
 
+before_install: echo "options(repos = c(CRAN='http://cran.r-project.org'))" > ~/.Rprofile
+
 os:
   - linux
   - osx
