@@ -7,8 +7,9 @@ This release fixes a couple edge cases which were handled incorrectly.  One new 
 ## Test environments
 * local Windows 7 install, R 3.2.1
 * local OS X install, R 3.2.1
+* win-builder (devel and release)
 * ubuntu 12.04 (on travis-ci) R 3.2.1
-* win-builder (on AppVeyor), R-devel
+* Windows (on AppVeyor), R-devel
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
@@ -20,6 +21,14 @@ New maintainer:
   
 Old maintainer(s):
   Arie Voorman <arie.voorman@gmail.com>
+  
+On Win-builder along with this NOTE was 
+
+
+Possibly mis-spelled words in DESCRIPTION:
+  SKAT (14:43)
+  
+SKAT is not mis-spelled it is a comonly used acronym in the genetics field.
 
 ## Downstream dependencies
 There are no downstream dependencies.
