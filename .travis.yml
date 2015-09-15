@@ -17,7 +17,7 @@ notifications:
     on_failure: change
 
 env:
- global:
+  global:
    - CRAN: http://cran.rstudio.com
 
   matrix:
