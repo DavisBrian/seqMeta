@@ -1,5 +1,3 @@
-# Sample .travis.yml for R projects
-
 language: r
 warnings_are_errors: true
 sudo: required
@@ -10,17 +8,17 @@ os:
   - linux
   - osx
 
+env:
+ global:
+   - CRAN: http://cran.rstudio.com
+ matrix:
+   - RVERSION=oldrel
+   - RVERSION=release
+   - RVERSION=devel
 
 notifications:
   email:
     on_success: change
     on_failure: change
 
-env:
-  global:
-    - CRAN: http://cran.rstudio.com
 
-  matrix:
-    - RVERSION=oldrel
-    - RVERSION=release
-    - RVERSION=devel
