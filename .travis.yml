@@ -10,12 +10,17 @@ os:
   - linux
   - osx
 
-env:
- global:
-   - CRAN: http://cran.rstudio.com
-
 
 notifications:
   email:
     on_success: change
     on_failure: change
+
+env:
+ global:
+   - CRAN: http://cran.rstudio.com
+
+  matrix:
+    - RVERSION=oldrel
+    - RVERSION=release
+    - RVERSION=devel
