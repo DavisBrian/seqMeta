@@ -218,7 +218,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
       colnames(kins)
     }    
     
-    nullmodel <- lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")  
+    nullmodel <- coxme::lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")  
     
     nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)   
     SIGMA <- nullmodel$theta[1] * 2 * kins + nullmodel$theta[2] * Diagonal(nrow(kins))   
@@ -227,7 +227,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     #rotate data:
     nullmodel$family$var <- function(x){1}
     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
-    X1 <- sef*stats::model.matrix(lm(formula,data=data)) 
+    X1 <- sef*stats::model.matrix(stats::lm(formula,data=data)) 
     res <- as.vector(nullmodel$res)* s2 / nullmodel$theta[2]  
     Om_i <- solve(SIGMA/s2)
     # optimize calculations
@@ -237,7 +237,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     check_dropped_subjects(res, formula)
     list(res=res, family=fam, n=nrow(X1), sey=sqrt(s2), sef=sef, X1=X1, AX1=AX1, Om_i=Om_i)
   } else if (fam == "binomial" || fam == "gaussian") {
-    nullmodel <- glm(formula=formula, family=fam, data=data)
+    nullmodel <- stats::glm(formula=formula, family=fam, data=data)
     res <- residuals(nullmodel, type = "response")  
     check_dropped_subjects(res, formula) 
     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))

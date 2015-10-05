@@ -156,11 +156,11 @@ prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNa
 			data$id <- colnames(kins)
 		}
 		
-		nullmodel <- lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")	
+		nullmodel <- coxme::lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")	
 		nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)
 	
 		SIGMA <- nullmodel$theta[1]*2*kins+nullmodel$theta[2]*Diagonal(n)
-		X1 <- stats::model.matrix(lm(formula,data=data))
+		X1 <- stats::model.matrix(stats::lm(formula,data=data))
 	
 		s2 <- sum(nullmodel$theta)
 		Om_i <- solve(SIGMA/s2)
@@ -169,7 +169,7 @@ prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNa
 		res <- as.vector(nullmodel$res)* s2 / nullmodel$theta[2]	
 		nullmodel$family$var <- function(x){1}
 	} else {
-		nullmodel <- glm(formula=formula, family = family, data=data)
+		nullmodel <- stats::glm(formula=formula, family = family, data=data)
 		res <- residuals(nullmodel, type = "response")
 		X1 <- stats::model.matrix(nullmodel)
 		n <- nrow(X1)
@@ -361,11 +361,11 @@ prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NU
       data$id <- colnames(kins)
     }
     
-    nullmodel <- lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")	
+    nullmodel <- coxme::lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")	
     nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)
     
     SIGMA <- nullmodel$theta[1]*2*kins+nullmodel$theta[2]*Diagonal(n)
-    X1 <- stats::model.matrix(lm(formula,data=data))
+    X1 <- stats::model.matrix(stats::lm(formula,data=data))
     
     s2 <- sum(nullmodel$theta)
     Om_i <- solve(SIGMA/s2)
@@ -374,7 +374,7 @@ prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NU
     res <- as.vector(nullmodel$res)* s2 / nullmodel$theta[2]	
     nullmodel$family$var <- function(x){1}
   } else {
-    nullmodel <- glm(formula=formula, family = family, data=data)
+    nullmodel <- stats::glm(formula=formula, family = family, data=data)
     res <- residuals(nullmodel, type = "response")
     X1 <- stats::model.matrix(nullmodel)
     n <- nrow(X1)
