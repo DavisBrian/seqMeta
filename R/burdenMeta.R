@@ -177,12 +177,12 @@ burdenMeta <- function(..., SNPInfo=NULL, wts=1, snpNames="Name", aggregateBy="g
 		bscorevar <- as.numeric(tmpwts%*%big.cov%*%tmpwts)
 		bscore <- as.numeric(tmpwts%*%mscores)
 		
-		res.numeric[ri,"beta"] = ifelse(bscorevar !=0, bscore/bscorevar, NA)
-		res.numeric[ri,"se"] = sqrt(1/bscorevar)
+		res.numeric[ri,"beta"] = ifelse(bscorevar != 0, bscore/bscorevar, NA)
+		res.numeric[ri,"se"] = ifelse(bscorevar != 0, sqrt(1/bscorevar), NA)
 		res.numeric[ri,"cmafTotal"] = sum(maf,na.rm=TRUE)
-		res.numeric[ri,"cmafUsed"] = sum(maf[tmpwts != 0],na.rm=TRUE)
+		res.numeric[ri,"cmafUsed"] = sum(maf[tmpwts != 0],na.rm = TRUE)
 		res.numeric[ri,"nsnpsTotal"] = length(maf)
-		res.numeric[ri,"nmiss"] = sum(n.miss[tmpwts != 0], na.rm =T)
+		res.numeric[ri,"nmiss"] = sum(n.miss[tmpwts != 0], na.rm = T)
 		res.numeric[ri,"nsnpsUsed"] = sum(tmpwts != 0)
 		res.numeric[ri,"p"] = ifelse(bscorevar !=0,stats::pchisq(bscore^2/bscorevar,lower.tail=FALSE,df=1),NA)
 		if(verbose){
