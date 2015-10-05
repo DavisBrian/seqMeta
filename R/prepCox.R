@@ -86,8 +86,8 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
   re <- as.list(by(SNPInfo[,snpNames], SNPInfo[,aggregateBy],function(snp.names){
     inds <- match(snp.names,colnames(Z))
     mcov <- matrix(0,length(snp.names),length(snp.names))
-    if(length(na.omit(inds)) > 0){
-      Z0 <- as.matrix(Z[,na.omit(inds),drop=FALSE])
+    if(length(stats::na.omit(inds)) > 0){
+      Z0 <- as.matrix(Z[,stats::na.omit(inds),drop=FALSE])
       if(any(is.na(Z0))) Z0 <- apply(Z0,2,function(z){
         if(all(is.na(z))) z <- rep(0,length(z))
         mz <- mean(z, na.rm=TRUE)

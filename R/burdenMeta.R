@@ -85,7 +85,7 @@ burdenMeta <- function(..., SNPInfo=NULL, wts=1, snpNames="Name", aggregateBy="g
 	}
 	
 		
-	genelist <- na.omit(unique(SNPInfo[,aggregateBy]))
+	genelist <- stats::na.omit(unique(SNPInfo[,aggregateBy]))
 	cohortNames <- lapply(cl[[2]],as.character)
 	ncohort <- length(cohortNames)
 	

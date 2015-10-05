@@ -129,7 +129,7 @@ skatMeta <- function(..., SNPInfo=NULL, wts=function(maf){ dbeta(maf,1,25) }, me
 	  SNPInfo <- prepSNPInfo(SNPInfo, snpNames, aggregateBy, wt1=wts)
 	}
 	
-	genelist <- na.omit(unique(SNPInfo[,aggregateBy]))
+	genelist <- stats::na.omit(unique(SNPInfo[,aggregateBy]))
 	cohortNames <- lapply(cl[[2]],as.character)
 	ncohort <- length(cohortNames)
 	

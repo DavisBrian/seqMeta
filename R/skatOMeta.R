@@ -1,4 +1,3 @@
-
 #' @title Combine SKAT-O analyses from one or more studies.
 #'   
 #' @description Takes as input `seqMeta` objects (from e.g.
@@ -168,7 +167,7 @@ skatOMeta <- function(..., SNPInfo=NULL, skat.wts=function(maf){dbeta(maf,1,25)}
 	method <- match.arg(method)
    #if( !(method %in% c("davies","farebrother","imhof","liu")) ) stop("Method specified is not valid! See documentation")
 	
-	genelist <- na.omit(unique(SNPInfo[,aggregateBy]))
+	genelist <- stats::na.omit(unique(SNPInfo[,aggregateBy]))
 	cohortNames <- lapply(cl[[2]],as.character)
 	ncohort <- length(cohortNames)
 	

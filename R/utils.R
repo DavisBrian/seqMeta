@@ -60,7 +60,7 @@ is_monomorphic <- function(x, tolerance = .Machine$double.eps ^ 0.5) {
   names(caf1) <- colnames(x)
   caf1_idx <- which(caf > 1-tolerance & caf < 1+tolerance)
   if (length(caf1_idx) > 0) {
-    tmp <- apply(x[ , caf1_idx, drop=FALSE], 2, function(x) all(na.omit(x) == 1))
+    tmp <- apply(x[ , caf1_idx, drop=FALSE], 2, function(x) all(stats::na.omit(x) == 1))
     caf1[names(tmp)] <- tmp    
   }
   
@@ -75,7 +75,7 @@ monomorphic_snps <- function(x, tolerance = .Machine$double.eps ^ 0.5) {
 
 is_mono <- function(Z) {
   apply(Z, 2, function(x) {
-    y <- na.omit(x)
+    y <- stats::na.omit(x)
     if (length(y) == 0) {
       FALSE
     } else {

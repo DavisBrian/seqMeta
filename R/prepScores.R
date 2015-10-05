@@ -253,8 +253,8 @@ prepScores <- function(Z, formula, family=gaussian(), SNPInfo=NULL, snpNames="Na
 	re <- tapply(SNPInfo[,snpNames], SNPInfo[,aggregateBy],function(snp.names){
 		inds <- match(snp.names,colnames(Z))
 		mcov <- matrix(0,length(snp.names),length(snp.names))
-		if(length(na.omit(inds)) > 0){
-		  Z0 <- as.matrix(Z[,na.omit(inds),drop=FALSE])
+		if(length(stats::na.omit(inds)) > 0){
+		  Z0 <- as.matrix(Z[,stats::na.omit(inds),drop=FALSE])
 #			Z0 <- sqrt(nullmodel$family$var(nullmodel$fitted))*as.matrix(Z[,na.omit(inds),drop=FALSE])
 			if(any(is.na(Z0))) Z0 <- apply(Z0,2,function(z){
 			  if(all(is.na(z))) z <- rep(0,length(z))
@@ -468,8 +468,8 @@ prepScoresX <- function(Z, formula, male, family = gaussian(), SNPInfo=NULL, snp
   re <- tapply(SNPInfo[,snpNames], SNPInfo[,aggregateBy],function(snp.names){
     inds <- match(snp.names,colnames(Z))
     mcov <- matrix(0,length(snp.names),length(snp.names))
-    if(length(na.omit(inds)) > 0){
-      Z0 <- as.matrix(Z[,na.omit(inds),drop=FALSE])
+    if(length(stats::na.omit(inds)) > 0){
+      Z0 <- as.matrix(Z[,stats::na.omit(inds),drop=FALSE])
 #       Z0 <- sqrt(nullmodel$family$var(nullmodel$fitted))*as.matrix(Z[,na.omit(inds),drop=FALSE])
       if(any(is.na(Z0))) Z0 <- apply(Z0,2,function(z){
         naz <- is.na(z)

@@ -92,7 +92,7 @@ singlesnpMeta <- function(..., SNPInfo=NULL, snpNames="Name", aggregateBy="gene"
 	  SNPInfo <- prepSNPInfo(SNPInfo, snpNames, aggregateBy)
 	}
 	
-	genelist <- na.omit(unique(SNPInfo[,aggregateBy]))
+	genelist <- stats::na.omit(unique(SNPInfo[,aggregateBy]))
 	cohortNames <- lapply(cl[[2]],as.character)
 	ncohort <- length(cohortNames)
 	
