@@ -181,13 +181,13 @@ singlesnpMeta <- function(..., SNPInfo=NULL, snpNames="Name", aggregateBy="gene"
 		caf = maf ## JB v 1.5
 		maf <- sapply(maf, function(x){min(x,1-x)})
 				
-		res.numeric[ri,"beta"] <- ifelse(scorevar !=0, mscore/scorevar, NA)
-		res.numeric[ri,"se"] <- sqrt(1/scorevar)
+		res.numeric[ri,"beta"] <- ifelse(scorevar != 0, mscore/scorevar, NA)
+		res.numeric[ri,"se"] <- ifelse(scorevar != 0, sqrt(1/scorevar), NA)
 		res.numeric[ri,"maf"] <- maf
 		res.numeric[ri,"caf"] <- caf #JB v 1.5
 		res.numeric[ri,"nmiss"] <- n.miss
 		res.numeric[ri,"ntotal"] <- n.total
-		res.numeric[ri,"p"] <- ifelse(scorevar !=0, stats::pchisq(mscore^2/scorevar,lower.tail=FALSE,df=1), NA)
+		res.numeric[ri,"p"] <- ifelse(scorevar != 0, stats::pchisq(mscore^2/scorevar, lower.tail = FALSE,df = 1), NA)
 
 		if(verbose){
 			pb.i <- pb.i+1
