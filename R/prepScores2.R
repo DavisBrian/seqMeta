@@ -326,7 +326,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
 # }
 
 check_dropped_subjects <- function(res, formula) {
-  if (!is.null(na.action(res))) { 
+  if (!is.null(stats::na.action(res))) { 
     stop(paste0("Some observations in '", 
                 utils::capture.output(print(formula)), 
                 "' are missing...\n Complete data in the null model is required. Please remove, and subset genotypes accordingly"))

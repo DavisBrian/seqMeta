@@ -1,7 +1,7 @@
 check_format_skat <- function(Z, SNPInfo, mod0, aggregateBy, snpNames) {
 	if(length(residuals(mod0)) != nrow(Z)) stop("Number of genotypes is not equal to number of phenotypes!")
 	
-	if(!is.null(na.action(mod0))){ 
+	if(!is.null(stats::na.action(mod0))){ 
 	  stop(paste0("Some observations in '", 
 	              utils::capture.output(print(formula)), 
 	              "' are missing...\n Complete data in the null model is required. Please remove, and subset genotypes accordingly"))
