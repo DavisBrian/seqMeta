@@ -100,7 +100,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
       mcov[which(!is.na(inds))[zvar !=0], which(!is.na(inds))[zvar !=0]] <- tryCatch(
         ginv_s(mod1$var[1:sum(zvar !=0),1:sum(zvar !=0),drop=FALSE]),
         error=function(e){
-          cov(Z0[nullmodel$y[,"status"]==1,zvar !=0,drop=FALSE])*(sum(nullmodel$y[,"status"]==1)-1)
+          stats::cov(Z0[nullmodel$y[,"status"]==1,zvar !=0,drop=FALSE])*(sum(nullmodel$y[,"status"]==1)-1)
         })
     }
     rownames(mcov) <- colnames(mcov) <- snp.names

@@ -424,7 +424,7 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
         mcov[inds[zvar != 0], inds[zvar != 0]] <- 
           tryCatch(ginv_s(mod1$var[1:sum(zvar != 0), 1:sum(zvar != 0), drop=FALSE]),
           error=function(e){
-            cov(Z0[m$y[,"status"]==1,zvar !=0,drop=FALSE])*(sum(m$y[,"status"]==1)-1)
+            stats::cov(Z0[m$y[,"status"]==1,zvar !=0,drop=FALSE])*(sum(m$y[,"status"]==1)-1)
           })
         forceSymmetric(Matrix(mcov,sparse=TRUE))
       } else {
