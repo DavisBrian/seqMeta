@@ -64,7 +64,7 @@
 #' head(out.ss)
 #' 
 #' @export
-prepCondScores <- function(Z, formula, family = gaussian(), SNPInfo=NULL, adjustments= NULL, snpNames = "Name", aggregateBy = "gene",kins=NULL, sparse = TRUE, data=parent.frame()){
+prepCondScores <- function(Z, formula, family = stats::gaussian(), SNPInfo=NULL, adjustments= NULL, snpNames = "Name", aggregateBy = "gene",kins=NULL, sparse = TRUE, data=parent.frame()){
 	if(is.null(SNPInfo)) stop("SNPInfo file must be provided!")
 	if(is.null(adjustments)) stop("adjustments must be provided!")
 	

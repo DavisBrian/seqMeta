@@ -125,7 +125,7 @@
 #' }
 #' @name prepScores
 #' @export
-prepScores <- function(Z, formula, family=gaussian(), SNPInfo=NULL, snpNames="Name", aggregateBy="gene", kins=NULL, sparse=TRUE, data=parent.frame(), verbose=FALSE) {
+prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNames="Name", aggregateBy="gene", kins=NULL, sparse=TRUE, data=parent.frame(), verbose=FALSE) {
 	#fit Null model
 	if(is.null(SNPInfo)){ 
 		warning("No SNP Info file provided: loading the Illumina HumanExome BeadChip. See ?SNPInfo for more details")
@@ -327,7 +327,7 @@ getcc <- function(M){
 #' @param male For analyzing the X chromosome, with prepScoresX, `male' is the
 #'   gender (0/1 or F/T) indicating female/male. See details.
 #' @export
-prepScoresX <- function(Z, formula, male, family = gaussian(), SNPInfo=NULL, snpNames = "Name", aggregateBy = "gene", kins = NULL, sparse= TRUE, data=parent.frame(), verbose = FALSE){
+prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NULL, snpNames = "Name", aggregateBy = "gene", kins = NULL, sparse= TRUE, data=parent.frame(), verbose = FALSE){
   #fit Null model
   if(is.null(SNPInfo)){ 
     warning("No SNP Info file provided: loading the Illumina HumanExome BeadChip. See ?SNPInfo for more details")
