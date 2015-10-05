@@ -367,7 +367,7 @@ skatO_getp <- function(U,V, R, w, rho,method = "davies", gene=NULL){
 			
 	for(i in 1:length(rho)){					
 		sat <- satterthwaite(lambdas[[i]],rep(1,length(lambdas[[i]])))
-		upper <- qchisq(minp/20,df=sat$df,lower.tail=FALSE)*sat$scale		
+		upper <- stats::qchisq(minp/20,df=sat$df,lower.tail=FALSE)*sat$scale		
 		tmpT <- try(stats::uniroot(function(x){pchisqsum2(x,lambda=lambdas[[i]],method=method,acc=1e-5)$p- minp }, interval=c(1e-10,upper))$root, silent = TRUE)
 		if(class(tmpT) == "try-error"){
 			#warning(paste0("Problem finding quantiles in gene ", gene, ", p-value may not be accurate"))
@@ -407,10 +407,10 @@ skatO_getp <- function(U,V, R, w, rho,method = "davies", gene=NULL){
 	}
 			
 	if(any(lambda.cond > 0)){
-		integrand <- function(x){dchisq(x,1)*Fcond(x*v22,method=method)}
+		integrand <- function(x){stats::dchisq(x,1)*Fcond(x*v22,method=method)}
 		integral <- try(stats::integrate(Vectorize(integrand),lower=0,upper=Inf, subdivisions = 200L, rel.tol=min(minp/100,1e-4)), silent = TRUE)
 		if (class(integral) == "try-error" ) {
-       		integrand <- function(x){dchisq(x,1)*Fcond(x*v22,method="liu")}
+       		integrand <- function(x){stats::dchisq(x,1)*Fcond(x*v22,method="liu")}
        		integral <- stats::integrate(Vectorize(integrand),lower=0,upper=Inf)
        		errflag <- 3
        	} else {

@@ -4,10 +4,10 @@
 \alias{skatOMeta}
 \title{Combine SKAT-O analyses from one or more studies.}
 \usage{
-skatOMeta(..., SNPInfo = NULL, skat.wts = function(maf) {     dbeta(maf, 1,
-  25) }, burden.wts = function(maf) {     as.numeric(maf <= 0.01) },
-  rho = c(0, 1), method = c("integration", "saddlepoint", "liu"),
-  snpNames = "Name", aggregateBy = "gene", mafRange = c(0, 0.5),
+skatOMeta(..., SNPInfo = NULL, skat.wts = function(maf) {    
+  stats::dbeta(maf, 1, 25) }, burden.wts = function(maf) {     as.numeric(maf
+  <= 0.01) }, rho = c(0, 1), method = c("integration", "saddlepoint",
+  "liu"), snpNames = "Name", aggregateBy = "gene", mafRange = c(0, 0.5),
   verbose = FALSE)
 }
 \arguments{

@@ -4,8 +4,8 @@
 \alias{skatMeta}
 \title{Combine SKAT analyses from one or more studies}
 \usage{
-skatMeta(..., SNPInfo = NULL, wts = function(maf) {     dbeta(maf, 1, 25) },
-  method = "saddlepoint", snpNames = "Name", aggregateBy = "gene",
+skatMeta(..., SNPInfo = NULL, wts = function(maf) {     stats::dbeta(maf, 1,
+  25) }, method = "saddlepoint", snpNames = "Name", aggregateBy = "gene",
   mafRange = c(0, 0.5), verbose = FALSE)
 }
 \arguments{
