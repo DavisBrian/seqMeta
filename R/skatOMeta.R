@@ -408,10 +408,10 @@ skatO_getp <- function(U,V, R, w, rho,method = "davies", gene=NULL){
 			
 	if(any(lambda.cond > 0)){
 		integrand <- function(x){dchisq(x,1)*Fcond(x*v22,method=method)}
-		integral <- try(integrate(Vectorize(integrand),lower=0,upper=Inf, subdivisions = 200L, rel.tol=min(minp/100,1e-4)), silent = TRUE)
+		integral <- try(stats::integrate(Vectorize(integrand),lower=0,upper=Inf, subdivisions = 200L, rel.tol=min(minp/100,1e-4)), silent = TRUE)
 		if (class(integral) == "try-error" ) {
        		integrand <- function(x){dchisq(x,1)*Fcond(x*v22,method="liu")}
-       		integral <- integrate(Vectorize(integrand),lower=0,upper=Inf)
+       		integral <- stats::integrate(Vectorize(integrand),lower=0,upper=Inf)
        		errflag <- 3
        	} else {
        		if(integral$message != "OK") errflag <- 2
