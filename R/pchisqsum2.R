@@ -62,7 +62,7 @@ saddle <- function (x, lambda,delta=rep(0,length(lambda))){
         lmin <- -length(lambda)/(2 * x)
     }
     lmax <- min(1/(2 * lambda[lambda > 0])) * 0.99999
-    hatzeta <- uniroot(function(zeta) kprime0(zeta) - x, lower = lmin, 
+    hatzeta <- stats::uniroot(function(zeta) kprime0(zeta) - x, lower = lmin, 
         upper = lmax, tol = 1e-08)$root
     w <- sign(hatzeta) * sqrt(2 * (hatzeta * x - k0(hatzeta)))
     v <- hatzeta * sqrt(kpprime0(hatzeta))

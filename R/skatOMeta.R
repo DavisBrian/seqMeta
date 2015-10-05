@@ -368,7 +368,7 @@ skatO_getp <- function(U,V, R, w, rho,method = "davies", gene=NULL){
 	for(i in 1:length(rho)){					
 		sat <- satterthwaite(lambdas[[i]],rep(1,length(lambdas[[i]])))
 		upper <- qchisq(minp/20,df=sat$df,lower.tail=FALSE)*sat$scale		
-		tmpT <- try(uniroot(function(x){pchisqsum2(x,lambda=lambdas[[i]],method=method,acc=1e-5)$p- minp }, interval=c(1e-10,upper))$root, silent = TRUE)
+		tmpT <- try(stats::uniroot(function(x){pchisqsum2(x,lambda=lambdas[[i]],method=method,acc=1e-5)$p- minp }, interval=c(1e-10,upper))$root, silent = TRUE)
 		if(class(tmpT) == "try-error"){
 			#warning(paste0("Problem finding quantiles in gene ", gene, ", p-value may not be accurate"))
 			Ts[i] <- Qs[i]
