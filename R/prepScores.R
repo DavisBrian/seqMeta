@@ -160,7 +160,7 @@ prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNa
 		nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)
 	
 		SIGMA <- nullmodel$theta[1]*2*kins+nullmodel$theta[2]*Diagonal(n)
-		X1 <- model.matrix(lm(formula,data=data))
+		X1 <- stats::model.matrix(lm(formula,data=data))
 	
 		s2 <- sum(nullmodel$theta)
 		Om_i <- solve(SIGMA/s2)
@@ -171,7 +171,7 @@ prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNa
 	} else {
 		nullmodel <- glm(formula=formula, family = family, data=data)
 		res <- residuals(nullmodel, type = "response")
-		X1 <- model.matrix(nullmodel)
+		X1 <- stats::model.matrix(nullmodel)
 		n <- nrow(X1)
 	}
  
@@ -365,7 +365,7 @@ prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NU
     nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)
     
     SIGMA <- nullmodel$theta[1]*2*kins+nullmodel$theta[2]*Diagonal(n)
-    X1 <- model.matrix(lm(formula,data=data))
+    X1 <- stats::model.matrix(lm(formula,data=data))
     
     s2 <- sum(nullmodel$theta)
     Om_i <- solve(SIGMA/s2)
@@ -376,7 +376,7 @@ prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NU
   } else {
     nullmodel <- glm(formula=formula, family = family, data=data)
     res <- residuals(nullmodel, type = "response")
-    X1 <- model.matrix(nullmodel)
+    X1 <- stats::model.matrix(nullmodel)
     n <- nrow(X1)
   }
 

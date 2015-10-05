@@ -227,7 +227,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     #rotate data:
     nullmodel$family$var <- function(x){1}
     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
-    X1 <- sef*model.matrix(lm(formula,data=data)) 
+    X1 <- sef*stats::model.matrix(lm(formula,data=data)) 
     res <- as.vector(nullmodel$res)* s2 / nullmodel$theta[2]  
     Om_i <- solve(SIGMA/s2)
     # optimize calculations
@@ -241,7 +241,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     res <- residuals(nullmodel, type = "response")  
     check_dropped_subjects(res, formula) 
     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
-    X1 <- sef*model.matrix(nullmodel) 
+    X1 <- sef*stats::model.matrix(nullmodel) 
     AX1 <- with(svd(X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(u[, d > 0,drop=FALSE])))     
     sey <- if (fam == "gaussian") {
       sqrt(var(res)*(nrow(X1) - 1)/(nrow(X1) - ncol(X1)) )
@@ -254,7 +254,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
   } else if (fam == "cox") {
     nullmodel <- coxph(formula=formula, data=data)
     strata <- eval(parse(text=rownames(attr(nullmodel$terms, "factors"))[attr(nullmodel$terms, "specials")$strata]), envir=data) # necessary for stratified analysis - 2014-10-07 - HC
-    X <- model.matrix(nullmodel, data)
+    X <- stats::model.matrix(nullmodel, data)
     rn <- row.names(model.frame(nullmodel,data=data))
     nullcoef <- coef(nullmodel)
     

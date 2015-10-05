@@ -11,7 +11,8 @@
 #' @useDynLib seqMeta
 #' @import Matrix CompQuadForm survival
 #' @importFrom coxme lmekin
-#' @importFrom stats na.action na.omit dbeta dchisq qchisq pchisq pnorm uniroot integrate gaussian
+#' @importFrom stats na.action na.omit dbeta dchisq qchisq pchisq pnorm uniroot 
+#' integrate gaussian model.matrix
 #' @importFrom utils capture.output setTxtProgressBar txtProgressBar
 #' @export prepCondScores skatMeta burdenMeta singlesnpMeta skatOMeta
 #' @exportMethod c.seqMeta c.seqMeta

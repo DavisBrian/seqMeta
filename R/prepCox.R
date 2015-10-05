@@ -14,7 +14,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
   #fit null model: 
   nullmodel <- coxph(formula=formula,data=data)
   nullmodel$strata <- eval(parse(text=rownames(attr(nullmodel$terms, "factors"))[attr(nullmodel$terms, "specials")$strata]), envir=data) # necessary for stratified analysis - 2014-10-07 - HC
-  X<-model.matrix(nullmodel,data)
+  X<-stats::model.matrix(nullmodel,data)
   rn<-row.names(model.frame(nullmodel,data=data))
   nullcoef<-coef(nullmodel)
   
