@@ -35,7 +35,7 @@ pchisqsum2 <- function(Q, lambda, delta = rep(0,length(lambda)), method=c("saddl
 saddle <- function (x, lambda,delta=rep(0,length(lambda))){
    	if(x==0) return(1)
     if(length(lambda) ==1){
-      return(pchisq(x/lambda,df=1,ncp=delta,lower.tail=FALSE))
+      return(stats::pchisq(x/lambda,df=1,ncp=delta,lower.tail=FALSE))
     }
     d <- max(lambda)
     lambda <- lambda/d

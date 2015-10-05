@@ -184,7 +184,7 @@ burdenMeta <- function(..., SNPInfo=NULL, wts=1, snpNames="Name", aggregateBy="g
 		res.numeric[ri,"nsnpsTotal"] = length(maf)
 		res.numeric[ri,"nmiss"] = sum(n.miss[tmpwts != 0], na.rm =T)
 		res.numeric[ri,"nsnpsUsed"] = sum(tmpwts != 0)
-		res.numeric[ri,"p"] = ifelse(bscorevar !=0,pchisq(bscore^2/bscorevar,lower.tail=FALSE,df=1),NA)
+		res.numeric[ri,"p"] = ifelse(bscorevar !=0,stats::pchisq(bscore^2/bscorevar,lower.tail=FALSE,df=1),NA)
 		if(verbose){
 			pb.i <- pb.i+1
 			utils::setTxtProgressBar(pb, pb.i)

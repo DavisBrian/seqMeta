@@ -187,7 +187,7 @@ singlesnpMeta <- function(..., SNPInfo=NULL, snpNames="Name", aggregateBy="gene"
 		res.numeric[ri,"caf"] <- caf #JB v 1.5
 		res.numeric[ri,"nmiss"] <- n.miss
 		res.numeric[ri,"ntotal"] <- n.total
-		res.numeric[ri,"p"] <- ifelse(scorevar !=0, pchisq(mscore^2/scorevar,lower.tail=FALSE,df=1), NA)
+		res.numeric[ri,"p"] <- ifelse(scorevar !=0, stats::pchisq(mscore^2/scorevar,lower.tail=FALSE,df=1), NA)
 
 		if(verbose){
 			pb.i <- pb.i+1

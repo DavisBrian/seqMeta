@@ -280,7 +280,7 @@ skatOMeta <- function(..., SNPInfo=NULL, skat.wts=function(maf){dbeta(maf,1,25)}
 		      }
 		      p <- tmpP$p
 		    } else {
-		      p <- ifelse(length(lambda) == 1 & all(lambda > 0), pchisq(Q.skat/lambda,df=1,lower.tail=FALSE),1)
+		      p <- ifelse(length(lambda) == 1 & all(lambda > 0), stats::pchisq(Q.skat/lambda,df=1,lower.tail=FALSE),1)
 		      res.numeric[ri,"errflag"] = 0
 		    }
 		    res.numeric[ri,"pmin"] = res.numeric[ri,"p"] = p
