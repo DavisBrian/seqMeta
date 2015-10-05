@@ -238,7 +238,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     list(res=res, family=fam, n=nrow(X1), sey=sqrt(s2), sef=sef, X1=X1, AX1=AX1, Om_i=Om_i)
   } else if (fam == "binomial" || fam == "gaussian") {
     nullmodel <- stats::glm(formula=formula, family=fam, data=data)
-    res <- residuals(nullmodel, type = "response")  
+    res <- stats::residuals(nullmodel, type = "response")  
     check_dropped_subjects(res, formula) 
     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
     X1 <- sef*stats::model.matrix(nullmodel) 

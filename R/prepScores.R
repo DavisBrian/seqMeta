@@ -170,7 +170,7 @@ prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNa
 		nullmodel$family$var <- function(x){1}
 	} else {
 		nullmodel <- stats::glm(formula=formula, family = family, data=data)
-		res <- residuals(nullmodel, type = "response")
+		res <- stats::residuals(nullmodel, type = "response")
 		X1 <- stats::model.matrix(nullmodel)
 		n <- nrow(X1)
 	}
@@ -375,7 +375,7 @@ prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NU
     nullmodel$family$var <- function(x){1}
   } else {
     nullmodel <- stats::glm(formula=formula, family = family, data=data)
-    res <- residuals(nullmodel, type = "response")
+    res <- stats::residuals(nullmodel, type = "response")
     X1 <- stats::model.matrix(nullmodel)
     n <- nrow(X1)
   }
