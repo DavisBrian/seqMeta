@@ -119,7 +119,7 @@
 #' }
 #' 
 #' @export
-skatMeta <- function(..., SNPInfo=NULL, wts=function(maf){ dbeta(maf,1,25) }, method="saddlepoint", snpNames="Name", aggregateBy="gene", mafRange=c(0,0.5), verbose=FALSE) {
+skatMeta <- function(..., SNPInfo=NULL, wts=function(maf){ stats::dbeta(maf,1,25) }, method="saddlepoint", snpNames="Name", aggregateBy="gene", mafRange=c(0,0.5), verbose=FALSE) {
 	cl <- match.call(expand.dots = FALSE)
 	if(is.null(SNPInfo)){ 
 		warning("No SNP Info file provided: loading the Illumina HumanExome BeadChip. See ?SNPInfo for more details")

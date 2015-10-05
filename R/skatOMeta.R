@@ -152,7 +152,7 @@
 #' }
 #' 
 #' @export
-skatOMeta <- function(..., SNPInfo=NULL, skat.wts=function(maf){dbeta(maf,1,25)}, burden.wts=function(maf){as.numeric(maf <= 0.01) }, rho=c(0,1), method=c("integration", "saddlepoint", "liu"), snpNames="Name", aggregateBy="gene", mafRange=c(0,0.5), verbose=FALSE) {
+skatOMeta <- function(..., SNPInfo=NULL, skat.wts=function(maf){stats::dbeta(maf,1,25)}, burden.wts=function(maf){as.numeric(maf <= 0.01) }, rho=c(0,1), method=c("integration", "saddlepoint", "liu"), snpNames="Name", aggregateBy="gene", mafRange=c(0,0.5), verbose=FALSE) {
 	cl <- match.call(expand.dots = FALSE)
 	if(is.null(SNPInfo)){ 
 		warning("No SNP Info file provided: loading the Illumina HumanExome BeadChip. See ?SNPInfo for more details")
