@@ -157,10 +157,10 @@ prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNa
 		}
 		
 		nullmodel <- coxme::lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")	
-		nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)
+		nullmodel$theta <- c(nullmodel$vcoef$id, nullmodel$sigma^2)
 	
 		SIGMA <- nullmodel$theta[1]*2*kins+nullmodel$theta[2]*Diagonal(n)
-		X1 <- stats::model.matrix(stats::lm(formula,data=data))
+		X1 <- stats::model.matrix(stats::lm(formula, data=data))
 	
 		s2 <- sum(nullmodel$theta)
 		Om_i <- solve(SIGMA/s2)
@@ -362,10 +362,10 @@ prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NU
     }
     
     nullmodel <- coxme::lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")	
-    nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)
+    nullmodel$theta <- c(nullmodel$vcoef$id, nullmodel$sigma^2)
     
     SIGMA <- nullmodel$theta[1]*2*kins+nullmodel$theta[2]*Diagonal(n)
-    X1 <- stats::model.matrix(stats::lm(formula,data=data))
+    X1 <- stats::model.matrix(stats::lm(formula, data=data))
     
     s2 <- sum(nullmodel$theta)
     Om_i <- solve(SIGMA/s2)

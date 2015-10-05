@@ -72,7 +72,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores gaussian
   expect_true(is.na(out[out$Name == monos[1], "p"]))
   expect_true(is.na(out[out$Name == monos[1], "beta"]))
   expect_true(is.na(out[out$Name == monos[1], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[1], "se"]))
+  expect_true(is.na(out[out$Name == monos[1], "se"]))
   expect_true(is.infinite(out[out$Name == monos[1], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[2], "maf"] == 0.5)
@@ -80,7 +80,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores gaussian
   expect_true(is.na(out[out$Name == monos[2], "p"]))
   expect_true(is.na(out[out$Name == monos[2], "beta"]))
   expect_true(is.na(out[out$Name == monos[2], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[2], "se"]))
+  expect_true(is.na(out[out$Name == monos[2], "se"]))
   expect_true(is.infinite(out[out$Name == monos[2], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[3], "maf"] == 0)
@@ -88,7 +88,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores gaussian
   expect_true(is.na(out[out$Name == monos[3], "p"]))
   expect_true(is.na(out[out$Name == monos[3], "beta"]))
   expect_true(is.na(out[out$Name == monos[3], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[3], "se"]))
+  expect_true(is.na(out[out$Name == monos[3], "se"]))
   expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
   
   # test prepScores2 equivalency
@@ -124,7 +124,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores binomial
   expect_true(is.na(out[out$Name == monos[1], "p"]))
   expect_true(is.na(out[out$Name == monos[1], "beta"]))
   expect_true(is.na(out[out$Name == monos[1], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[1], "se"]))
+  expect_true(is.na(out[out$Name == monos[1], "se"]))
   expect_true(is.infinite(out[out$Name == monos[1], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[2], "maf"] == 0.5)
@@ -132,7 +132,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores binomial
   expect_true(is.na(out[out$Name == monos[2], "p"]))
   expect_true(is.na(out[out$Name == monos[2], "beta"]))
   expect_true(is.na(out[out$Name == monos[2], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[2], "se"]))
+  expect_true(is.na(out[out$Name == monos[2], "se"]))
   expect_true(is.infinite(out[out$Name == monos[2], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[3], "maf"] == 0)
@@ -140,7 +140,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores binomial
   expect_true(is.na(out[out$Name == monos[3], "p"]))
   expect_true(is.na(out[out$Name == monos[3], "beta"]))
   expect_true(is.na(out[out$Name == monos[3], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[3], "se"]))
+  expect_true(is.na(out[out$Name == monos[3], "se"]))
   expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
   
   # test prepScores2 equivalency
@@ -176,7 +176,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepCox)", {
   expect_true(is.na(out[out$Name == monos[1], "p"]))
   expect_true(is.na(out[out$Name == monos[1], "beta"]))
   expect_true(is.na(out[out$Name == monos[1], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[1], "se"]))
+  expect_true(is.na(out[out$Name == monos[1], "se"]))
   expect_true(is.infinite(out[out$Name == monos[1], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[2], "maf"] == 0.5)
@@ -184,7 +184,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepCox)", {
   expect_true(is.na(out[out$Name == monos[2], "p"]))
   expect_true(is.na(out[out$Name == monos[2], "beta"]))
   expect_true(is.na(out[out$Name == monos[2], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[2], "se"]))
+  expect_true(is.na(out[out$Name == monos[2], "se"]))
   expect_true(is.infinite(out[out$Name == monos[2], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[3], "maf"] == 0)
@@ -192,7 +192,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepCox)", {
   expect_true(is.na(out[out$Name == monos[3], "p"]))
   expect_true(is.na(out[out$Name == monos[3], "beta"]))
   expect_true(is.na(out[out$Name == monos[3], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[3], "se"]))
+  expect_true(is.na(out[out$Name == monos[3], "se"]))
   expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
   
   #test prepScores2 equivalency
@@ -228,7 +228,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 gaussia
   expect_true(is.na(out[out$Name == monos[1], "p"]))
   expect_true(is.na(out[out$Name == monos[1], "beta"]))
   expect_true(is.na(out[out$Name == monos[1], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[1], "se"]))
+  expect_true(is.na(out[out$Name == monos[1], "se"]))
   expect_true(is.infinite(out[out$Name == monos[1], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[2], "maf"] == 0.5)
@@ -236,7 +236,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 gaussia
   expect_true(is.na(out[out$Name == monos[2], "p"]))
   expect_true(is.na(out[out$Name == monos[2], "beta"]))
   expect_true(is.na(out[out$Name == monos[2], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[2], "se"]))
+  expect_true(is.na(out[out$Name == monos[2], "se"]))
   expect_true(is.infinite(out[out$Name == monos[2], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[3], "maf"] == 0)
@@ -244,7 +244,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 gaussia
   expect_true(is.na(out[out$Name == monos[3], "p"]))
   expect_true(is.na(out[out$Name == monos[3], "beta"]))
   expect_true(is.na(out[out$Name == monos[3], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[3], "se"]))
+  expect_true(is.na(out[out$Name == monos[3], "se"]))
   expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
 })
 
@@ -276,7 +276,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 binomia
   expect_true(is.na(out[out$Name == monos[1], "p"]))
   expect_true(is.na(out[out$Name == monos[1], "beta"]))
   expect_true(is.na(out[out$Name == monos[1], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[1], "se"]))
+  expect_true(is.na(out[out$Name == monos[1], "se"]))
   expect_true(is.infinite(out[out$Name == monos[1], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[2], "maf"] == 0.5)
@@ -284,7 +284,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 binomia
   expect_true(is.na(out[out$Name == monos[2], "p"]))
   expect_true(is.na(out[out$Name == monos[2], "beta"]))
   expect_true(is.na(out[out$Name == monos[2], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[2], "se"]))
+  expect_true(is.na(out[out$Name == monos[2], "se"]))
   expect_true(is.infinite(out[out$Name == monos[2], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[3], "maf"] == 0)
@@ -292,7 +292,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 binomia
   expect_true(is.na(out[out$Name == monos[3], "p"]))
   expect_true(is.na(out[out$Name == monos[3], "beta"]))
   expect_true(is.na(out[out$Name == monos[3], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[3], "se"]))
+  expect_true(is.na(out[out$Name == monos[3], "se"]))
   expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
 })
 
@@ -324,7 +324,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 surviva
   expect_true(is.na(out[out$Name == monos[1], "p"]))
   expect_true(is.na(out[out$Name == monos[1], "beta"]))
   expect_true(is.na(out[out$Name == monos[1], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[1], "se"]))
+  expect_true(is.na(out[out$Name == monos[1], "se"]))
   expect_true(is.infinite(out[out$Name == monos[1], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[2], "maf"] == 0.5)
@@ -332,7 +332,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 surviva
   expect_true(is.na(out[out$Name == monos[2], "p"]))
   expect_true(is.na(out[out$Name == monos[2], "beta"]))
   expect_true(is.na(out[out$Name == monos[2], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[2], "se"]))
+  expect_true(is.na(out[out$Name == monos[2], "se"]))
   expect_true(is.infinite(out[out$Name == monos[2], "se.cohort1"])) 
   
   expect_true(out[out$Name == monos[3], "maf"] == 0)
@@ -340,7 +340,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 surviva
   expect_true(is.na(out[out$Name == monos[3], "p"]))
   expect_true(is.na(out[out$Name == monos[3], "beta"]))
   expect_true(is.na(out[out$Name == monos[3], "beta.cohort1"]))
-  expect_true(is.infinite(out[out$Name == monos[3], "se"]))
+  expect_true(is.na(out[out$Name == monos[3], "se"]))
   expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
 })
 

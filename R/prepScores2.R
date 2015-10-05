@@ -220,7 +220,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     
     nullmodel <- coxme::lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")  
     
-    nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)   
+    nullmodel$theta <- c(nullmodel$vcoef$id, nullmodel$sigma^2)   
     SIGMA <- nullmodel$theta[1] * 2 * kins + nullmodel$theta[2] * Diagonal(nrow(kins))   
     s2 <- sum(nullmodel$theta)
     
