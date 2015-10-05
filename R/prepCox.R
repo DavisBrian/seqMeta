@@ -15,7 +15,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
   nullmodel <- coxph(formula=formula,data=data)
   nullmodel$strata <- eval(parse(text=rownames(attr(nullmodel$terms, "factors"))[attr(nullmodel$terms, "specials")$strata]), envir=data) # necessary for stratified analysis - 2014-10-07 - HC
   X<-stats::model.matrix(nullmodel,data)
-  rn<-row.names(model.frame(nullmodel,data=data))
+  rn<-row.names(stats::model.frame(nullmodel,data=data))
   nullcoef<-coef(nullmodel)
   
   ##match snps in Z with master list in SNPInfo file 

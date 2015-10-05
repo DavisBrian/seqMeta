@@ -255,7 +255,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     nullmodel <- coxph(formula=formula, data=data)
     strata <- eval(parse(text=rownames(attr(nullmodel$terms, "factors"))[attr(nullmodel$terms, "specials")$strata]), envir=data) # necessary for stratified analysis - 2014-10-07 - HC
     X <- stats::model.matrix(nullmodel, data)
-    rn <- row.names(model.frame(nullmodel,data=data))
+    rn <- row.names(stats::model.frame(nullmodel,data=data))
     nullcoef <- coef(nullmodel)
     
     list(X=X, family=fam, n=nrow(X), sey=1, y=nullmodel$y, strata=strata, rn=rn, coef=nullcoef)
