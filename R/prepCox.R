@@ -94,7 +94,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
         z[is.na(z)] <- mz
         z
       })
-      zvar <- apply(Z0,2,var)
+      zvar <- apply(Z0,2,stats::var)
       mod1 <- coxlr.fit(cbind(Z0[,zvar !=0],X), nullmodel$y, nullmodel$strata, NULL,
                         init=c(rep(0,ncol(Z0[,zvar !=0,drop=FALSE])),nullcoef),coxph.control(iter.max=0),NULL,"efron",rn)
       mcov[which(!is.na(inds))[zvar !=0], which(!is.na(inds))[zvar !=0]] <- tryCatch(

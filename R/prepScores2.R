@@ -244,7 +244,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     X1 <- sef*stats::model.matrix(nullmodel) 
     AX1 <- with(svd(X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(u[, d > 0,drop=FALSE])))     
     sey <- if (fam == "gaussian") {
-      sqrt(var(res)*(nrow(X1) - 1)/(nrow(X1) - ncol(X1)) )
+      sqrt(stats::var(res)*(nrow(X1) - 1)/(nrow(X1) - ncol(X1)) )
     } else if (fam == "binomial") {
       1
     } else {
@@ -417,7 +417,7 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
       if(length(inds) > 0L){
         mcov <- matrix(0,length(snp.names),length(snp.names), dimnames=list(snp.names, snp.names))
         Z0 <- Z[, inds, drop=FALSE]
-        zvar <- apply(Z0, 2, var)
+        zvar <- apply(Z0, 2, stats::var)
         mod1 <- coxlr.fit(cbind(Z0[,zvar != 0 ],X), m$y, m$strata, NULL,
                           init=c(rep(0, ncol(Z0[,zvar !=0, drop=FALSE])), m$coef),
                           coxph.control(iter.max=0), NULL, "efron", m$rn)

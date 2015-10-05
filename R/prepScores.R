@@ -280,7 +280,7 @@ prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNa
 		mcov[ , mono_snps] <- 0
 		return(forceSymmetric(Matrix(mcov,sparse=TRUE)))
 	},simplify = FALSE)
-	sey = sqrt(var(res)*(nrow(X1)-1)/(nrow(X1)-ncol(X1)) )
+	sey = sqrt(stats::var(res)*(nrow(X1)-1)/(nrow(X1)-ncol(X1)) )
 	if(family$family == "binomial") sey = 1
 	if(!is.null(kins)) 	sey = sqrt(s2)
 
@@ -498,7 +498,7 @@ prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NU
     }
     return(forceSymmetric(Matrix(mcov,sparse=TRUE)))
   },simplify = FALSE)
-  sey = sqrt(var(res)*(nrow(X1)-1)/(nrow(X1)-ncol(X1)) )
+  sey = sqrt(stats::var(res)*(nrow(X1)-1)/(nrow(X1)-ncol(X1)) )
   if(family$family == "binomial") sey = 1
   if(!is.null(kins)) 	sey = sqrt(s2)
   
