@@ -5,7 +5,7 @@
 \title{Run SKAT on data from a single cohort, conditional on specified SNP
   effects}
 \usage{
-prepCondScores(Z, formula, family = gaussian(), SNPInfo = NULL,
+prepCondScores(Z, formula, family = stats::gaussian(), SNPInfo = NULL,
   adjustments = NULL, snpNames = "Name", aggregateBy = "gene",
   kins = NULL, sparse = TRUE, data = parent.frame())
 }

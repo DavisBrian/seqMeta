@@ -177,7 +177,7 @@ prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNa
  
 	env <- environment()
 	##check format:
-	invisible(check_format_skat(Z, SNPInfo, nullmodel,aggregateBy, snpNames))
+	invisible(check_format_skat(Z, SNPInfo, nullmodel,aggregateBy, snpNames, formula))
 	
 	##match snps in Z with master list in SNPInfo file 
 	mysnps <- colnames(Z)
@@ -382,7 +382,7 @@ prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NU
 
   env <- environment()
   ##check format:
-  invisible(check_format_skat(Z, SNPInfo, nullmodel,aggregateBy, snpNames))
+  invisible(check_format_skat(Z, SNPInfo, nullmodel,aggregateBy, snpNames, formula))
   
   male <- eval(cl$male,data)
   if(length(male) != length(res)) stop("`male' not the same length as phenotype")

@@ -9,11 +9,11 @@
 prepCox(Z, formula, SNPInfo = NULL, snpNames = "Name",
   aggregateBy = "gene", data = parent.frame(), verbose = FALSE)
 
-prepScores(Z, formula, family = gaussian(), SNPInfo = NULL,
+prepScores(Z, formula, family = stats::gaussian(), SNPInfo = NULL,
   snpNames = "Name", aggregateBy = "gene", kins = NULL, sparse = TRUE,
   data = parent.frame(), verbose = FALSE)
 
-prepScoresX(Z, formula, male, family = gaussian(), SNPInfo = NULL,
+prepScoresX(Z, formula, male, family = stats::gaussian(), SNPInfo = NULL,
   snpNames = "Name", aggregateBy = "gene", kins = NULL, sparse = TRUE,
   data = parent.frame(), verbose = FALSE)
 }
