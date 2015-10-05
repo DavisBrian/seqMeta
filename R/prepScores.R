@@ -196,7 +196,7 @@ prepScores <- function(Z, formula, family=gaussian(), SNPInfo=NULL, snpNames="Na
 	
 	if(verbose){
     	cat("\n Scoring... Progress:\n")
-    	pb <- txtProgressBar(min = 0, max = nsnps, style = 3)
+    	pb <- utils::txtProgressBar(min = 0, max = nsnps, style = 3)
     	pb.i <- 0
     }
 	
@@ -215,7 +215,7 @@ prepScores <- function(Z, formula, family=gaussian(), SNPInfo=NULL, snpNames="Na
 		}
         if (verbose){
 				assign("pb.i", get("pb.i",env)+1,env)
-				if(get("pb.i", env)%%ceiling(nsnps/100) == 0) setTxtProgressBar(get("pb",env),get("pb.i",env))
+				if(get("pb.i", env)%%ceiling(nsnps/100) == 0) utils::setTxtProgressBar(get("pb",env),get("pb.i",env))
 			}
 		sum(res*z)
 		})[ZtoSI]
@@ -246,7 +246,7 @@ prepScores <- function(Z, formula, family=gaussian(), SNPInfo=NULL, snpNames="Na
 	ngenes <- length(unique(SNPInfo[,aggregateBy]))
 	if(verbose){
     	cat("\n Calculating covariance... Progress:\n")
-    	pb <- txtProgressBar(min = 0, max = ngenes, style = 3)
+    	pb <- utils::txtProgressBar(min = 0, max = ngenes, style = 3)
     	pb.i <- 0
     }
 	##get covariance matrices:
@@ -272,7 +272,7 @@ prepScores <- function(Z, formula, family=gaussian(), SNPInfo=NULL, snpNames="Na
 		rownames(mcov) <- colnames(mcov) <- snp.names
 		if(verbose){
 				assign("pb.i", get("pb.i",env)+1,env)
-				if(get("pb.i", env)%%ceiling(ngenes/100) == 0) setTxtProgressBar(get("pb",env),get("pb.i",env))		  
+				if(get("pb.i", env)%%ceiling(ngenes/100) == 0) utils::setTxtProgressBar(get("pb",env),get("pb.i",env))		  
 		}
     # set monomorphic inds to 0
     mono_snps <- intersect(snp.names, monos)
@@ -406,7 +406,7 @@ prepScoresX <- function(Z, formula, male, family = gaussian(), SNPInfo=NULL, snp
   
   if(verbose){
     cat("\n Scoring... Progress:\n")
-    pb <- txtProgressBar(min = 0, max = nsnps, style = 3)
+    pb <- utils::txtProgressBar(min = 0, max = nsnps, style = 3)
     pb.i <- 0
   }
   
@@ -432,7 +432,7 @@ prepScoresX <- function(Z, formula, male, family = gaussian(), SNPInfo=NULL, snp
     }
     if (verbose){
       assign("pb.i", get("pb.i",env)+1,env)
-      if(get("pb.i", env)%%ceiling(nsnps/100) == 0) setTxtProgressBar(get("pb",env),get("pb.i",env))
+      if(get("pb.i", env)%%ceiling(nsnps/100) == 0) utils::setTxtProgressBar(get("pb",env),get("pb.i",env))
     }
     sum(res*z)
   })[ZtoSI]
@@ -461,7 +461,7 @@ prepScoresX <- function(Z, formula, male, family = gaussian(), SNPInfo=NULL, snp
   ngenes <- length(unique(SNPInfo[,aggregateBy]))
   if(verbose){
     cat("\n Calculating covariance... Progress:\n")
-    pb <- txtProgressBar(min = 0, max = ngenes, style = 3)
+    pb <- utils::txtProgressBar(min = 0, max = ngenes, style = 3)
     pb.i <- 0
   }
   ##get covariance matrices:
@@ -494,7 +494,7 @@ prepScoresX <- function(Z, formula, male, family = gaussian(), SNPInfo=NULL, snp
     rownames(mcov) <- colnames(mcov) <- snp.names
     if(verbose){
       assign("pb.i", get("pb.i",env)+1,env)
-      if(get("pb.i", env)%%ceiling(ngenes/100) == 0) setTxtProgressBar(get("pb",env),get("pb.i",env))		  
+      if(get("pb.i", env)%%ceiling(ngenes/100) == 0) utils::setTxtProgressBar(get("pb",env),get("pb.i",env))		  
     }
     return(forceSymmetric(Matrix(mcov,sparse=TRUE)))
   },simplify = FALSE)

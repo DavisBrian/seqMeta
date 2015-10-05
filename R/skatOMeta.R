@@ -184,7 +184,7 @@ skatOMeta <- function(..., SNPInfo=NULL, skat.wts=function(maf){dbeta(maf,1,25)}
 	
     if(verbose){
     	cat("\n Meta Analyzing... Progress:\n")
-    	pb <- txtProgressBar(min = 0, max = length(genelist), style = 3)
+    	pb <- utils::txtProgressBar(min = 0, max = length(genelist), style = 3)
     	pb.i <- 0
     }
     ri <- 0
@@ -307,7 +307,7 @@ skatOMeta <- function(..., SNPInfo=NULL, skat.wts=function(maf){dbeta(maf,1,25)}
 		res.numeric[ri,"nmiss"] = sum(n.miss, na.rm =T)
 		if(verbose){
 			pb.i <- pb.i+1
-			setTxtProgressBar(pb, pb.i)
+			utils::setTxtProgressBar(pb, pb.i)
 		}
 	}
 	if(verbose) close(pb)

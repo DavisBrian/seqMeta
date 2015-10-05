@@ -3,7 +3,7 @@ check_format_skat <- function(Z, SNPInfo, mod0, aggregateBy, snpNames) {
 	
 	if(!is.null(na.action(mod0))){ 
 	  stop(paste0("Some observations in '", 
-	              capture.output(print(formula)), 
+	              utils::capture.output(print(formula)), 
 	              "' are missing...\n Complete data in the null model is required. Please remove, and subset genotypes accordingly"))
 	}
   

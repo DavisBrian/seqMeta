@@ -101,7 +101,7 @@ burdenMeta <- function(..., SNPInfo=NULL, wts=1, snpNames="Name", aggregateBy="g
 
 	if(verbose){
     	cat("\n Meta Analyzing... Progress:\n")
-    	pb <- txtProgressBar(min = 0, max = length(genelist), style = 3)
+    	pb <- utils::txtProgressBar(min = 0, max = length(genelist), style = 3)
     	pb.i <- 0
     }
 
@@ -187,7 +187,7 @@ burdenMeta <- function(..., SNPInfo=NULL, wts=1, snpNames="Name", aggregateBy="g
 		res.numeric[ri,"p"] = ifelse(bscorevar !=0,pchisq(bscore^2/bscorevar,lower.tail=FALSE,df=1),NA)
 		if(verbose){
 			pb.i <- pb.i+1
-			setTxtProgressBar(pb, pb.i)
+			utils::setTxtProgressBar(pb, pb.i)
 		}
 	
 	}

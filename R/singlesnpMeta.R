@@ -119,7 +119,7 @@ singlesnpMeta <- function(..., SNPInfo=NULL, snpNames="Name", aggregateBy="gene"
 	
 	if(verbose){
     	cat("\n Meta Analyzing... Progress:\n")
-    	pb <- txtProgressBar(min = 0, max = length(genelist), style = 3)
+    	pb <- utils::txtProgressBar(min = 0, max = length(genelist), style = 3)
     	pb.i <- 0
     }
 
@@ -191,7 +191,7 @@ singlesnpMeta <- function(..., SNPInfo=NULL, snpNames="Name", aggregateBy="gene"
 
 		if(verbose){
 			pb.i <- pb.i+1
-			setTxtProgressBar(pb, pb.i)
+			utils::setTxtProgressBar(pb, pb.i)
 		}
 	}
 	if(verbose) close(pb)

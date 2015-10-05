@@ -11,6 +11,7 @@
 #' @useDynLib seqMeta
 #' @import Matrix CompQuadForm survival
 #' @importFrom coxme lmekin
+#' @importFrom utils capture.output setTxtProgressBar txtProgressBar
 #' @export prepCondScores skatMeta burdenMeta singlesnpMeta skatOMeta
 #' @exportMethod c.seqMeta c.seqMeta
 NULL

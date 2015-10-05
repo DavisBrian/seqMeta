@@ -34,7 +34,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
   
   if(verbose){
     cat("\n Calculating signed LRTs... Progress:\n")
-    pb <- txtProgressBar(min = 0, max = nsnps, style = 3)
+    pb <- utils::txtProgressBar(min = 0, max = nsnps, style = 3)
     pb.i <- 0
   }
   
@@ -54,7 +54,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
     }
     if (verbose){
       assign("pb.i", get("pb.i",env)+1,env)
-      if(get("pb.i", env)%%ceiling(nsnps/100) == 0) setTxtProgressBar(get("pb",env),get("pb.i",env))
+      if(get("pb.i", env)%%ceiling(nsnps/100) == 0) utils::setTxtProgressBar(get("pb",env),get("pb.i",env))
     }
     model<- coxlr.fit(cbind(z,X), nullmodel$y, nullmodel$strata, NULL,
                       init=c(0,nullcoef),coxph.control(iter.max=100),NULL,"efron",rn)
@@ -78,7 +78,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
   ngenes <- length(unique(SNPInfo[,aggregateBy]))
   if(verbose){
     cat("\n Calculating covariance... Progress:\n")
-    pb <- txtProgressBar(min = 0, max = ngenes, style = 3)
+    pb <- utils::txtProgressBar(min = 0, max = ngenes, style = 3)
     pb.i <- 0
   }
   
@@ -106,7 +106,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
     rownames(mcov) <- colnames(mcov) <- snp.names
     if(verbose){
       assign("pb.i", get("pb.i",env)+1,env)
-      if(get("pb.i", env)%%ceiling(ngenes/100) == 0) setTxtProgressBar(get("pb",env),get("pb.i",env))		  
+      if(get("pb.i", env)%%ceiling(ngenes/100) == 0) utils::setTxtProgressBar(get("pb",env),get("pb.i",env))		  
     }
     return(forceSymmetric(Matrix(mcov,sparse=TRUE)))
   }),simplify = FALSE)
