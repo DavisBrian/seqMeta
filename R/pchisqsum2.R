@@ -67,5 +67,5 @@ saddle <- function (x, lambda,delta=rep(0,length(lambda))){
     w <- sign(hatzeta) * sqrt(2 * (hatzeta * x - k0(hatzeta)))
     v <- hatzeta * sqrt(kpprime0(hatzeta))
     if (abs(hatzeta) < 1e-04) return(NA)
-    else return(pnorm(w + log(v/w)/w, lower.tail = FALSE))
+    else return(stats::pnorm(w + log(v/w)/w, lower.tail = FALSE))
 }
