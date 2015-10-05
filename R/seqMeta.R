@@ -12,7 +12,7 @@
 #' @import Matrix CompQuadForm survival
 #' @importFrom coxme lmekin
 #' @importFrom stats na.action na.omit dbeta dchisq qchisq pchisq pnorm uniroot 
-#' integrate gaussian model.matrix lm glm residuals model.frame var cov
+#' integrate gaussian model.matrix lm glm residuals model.frame var cov coef
 #' @importFrom utils capture.output setTxtProgressBar txtProgressBar
 #' @export prepCondScores skatMeta burdenMeta singlesnpMeta skatOMeta
 #' @exportMethod c.seqMeta c.seqMeta

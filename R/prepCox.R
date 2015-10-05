@@ -16,7 +16,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
   nullmodel$strata <- eval(parse(text=rownames(attr(nullmodel$terms, "factors"))[attr(nullmodel$terms, "specials")$strata]), envir=data) # necessary for stratified analysis - 2014-10-07 - HC
   X<-stats::model.matrix(nullmodel,data)
   rn<-row.names(stats::model.frame(nullmodel,data=data))
-  nullcoef<-coef(nullmodel)
+  nullcoef<-stats::coef(nullmodel)
   
   ##match snps in Z with master list in SNPInfo file 
   mysnps <- colnames(Z)
@@ -58,7 +58,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
     }
     model<- coxlr.fit(cbind(z,X), nullmodel$y, nullmodel$strata, NULL,
                       init=c(0,nullcoef),coxph.control(iter.max=100),NULL,"efron",rn)
-    return(sign(coef(model)[1])*sqrt(2*diff(model$loglik)))
+    return(sign(stats::coef(model)[1])*sqrt(2*diff(model$loglik)))
   })[ZtoSI]
   names(zlrt) <- SNPInfo[,snpNames]
   zlrt[is.na(zlrt)] <- 0

@@ -127,7 +127,7 @@ prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="N
     for(j in 1:ncol(Z)) {
       dat[ , 1] <- Z[ , j]
       model<- coxlr.fit(dat, m$y, m$strata, NULL, init=c(0,m$coef), coxph.control(iter.max=100), NULL,"efron", m$rn)
-      zlrt[j] <- sign(coef(model)[1])*sqrt(2*diff(model$loglik))
+      zlrt[j] <- sign(stats::coef(model)[1])*sqrt(2*diff(model$loglik))
     }
     zlrt[is.na(zlrt)] <- 0
     zlrt[monos] <- 0
@@ -256,7 +256,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     strata <- eval(parse(text=rownames(attr(nullmodel$terms, "factors"))[attr(nullmodel$terms, "specials")$strata]), envir=data) # necessary for stratified analysis - 2014-10-07 - HC
     X <- stats::model.matrix(nullmodel, data)
     rn <- row.names(stats::model.frame(nullmodel,data=data))
-    nullcoef <- coef(nullmodel)
+    nullcoef <- stats::coef(nullmodel)
     
     list(X=X, family=fam, n=nrow(X), sey=1, y=nullmodel$y, strata=strata, rn=rn, coef=nullcoef)
   } else {
