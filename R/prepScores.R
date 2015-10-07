@@ -142,7 +142,7 @@ prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNa
 		stopifnot(family$family == "gaussian")
 		if(sparse){
 			kins[kins < 2 * 2^{-6}] <- 0
-			kins <- forceSymmetric(kins)
+			kins <- Matrix::forceSymmetric(kins)
 			#oo <- order(getcc(kins))
 		} else {
 			#oo <- 1:n
@@ -278,7 +278,7 @@ prepScores <- function(Z, formula, family=stats::gaussian(), SNPInfo=NULL, snpNa
     mono_snps <- intersect(snp.names, monos)
 		mcov[mono_snps , ] <- 0
 		mcov[ , mono_snps] <- 0
-		return(forceSymmetric(Matrix(mcov,sparse=TRUE)))
+		return(Matrix::forceSymmetric(Matrix(mcov,sparse=TRUE)))
 	},simplify = FALSE)
 	sey = sqrt(stats::var(res)*(nrow(X1)-1)/(nrow(X1)-ncol(X1)) )
 	if(family$family == "binomial") sey = 1
@@ -347,7 +347,7 @@ prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NU
     stopifnot(family$family == "gaussian")
     if(sparse){
       kins[kins < 2 * 2^{-6}] <- 0
-      kins <- forceSymmetric(kins)
+      kins <- Matrix::forceSymmetric(kins)
       #oo <- order(getcc(kins))
     } else {
       #oo <- 1:n
@@ -496,7 +496,7 @@ prepScoresX <- function(Z, formula, male, family = stats::gaussian(), SNPInfo=NU
       assign("pb.i", get("pb.i",env)+1,env)
       if(get("pb.i", env)%%ceiling(ngenes/100) == 0) utils::setTxtProgressBar(get("pb",env),get("pb.i",env))		  
     }
-    return(forceSymmetric(Matrix(mcov,sparse=TRUE)))
+    return(Matrix::forceSymmetric(Matrix(mcov,sparse=TRUE)))
   },simplify = FALSE)
   sey = sqrt(stats::var(res)*(nrow(X1)-1)/(nrow(X1)-ncol(X1)) )
   if(family$family == "binomial") sey = 1

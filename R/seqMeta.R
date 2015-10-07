@@ -9,7 +9,7 @@
 #' @name seqMeta
 #' @docType package
 #' @useDynLib seqMeta
-#' @import Matrix CompQuadForm survival
+#' @import methods Matrix CompQuadForm survival
 #' @importFrom coxme lmekin
 #' @importFrom stats na.action na.omit dbeta dchisq qchisq pchisq pnorm uniroot 
 #' integrate gaussian model.matrix lm glm residuals model.frame var cov coef

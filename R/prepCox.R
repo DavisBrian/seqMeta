@@ -108,7 +108,7 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
       assign("pb.i", get("pb.i",env)+1,env)
       if(get("pb.i", env)%%ceiling(ngenes/100) == 0) utils::setTxtProgressBar(get("pb",env),get("pb.i",env))		  
     }
-    return(forceSymmetric(Matrix(mcov,sparse=TRUE)))
+    return(Matrix::forceSymmetric(Matrix(mcov,sparse=TRUE)))
   }),simplify = FALSE)
   
   ##aggregate

@@ -3,12 +3,13 @@ Type: Package
 Title: Meta-Analysis of Region-Based Tests of Rare DNA Variants
 Version: 1.6.0.9073
 Date: 2015-07-08
-Author: Arie Voorman, Jennifer Brody, Han Chen, Thomas Lumley
+Author: Arie Voorman, Jennifer Brody, Han Chen, Thomas Lumley, Brian Davis
 Maintainer: Brian Davis <Brian.Davis281@gmail.com>
 URL: https://github.com/DavisBrian/seqMeta
 BugReports: https://github.com/DavisBrian/seqMeta/issues
 Depends:
     R (>= 3.1.0),
+    methods,
     survival
 Imports:
     Matrix,

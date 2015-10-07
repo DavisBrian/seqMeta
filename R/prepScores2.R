@@ -210,7 +210,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     } 
     if(sparse){
       kins[kins < 2^{-5}] <- 0
-      kins <- forceSymmetric(kins)
+      kins <- Matrix::forceSymmetric(kins)
     }
     data$id <- if(is.null(colnames(kins))){
       1:ncol(kins)
@@ -426,7 +426,7 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
           error=function(e){
             stats::cov(Z0[m$y[,"status"]==1,zvar !=0,drop=FALSE])*(sum(m$y[,"status"]==1)-1)
           })
-        forceSymmetric(Matrix(mcov,sparse=TRUE))
+        Matrix::forceSymmetric(Matrix(mcov,sparse=TRUE))
       } else {
         Matrix(0, nrow=length(snp.names), ncol=length(snp.names), dimnames=list(snp.names, snp.names), sparse=TRUE)
       }
@@ -453,7 +453,7 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
         mono_snps <- intersect(inds, monos)
         mcov[mono_snps , ] <- 0
         mcov[ , mono_snps] <- 0
-        forceSymmetric(Matrix(mcov,sparse=TRUE))     
+        Matrix::forceSymmetric(Matrix(mcov,sparse=TRUE))     
       } else{
         Matrix(0, nrow=length(snp.names), ncol=length(snp.names), dimnames=list(snp.names, snp.names), sparse=TRUE)
       }
