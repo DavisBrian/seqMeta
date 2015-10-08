@@ -57,7 +57,7 @@ an object of class 'seqMeta'. This is a list, not meant for human
   \item{cov}{The variance of the scores. When no covariates are used, this is
   the LD matrix.}
   \item{n}{The number of subjects}
-  \item{maf}{The minor allele frequency}
+  \item{maf}{The alternate allele frequency}
   \item{sey}{The residual standard error.}
 }
 \description{

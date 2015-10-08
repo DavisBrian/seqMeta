@@ -61,7 +61,7 @@
 #'   \item{cov}{The variance of the scores. When no covariates are used, this is
 #'   the LD matrix.}
 #'   \item{n}{The number of subjects} 
-#'   \item{maf}{The minor allele frequency}
+#'   \item{maf}{The alternate allele frequency}
 #'   \item{sey}{The residual standard error.}
 #'   
 #' @note For survival models, the signed likelihood ratio statistic is used 
