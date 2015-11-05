@@ -97,11 +97,11 @@ prepCox <- function(Z, formula, SNPInfo=NULL, snpNames = "Name", aggregateBy = "
       zvar <- apply(Z0,2,stats::var)
       mod1 <- coxlr.fit(cbind(Z0[,zvar !=0],X), nullmodel$y, nullmodel$strata, NULL,
                         init=c(rep(0,ncol(Z0[,zvar !=0,drop=FALSE])),nullcoef),coxph.control(iter.max=0),NULL,"efron",rn)
-      mcov[which(!is.na(inds))[zvar !=0], which(!is.na(inds))[zvar !=0]] <- tryCatch(
-        ginv_s(mod1$var[1:sum(zvar !=0),1:sum(zvar !=0),drop=FALSE]),
-        error=function(e){
-          stats::cov(Z0[nullmodel$y[,"status"]==1,zvar !=0,drop=FALSE])*(sum(nullmodel$y[,"status"]==1)-1)
-        })
+      mcov[which(!is.na(inds))[zvar !=0], which(!is.na(inds))[zvar !=0]] <- if(ncol(X) == 0) mod1$var_i
+      	else mod1$var_i[1:sum(zvar !=0),1:sum(zvar !=0),drop=FALSE] - 
+      	mod1$var_i[1:sum(zvar !=0),(1+sum(zvar !=0)):(ncol(X)+sum(zvar !=0)),drop=FALSE] %*% crossprod(ginv_s(
+      	mod1$var_i[(1+sum(zvar !=0)):(ncol(X)+sum(zvar !=0)),(1+sum(zvar !=0)):(ncol(X)+sum(zvar !=0)),drop=FALSE]), 
+      	mod1$var_i[(1+sum(zvar !=0)):(ncol(X)+sum(zvar !=0)),1:sum(zvar !=0),drop=FALSE])
     }
     rownames(mcov) <- colnames(mcov) <- snp.names
     if(verbose){

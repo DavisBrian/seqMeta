@@ -60,6 +60,7 @@ coxlr.fit<-function (x, y, strata, offset, init, control, weights, method,
     }
     else {
         var <- matrix(coxfit$imat, nvar, nvar)
+        var_i <- matrix(coxfit$imat_i, nvar, nvar)
         coef <- coxfit$coef
         if (coxfit$flag < nvar) 
             which.sing <- diag(var) == 0
@@ -77,7 +78,7 @@ coxlr.fit<-function (x, y, strata, offset, init, control, weights, method,
             }
         }
         names(coef) <- dimnames(x)[[2]]
-              list(coefficients = coef, var = var, loglik = coxfit$loglik, 
+              list(coefficients = coef, var = var, var_i = var_i, loglik = coxfit$loglik, 
             score = coxfit$sctest, iter = coxfit$iter, linear.predictors = NA, 
             residuals = NA, means = coxfit$means, concordance = NA, 
             method = "coxph")

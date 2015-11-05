@@ -421,11 +421,11 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
         mod1 <- coxlr.fit(cbind(Z0[,zvar != 0 ],X), m$y, m$strata, NULL,
                           init=c(rep(0, ncol(Z0[,zvar !=0, drop=FALSE])), m$coef),
                           coxph.control(iter.max=0), NULL, "efron", m$rn)
-        mcov[inds[zvar != 0], inds[zvar != 0]] <- 
-          tryCatch(ginv_s(mod1$var[1:sum(zvar != 0), 1:sum(zvar != 0), drop=FALSE]),
-          error=function(e){
-            stats::cov(Z0[m$y[,"status"]==1,zvar !=0,drop=FALSE])*(sum(m$y[,"status"]==1)-1)
-          })
+        mcov[inds[zvar != 0], inds[zvar != 0]] <- if(ncol(X) == 0) mod1$var_i
+          else mod1$var_i[1:sum(zvar !=0),1:sum(zvar !=0),drop=FALSE] - 
+          mod1$var_i[1:sum(zvar !=0),(1+sum(zvar !=0)):(ncol(X)+sum(zvar !=0)),drop=FALSE] %*% crossprod(ginv_s(
+          mod1$var_i[(1+sum(zvar !=0)):(ncol(X)+sum(zvar !=0)),(1+sum(zvar !=0)):(ncol(X)+sum(zvar !=0)),drop=FALSE]), 
+          mod1$var_i[(1+sum(zvar !=0)):(ncol(X)+sum(zvar !=0)),1:sum(zvar !=0),drop=FALSE])
         Matrix::forceSymmetric(Matrix(mcov,sparse=TRUE))
       } else {
         Matrix(0, nrow=length(snp.names), ncol=length(snp.names), dimnames=list(snp.names, snp.names), sparse=TRUE)
