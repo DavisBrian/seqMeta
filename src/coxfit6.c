@@ -29,6 +29,8 @@
 **       u(nv)        :score vector
 **       imat(nv,nv)  :the variance matrix at beta=final
 **                      (returned as a vector)
+**	 imat_i(nv,nv):the Information matrix at beta=final
+**			(returned as a vector)
 **       loglik(2)    :loglik at beta=initial values, at beta=final
 **       sctest       :the score test at beta=initial
 **       flag         :success flag  1000  did not converge
@@ -57,7 +59,7 @@ SEXP coxfit6(SEXP maxiter2,  SEXP time2,   SEXP status2,
 	     SEXP toler2,    SEXP ibeta,    SEXP doscale2) {
     int i,j,k, person;
     
-    double **covar, **cmat, **imat;  /*ragged arrays */
+    double **covar, **cmat, **imat, **imat_i;  /*ragged arrays */
     double  wtave;
     double *a, *newbeta;
     double *a2, **cmat2;
@@ -83,7 +85,7 @@ SEXP coxfit6(SEXP maxiter2,  SEXP time2,   SEXP status2,
     int *status, *strata;
     
     /* returned objects */
-    SEXP imat2, means2, beta2, u2, loglik2;
+    SEXP imat2, imat_i2, means2, beta2, u2, loglik2;
     double *beta, *u, *loglik, *means;
     SEXP sctest2, flag2, iter2;
     double *sctest;
@@ -122,6 +124,9 @@ SEXP coxfit6(SEXP maxiter2,  SEXP time2,   SEXP status2,
     PROTECT(imat2 = allocVector(REALSXP, nvar*nvar)); 
     nprotect++;
     imat = dmatrix(REAL(imat2),  nvar, nvar);
+    PROTECT(imat_i2 = allocVector(REALSXP, nvar*nvar)); 
+    nprotect++;
+    imat_i = dmatrix(REAL(imat_i2),  nvar, nvar);
     a = (double *) R_alloc(2*nvar*nvar + 4*nvar, sizeof(double));
     newbeta = a + nvar;
     a2 = newbeta + nvar;
@@ -289,6 +294,11 @@ SEXP coxfit6(SEXP maxiter2,  SEXP time2,   SEXP status2,
 	}   /* end  of accumulation loop */
     loglik[0] = loglik[1]; /* save the loglik for iter 0 */
 
+    for (i=0; i<nvar; i++) {
+	for (j=0; j<nvar; j++) {
+      	    imat_i[i][j] = imat[i][j];
+	    }
+	}
     /* am I done?
     **   update the betas and test for convergence
     */
@@ -316,9 +326,12 @@ SEXP coxfit6(SEXP maxiter2,  SEXP time2,   SEXP status2,
 	    beta[i] *= scale[i];  /*return to original scale */
 	    u[i] /= scale[i];
 	    imat[i][i] *= scale[i]*scale[i];
+	    imat_i[i][i] /= scale[i]*scale[i];
 	    for (j=0; j<i; j++) {
 		imat[j][i] *= scale[i]*scale[j];
 		imat[i][j] = imat[j][i];
+		imat_i[j][i] /= scale[i]*scale[j];
+		imat_i[i][j] = imat_i[j][i];
 		}
 	    }
 	goto finish;
@@ -424,6 +437,11 @@ SEXP coxfit6(SEXP maxiter2,  SEXP time2,   SEXP status2,
 		}
 	    }   /* end  of accumulation loop  */
 
+	for (i=0; i<nvar; i++) {
+	    for (j=0; j<nvar; j++) {
+	        imat_i[i][j] = imat[i][j];
+	    	}
+	    }
 	/* am I done?
 	**   update the betas and test for convergence
 	*/
@@ -436,9 +454,12 @@ SEXP coxfit6(SEXP maxiter2,  SEXP time2,   SEXP status2,
 		beta[i] = newbeta[i]*scale[i];
 		u[i] /= scale[i];
 		imat[i][i] *= scale[i]*scale[i];
+		imat_i[i][i] /= scale[i]*scale[i];
 		for (j=0; j<i; j++) {
 		    imat[j][i] *= scale[i]*scale[j];
 		    imat[i][j] = imat[j][i];
+		    imat_i[j][i] /= scale[i]*scale[j];
+		    imat_i[i][j] = imat_i[j][i];
 		    }
 	    }
 	    goto finish;
@@ -472,9 +493,12 @@ SEXP coxfit6(SEXP maxiter2,  SEXP time2,   SEXP status2,
 	beta[i] = newbeta[i]*scale[i];
 	u[i] /= scale[i];
 	imat[i][i] *= scale[i]*scale[i];
+	imat_i[i][i] /= scale[i]*scale[i];
 	for (j=0; j<i; j++) {
 	    imat[j][i] *= scale[i]*scale[j];
 	    imat[i][j] = imat[j][i];
+	    imat_i[j][i] /= scale[i]*scale[j];
+	    imat_i[i][j] = imat_i[j][i];
 	    }
 	}
     *flag = 1000;
@@ -484,7 +508,7 @@ finish:
     /*
     ** create the output list
     */
-    PROTECT(rlist= allocVector(VECSXP, 8));
+    PROTECT(rlist= allocVector(VECSXP, 9));
     SET_VECTOR_ELT(rlist, 0, beta2);
     SET_VECTOR_ELT(rlist, 1, means2);
     SET_VECTOR_ELT(rlist, 2, u2);
@@ -493,10 +517,11 @@ finish:
     SET_VECTOR_ELT(rlist, 5, sctest2);
     SET_VECTOR_ELT(rlist, 6, iter2);
     SET_VECTOR_ELT(rlist, 7, flag2);
-    
+    SET_VECTOR_ELT(rlist, 8, imat_i2);
+
 
     /* add names to the objects */
-    PROTECT(rlistnames = allocVector(STRSXP, 8));
+    PROTECT(rlistnames = allocVector(STRSXP, 9));
     SET_STRING_ELT(rlistnames, 0, mkChar("coef"));
     SET_STRING_ELT(rlistnames, 1, mkChar("means"));
     SET_STRING_ELT(rlistnames, 2, mkChar("u"));
@@ -505,6 +530,7 @@ finish:
     SET_STRING_ELT(rlistnames, 5, mkChar("sctest"));
     SET_STRING_ELT(rlistnames, 6, mkChar("iter"));
     SET_STRING_ELT(rlistnames, 7, mkChar("flag"));
+    SET_STRING_ELT(rlistnames, 8, mkChar("imat_i"));
     setAttrib(rlist, R_NamesSymbol, rlistnames);
 
     unprotect(nprotect+2);
