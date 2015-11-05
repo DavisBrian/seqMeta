@@ -13,7 +13,7 @@ Depends:
     survival
 Imports:
     Matrix,
-    coxme,
+    coxme (>= 2.2-4),
     CompQuadForm
 Suggests:
     SKAT,
