@@ -177,17 +177,21 @@ impute_to_mean <- function(Z, male=NULL) {
         (colSums(!is.na(Z[male, ])) + 2*colSums(!is.na(Z[!male,])))
       
     }
+    
     allNA <- which(is.nan(MZ))
-    Z[ , allNA] <- 0
-    MZ[allNA] <- 0
+    if (length(allNA) > 0L) {
+      Z[ , allNA] <- 0
+      MZ[allNA] <- 0 
+    }
+
     ISNAZ <- is.na(Z) 
     idx <- which(ISNAZ)
-    Z[idx] <- MZ[((idx-1)%/%nrow(Z))+1]
     
-    Z
-  } else {
-    Z
-  }
+    if (length(idx) > 0L) {
+      Z[idx] <- MZ[((idx-1)%/%nrow(Z))+1]      
+    }
+  } 
+  Z
 }
 
 
