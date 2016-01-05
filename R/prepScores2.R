@@ -154,7 +154,7 @@ prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="N
   monos <- monomorphic_snps(Z)
   Z <- impute_to_mean(Z, male)  
 
-  re <- calculate_cov(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins)
+  re <- calculate_cov(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins, verbose)
   
   if (m$family == "cox") {
     zlrt <- rep.int(0, ncol(Z))
@@ -388,7 +388,14 @@ calculate_maf <- function(Z, male=NULL) {
 
 # the two tapply statements could easily be combined but then you would have a logical
 # check for each gene as to which calculation to use.  
-calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
+calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins, verbose = FALSE) {
+  env <- environment()
+  ngenes <- length(unique(SNPInfo[,aggregateBy]))
+  if ( isTRUE(identical(verbose, TRUE)) ) {
+    cat("\n Calculating covariance... Progress:\n")
+    pb <- utils::txtProgressBar(min = 0, max = ngenes, style = 3)
+    pb.i <- 0
+  }
   
   if (m$family == "cox") {
     X <- m$X
@@ -401,6 +408,14 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
         mod1 <- coxlr.fit(cbind(Z0[,zvar != 0 ],X), m$y, m$strata, NULL,
                           init=c(rep(0, ncol(Z0[,zvar !=0, drop=FALSE])), m$coef),
                           coxph.control(iter.max=0), NULL, "efron", m$rn)
+        
+        if ( isTRUE(identical(verbose, TRUE)) ) {
+          assign("pb.i", get("pb.i",env)+1,env)
+          if(get("pb.i", env)%%ceiling(ngenes/100) == 0) {
+            utils::setTxtProgressBar(get("pb",env), get("pb.i",env))
+          } 		  
+        }
+        
         mcov[inds[zvar != 0], inds[zvar != 0]] <- if(ncol(X) == 0) mod1$var_i
           else mod1$var_i[1:sum(zvar !=0),1:sum(zvar !=0),drop=FALSE] - 
           mod1$var_i[1:sum(zvar !=0),(1+sum(zvar !=0)):(ncol(X)+sum(zvar !=0)),drop=FALSE] %*% crossprod(ginv_s(
@@ -412,6 +427,7 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
       }
     },simplify = FALSE)
     
+    if ( isTRUE(identical(verbose, TRUE)) ) { close(pb) }
     re
     
   } else {
@@ -430,6 +446,14 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
         } else {
           mcov[inds, inds] <- crossprod(Z0) - crossprod(Z0,X1)%*%(AX1%*%Z0)
         }
+        
+        if ( isTRUE(identical(verbose, TRUE)) ) {
+          assign("pb.i", get("pb.i",env)+1,env)
+          if(get("pb.i", env)%%ceiling(ngenes/100) == 0) {
+            utils::setTxtProgressBar(get("pb",env), get("pb.i",env))
+          } 		  
+        }
+        
         mono_snps <- intersect(inds, monos)
         mcov[mono_snps , ] <- 0
         mcov[ , mono_snps] <- 0
@@ -439,9 +463,11 @@ calculate_cov <- function(Z, m, SNPInfo, snpNames, aggregateBy, monos, kins) {
       }
     },simplify = FALSE)
     
+    if ( isTRUE(identical(verbose, TRUE)) ) { close(pb) }
     re
   }
 }
+
 
 fill_values <- function(x, r) { 
   cmn <- intersect(names(x), names(r)) 
