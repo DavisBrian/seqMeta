@@ -13,6 +13,7 @@ seqMeta object was the "minor allele frequency" when in reality it is the
 "alternate allele frequency". (#14)
 -   make sure coxme version is at least 2.2-4.  The definition of variance 
 component estimates in lmekin changed. (#20)
--   The prepCox function to calculate the projection matrix incorrectly for 
-collinear variants in teh same gene. (#21)
+-   prepCox function calculates the projection matrix incorrectly for 
+collinear variants in the same gene. (#21)
 -   internal function impute_to_mean could generate an error. (#23)
+-   added examples to prepScores2 documentation. (#7)

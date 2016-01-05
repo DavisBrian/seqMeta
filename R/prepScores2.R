@@ -93,6 +93,42 @@
 #' \code{\link[seqMeta]{singlesnpMeta}} 
 #' \code{\link[seqMeta]{skatOMeta}} 
 #' 
+#' @examples
+#' ###load example data for two studies:
+#' ### see ?seqMetaExample
+#' data(seqMetaExample)
+#' 
+#' ####run on each cohort:
+#' cohort1 <- prepScores2(Z=Z1, y~sex+bmi, SNPInfo = SNPInfo, data = pheno1)
+#' cohort2 <- prepScores2(Z=Z2, y~sex+bmi, SNPInfo = SNPInfo, kins = kins, data = pheno2)
+#' 
+#' #### combine results:
+#' ##skat
+#' out <- skatMeta(cohort1, cohort2, SNPInfo = SNPInfo)
+#' head(out)
+#' 
+#' ##T1 test
+#' out.t1 <- burdenMeta(cohort1,cohort2, SNPInfo = SNPInfo, mafRange = c(0,0.01))
+#' head(out.t1)
+#' 
+#' ##single snp tests:
+#' out.ss <- singlesnpMeta(cohort1,cohort2, SNPInfo = SNPInfo)
+#' head(out.ss)
+#' \dontrun{
+#' ########################
+#' ####binary data
+#' cohort1 <- prepScores2(Z=Z1, formula = ybin~1, family = "binomial", 
+#'                        SNPInfo = SNPInfo, data = pheno1)
+#' out <- skatMeta(cohort1, SNPInfo = SNPInfo)
+#' head(out)
+#' 
+#' ####################
+#' ####survival data
+#' cohort1 <- prepScores2(Z=Z1, formula = Surv(time,status)~strata(sex)+bmi, 
+#'                        family = "cox", SNPInfo = SNPInfo, data = pheno1)
+#' out <- skatMeta(cohort1, SNPInfo = SNPInfo)
+#' head(out)
+#' }
 #' @export
 prepScores2 <- function(Z, formula, family="gaussian", SNPInfo=NULL, snpNames="Name", aggregateBy="gene", kins=NULL, sparse=TRUE, data=parent.frame(), male=NULL, verbose=FALSE) {
   
@@ -267,67 +303,7 @@ create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, dat
     stop("Unknown family type.  Only 'gaussian', 'binomial', and 'cox' are currently supported.")
   }
 }
-# create_model <- function(formula, family="gaussian", kins=NULL, sparse=TRUE, data=parent.frame()) {
-#   
-#   if (!is.character(family) || is.function(family) || is.family(family)) {
-#     fam <- family$family   
-#   } else {
-#     fam=family
-#   }
-#   if (is.null(fam)) {
-#     print(fam)
-#     stop("'family' not recognized")
-#   }
-#   
-#   if(!is.null(kins)){
-#     if (fam != "gaussian") {
-#       stop("Family data is currently only supported for continuous outcomes.")
-#     } 
-#     if(sparse){
-#       kins[kins < 2^{-5}] <- 0
-#       kins <- forceSymmetric(kins)
-#     }
-#     data$id <- if(is.null(colnames(kins))){
-#       1:ncol(kins)
-#     } else {
-#       colnames(kins)
-#     }    
-#     
-#     nullmodel <- lmekin(formula=update(formula, '~.+ (1|id)'), data=data, varlist = 2*kins,method="REML")  
-#     
-#     nullmodel$theta <- c(nullmodel$vcoef$id*nullmodel$sigma^2,nullmodel$sigma^2)   
-#     SIGMA <- nullmodel$theta[1] * 2 * kins + nullmodel$theta[2] * Diagonal(nrow(kins))   
-#     s2 <- sum(nullmodel$theta)
-#     
-#     #rotate data:
-#     nullmodel$family$var <- function(x){1}
-#     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
-#     X1 <- sef*model.matrix(lm(formula,data=data)) 
-#     res <- as.vector(nullmodel$res)* s2 / nullmodel$theta[2]  
-#     Om_i <- solve(SIGMA/s2)
-#     # optimize calculations
-#      tX1_Om_i <- crossprod(X1, Om_i)
-#      AX1 <- with(svd(tX1_Om_i%*%X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(v[, d > 0,drop=FALSE])))%*%tX1_Om_i
-#     
-#     check_dropped_subjects(res, formula)
-#     list(res=res, family=fam, n=nrow(X1), sey=sqrt(s2), sef=sef, X1=X1, AX1=AX1, Om_i=Om_i)
-#   } else {
-#     nullmodel <- glm(formula=formula, family=fam, data=data)
-#     res <- residuals(nullmodel, type = "response")  
-#     check_dropped_subjects(res, formula) 
-#     sef <- sqrt(nullmodel$family$var(nullmodel$fitted))
-#     X1 <- sef*model.matrix(nullmodel) 
-#     AX1 <- with(svd(X1),  v[,d > 0,drop=FALSE]%*%( (1/d[d>0])*t(u[, d > 0,drop=FALSE])))     
-#     sey <- if (fam == "gaussian") {
-#       sqrt(var(res)*(nrow(X1) - 1)/(nrow(X1) - ncol(X1)) )
-#     } else if (fam == "binomial") {
-#       1
-#     } else {
-#       stop("Only family type 'binomial' and 'gaussian' are currently supported.")
-#     }   
-#     list(res=res, family=fam, n=nrow(X1), sey=sey, sef=sef, X1=X1, AX1=AX1)
-#   }  
-# }
+
 
 check_dropped_subjects <- function(res, formula) {
   if (!is.null(stats::na.action(res))) { 

@@ -116,6 +116,43 @@ For survival models, the signed likelihood ratio statistic is used
   
   Please see the package vignette for more details.
 }
+\examples{
+###load example data for two studies:
+### see ?seqMetaExample
+data(seqMetaExample)
+
+####run on each cohort:
+cohort1 <- prepScores2(Z=Z1, y~sex+bmi, SNPInfo = SNPInfo, data = pheno1)
+cohort2 <- prepScores2(Z=Z2, y~sex+bmi, SNPInfo = SNPInfo, kins = kins, data = pheno2)
+
+#### combine results:
+##skat
+out <- skatMeta(cohort1, cohort2, SNPInfo = SNPInfo)
+head(out)
+
+##T1 test
+out.t1 <- burdenMeta(cohort1,cohort2, SNPInfo = SNPInfo, mafRange = c(0,0.01))
+head(out.t1)
+
+##single snp tests:
+out.ss <- singlesnpMeta(cohort1,cohort2, SNPInfo = SNPInfo)
+head(out.ss)
+\dontrun{
+########################
+####binary data
+cohort1 <- prepScores2(Z=Z1, formula = ybin~1, family = "binomial", 
+                       SNPInfo = SNPInfo, data = pheno1)
+out <- skatMeta(cohort1, SNPInfo = SNPInfo)
+head(out)
+
+####################
+####survival data
+cohort1 <- prepScores2(Z=Z1, formula = Surv(time,status)~strata(sex)+bmi, 
+                       family = "cox", SNPInfo = SNPInfo, data = pheno1)
+out <- skatMeta(cohort1, SNPInfo = SNPInfo)
+head(out)
+}
+}
 \author{
 Brian Davis, Arie Voorman, Jennifer Brody
 }
