@@ -4,29 +4,22 @@ This release fixes a couple edge cases which were handled incorrectly.  The mini
 
 ## Test environments
 * win-builder (devel and release)
-* ubuntu 12.04 (on travis-ci) R 3.2.2, 3.2.3, 
-* OSX (on travis-ci) R 3.2.2, 3.2.3, 
-* Windows (on AppVeyor), R-devel
+* ubuntu 12.04 (on travis-ci) R 3.2.3
+* OSX (on travis-ci) R 3.2.3
+* Windows (on AppVeyor), 3.2.3, 3.3.0
 * local Windows 7 install, R 3.2.2
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
-There was 1 NOTE:
+There was 1 NOTE on Win-Builder:
 
-New maintainer:
-  Brian Davis <Brian.Davis281@gmail.com>
-  
-Old maintainer(s):
-  Arie Voorman <arie.voorman@gmail.com>
-  
-On Win-builder along with this NOTE was 
+* checking CRAN incoming feasibility ... NOTE
+  Possibly mis-spelled words in DESCRIPTION:
+    SKAT (14:43)
 
 
-Possibly mis-spelled words in DESCRIPTION:
-  SKAT (14:43)
-  
-SKAT is not mis-spelled it is a comonly used acronym in the genetics field.
+SKAT is not mis-spelled it is a commonly used acronym in the genetics field.
 
 ## Downstream dependencies
 There are no downstream dependencies.
