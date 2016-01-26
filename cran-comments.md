@@ -1,15 +1,13 @@
 ## Release Summary
 
-New maintainer for this package.  Arie (the old maintainer) is no longer active in this field.  A copy of our email exchange is at the bottom.  I have asked Arie to email CRAN@R-project.org to verify the change in maintainer. As the new maintainer I have read and agree to the CRAN policies.
-
-This release fixes a couple edge cases which were handled incorrectly.  One new function was added.  The minimum R version was bumped to 3.1.0 so that we could take advantage of the 'anyNA' function.
+This release fixes a couple edge cases which were handled incorrectly.  The minimum 'coxme' package version was bumped to 2.2-4 as it changed the definition of variance component estimates in lmekin. Minor changes to user documatation and examples were also made.
 
 ## Test environments
-* local Windows 7 install, R 3.2.1
-* local OS X install, R 3.2.1
 * win-builder (devel and release)
-* ubuntu 12.04 (on travis-ci) R 3.2.1
+* ubuntu 12.04 (on travis-ci) R 3.2.2, 3.2.3, 
+* OSX (on travis-ci) R 3.2.2, 3.2.3, 
 * Windows (on AppVeyor), R-devel
+* local Windows 7 install, R 3.2.2
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 

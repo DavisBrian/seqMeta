@@ -32,14 +32,14 @@ seqMeta 1.6.5
 -------------
 
 -   Explicitly passed formula to check\_format\_skat. Previously relied on calling environment to define formula.
--   Return if standard error is 0 in burdenMeta and singlesnpMeta.
+-   Return `NA` if standard error is 0 in burdenMeta and singlesnpMeta.
 -   prepScores and prepScores2 scaled theta incorrectly when using a kinship matrix.
 -   Minimum coxme version moved to 2.2-4.
 -   prepCox function calculates the projection matrix incorrectly for collinear variants in the same gene.
 -   Fixed impute\_to\_mean from producing an error in odd circumstances.
 -   Added verbose functionality to prepScores2.
 -   Added examples to prepScores2 documentation.
--   Explicietly import all functions in packages other than base to comply with new CRAN policy.
+-   Explicitly import all functions in packages other than base to comply with new CRAN policy.
 
 seqMeta 1.6.0
 -------------
