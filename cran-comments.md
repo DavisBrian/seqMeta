@@ -1,6 +1,6 @@
 ## Release Summary
 
-This release fixes a couple edge cases which were handled incorrectly.  The minimum 'coxme' package version was bumped to 2.2-4 as it changed the definition of variance component estimates in lmekin. Minor changes to user documatation and examples were also made.
+This release fixes a couple edge cases which were handled incorrectly.  The minimum 'coxme' package version was bumped to 2.2-4 as it changed the definition of variance component estimates in lmekin. Minor changes to user documentation and examples were also made.
 
 ## Test environments
 * win-builder (devel and release)
