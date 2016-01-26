@@ -1,4 +1,4 @@
-seqMeta 1.6.0.9xxx
+seqMeta 1.6.5
 ==================
 
 -   Updated to comply with CRAN policy to explicitly import all functions in 
