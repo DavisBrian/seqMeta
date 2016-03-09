@@ -9,7 +9,8 @@ c.skatCohort <- function(...){
 	class(re) <- "skatCohort"
 	re
 	}
-	
+
+#' @export
 c.seqMeta <- function(...){
 	ev <- environment()
   cl <- match.call()

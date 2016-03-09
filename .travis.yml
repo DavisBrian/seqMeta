@@ -1,6 +1,7 @@
 language: r
 warnings_are_errors: true
-sudo: required
+sudo: false
+cache: packages
 
 before_install: echo "options(repos = c(CRAN='http://cran.r-project.org'))" > ~/.Rprofile
 

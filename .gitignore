@@ -3,3 +3,4 @@
 .RData
 *.dll
 *.o
+*.so
