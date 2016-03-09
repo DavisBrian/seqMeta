@@ -1,4 +1,8 @@
 language: r
+r:
+  - oldrel
+  - release
+  - devel
 warnings_are_errors: true
 sudo: false
 cache: packages
@@ -12,10 +16,6 @@ os:
 env:
  global:
    - CRAN: http://cran.rstudio.com
- matrix:
-   - RVERSION=oldrel
-   - RVERSION=release
-   - RVERSION=devel
 
 notifications:
   email:
