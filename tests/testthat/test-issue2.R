@@ -149,7 +149,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores binomial
 })
 
 test_that("Monomophic snps (all 3 cases) handled correctly - prepCox)", {
-  cohort1 <- prepCox(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, SNPInfo=si, data=pheno1)
+  expect_warning(cohort1 <- prepCox(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, SNPInfo=si, data=pheno1))
   
   # check maf
   expect_equal(cohort1$gene1$maf[monos[1]], 0, check.attributes=FALSE)
@@ -196,7 +196,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepCox)", {
   expect_true(is.infinite(out[out$Name == monos[3], "se.cohort1"])) 
   
   #test prepScores2 equivalency
-  ps2 <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si, data =pheno1)
+  expect_warning(ps2 <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si, data =pheno1))
   expect_equivalent(ps2, cohort1)
 })
 
@@ -297,7 +297,7 @@ test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 binomia
 })
 
 test_that("Monomophic snps (all 3 cases) handled correctly - prepScores2 survival)", {
-  cohort1 <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si, data =pheno1)
+  expect_warning(cohort1 <- prepScores2(Z=Zgene1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si, data =pheno1))
   
   # check maf
   expect_equal(cohort1$gene1$maf[monos[1]], 0, check.attributes=FALSE)

@@ -22,16 +22,16 @@ test_that("basic examples run)", {
   expect_equal(cohort1, cohort2)
   
   # survival case
-  cohort1 <- prepCox(Z=Z1, Surv(time,status)~strata(sex)+bmi, SNPInfo=SNPInfo, data=pheno1)
-  cohort2 <- prepScores2(Z=Z1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=SNPInfo, data=pheno1)
+  expect_warning(cohort1 <- prepCox(Z=Z1, Surv(time,status)~strata(sex)+bmi, SNPInfo=SNPInfo, data=pheno1))
+  expect_warning(cohort2 <- prepScores2(Z=Z1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=SNPInfo, data=pheno1))
   expect_equivalent(cohort1, cohort2)
 })
 
-
+si <- SNPInfo
+rm(SNPInfo)
 
 test_that("Verify examples run with non-standard names)", {
-  si <- SNPInfo
-  rm(SNPInfo)
+
   # gaussian case
   cohort1 <- prepScores(Z=Z1, y~sex+bmi, SNPInfo=si, data=pheno1)
   cohort2 <- prepScores2(Z=Z1, y~sex+bmi, SNPInfo=si, data=pheno1)
@@ -45,11 +45,11 @@ test_that("Verify examples run with non-standard names)", {
   
   # binomial case
   cohort1 <- prepScores(Z=Z1, ybin~1, family=binomial(), SNPInfo=si, data=pheno1)
-  cohort2 <- prepScores2(Z=Z1, ybin~1, family="binomial", SNPInfo=si, data=pheno1)  
+  cohort2 <- prepScores2(Z=Z1, ybin~1, family="binomial", SNPInfo=si, data=pheno1)
   expect_equal(cohort1, cohort2)
   
   # survival case
-  cohort1 <- prepCox(Z=Z1, Surv(time,status)~strata(sex)+bmi, SNPInfo=si, data=pheno1)
-  cohort2 <- prepScores2(Z=Z1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si, data=pheno1)
+  expect_warning(cohort1 <- prepCox(Z=Z1, Surv(time,status)~strata(sex)+bmi, SNPInfo=si, data=pheno1))
+  expect_warning(cohort2 <- prepScores2(Z=Z1, Surv(time,status)~strata(sex)+bmi, family="cox", SNPInfo=si, data=pheno1))
   expect_equivalent(cohort1, cohort2)
 })
