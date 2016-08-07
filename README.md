@@ -28,6 +28,11 @@ You can install:
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues).
 
+seqMet 1.6.5.9990
+-----------------
+
+-   Export c.seqMeta
+
 seqMeta 1.6.5
 -------------
 
@@ -51,7 +56,7 @@ seqMeta 1.6.0
 -   Monomorphic snps with caf != 0 were handled incorrectly.
 -   Binomial models when genotypes imputed outside of seqMeta did not match when models were imputed by seqMeta. Very slight differences in the covariance structure.
 -   Replaced `any(is.na(Z))` with `anyNA(Z)`
--   Range test now checks that genotypes are [0, 2].
+-   Range test now checks that genotypes are \[0, 2\].
 -   SNPInfo in seqMetaExamples had incorrect type of snpNames and aggregateBy.
 -   Automatically convert (with warning) aggregateBy and snpName columns to type character if they are not already.
 -   Added new function prepScores2

@@ -37,6 +37,10 @@ install.packages("seqMeta")
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues). 
 
+## seqMet 1.6.5.9990
+
+* Export c.seqMeta
+
 ## seqMeta 1.6.5
 
 
