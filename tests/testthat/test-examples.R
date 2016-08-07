@@ -27,8 +27,8 @@ test_that("basic examples run)", {
   expect_equivalent(cohort1, cohort2)
 })
 
+
 si <- SNPInfo
-rm(SNPInfo)
 
 test_that("Verify examples run with non-standard names)", {
 
