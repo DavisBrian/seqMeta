@@ -1,3 +1,10 @@
+seqMeta 1.6.6
+==================
+
+-   c.seqMeta was not exported (#26)
+-   version 1.42 of CompQuadForm changed the *name* of the results  (#28)
+
+
 seqMeta 1.6.5
 ==================
 
