@@ -14,12 +14,12 @@ pchisqsum2 <- function(Q, lambda, delta = rep(0,length(lambda)), method=c("saddl
 	}
 	
   if(method == "integration"){
-		tmp <- davies(q=Q, lambda=lambda, delta=delta, acc=acc)
+		tmp <- CompQuadForm::davies(q=Q, lambda=lambda, delta=delta, acc=acc)
 		if(tmp$ifault > 0){
 		  lambda <- zapsmall(lambda, digits=2)
 		  delta <- delta[lambda > 0]
 		  lambda <- lambda[lambda > 0]
-		  tmp <- farebrother(q=Q,lambda=lambda,delta=delta)
+		  tmp <- CompQuadForm::farebrother(q=Q,lambda=lambda,delta=delta)
 #		  tmp$Qq <- tmp$res
 		  ## version 1.4.2 of CompQuadForm changed the *name* of the result. Grr.
 		  if ("Qq" %in% names(tmp)) tmp$Qq else tmp$res
@@ -28,7 +28,7 @@ pchisqsum2 <- function(Q, lambda, delta = rep(0,length(lambda)), method=c("saddl
 	}
 	
   if(method == "liu"){
-		tmp <- liu(Q, lambda=lambda, delta=delta )
+		tmp <- CompQuadForm::liu(Q, lambda=lambda, delta=delta )
 		return(list(p = tmp, errflag = 0))
 	}
 }
