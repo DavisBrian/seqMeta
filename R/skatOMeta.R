@@ -189,7 +189,7 @@ skatOMeta <- function(..., SNPInfo=NULL, skat.wts=function(maf){stats::dbeta(maf
     ri <- 0
     snp.names.list <- split(SNPInfo[,snpNames],SNPInfo[,aggregateBy])
 	for(gene in genelist){		
-		
+	  
 		ri <- ri+1
 		nsnps.sub <- length(snp.names.list[[gene]])
 		
