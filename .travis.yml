@@ -6,6 +6,9 @@ r:
   - release
   - devel
 
+before_install:
+  - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then mkdir ~/.R && echo 'CXX1X=g++ -std=c++0x -g -O2 -fPIC' > ~/.R/Makevars; fi
+
 warnings_are_errors: true
 
 os:
