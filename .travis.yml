@@ -10,6 +10,9 @@ os:
   - linux
   - osx
 
+r_github_packages:
+  - hadley/devtools
+  
 warnings_are_errors: true
 
 notifications:
