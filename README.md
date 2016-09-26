@@ -28,8 +28,8 @@ You can install:
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues).
 
-seqMet 1.6.5.9991
------------------
+seqMet 1.6.6
+------------
 
 -   Export c.seqMeta
 -   Fixed version 1.4.2 of CompQuadForm changing the *name* of the result.
