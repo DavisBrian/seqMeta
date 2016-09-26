@@ -2,7 +2,7 @@
 seqMeta
 =======
 
-[![Build Status](https://travis-ci.org/DavisBrian/seqMeta.svg?branch=master)](https://travis-ci.org/DavisBrian) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/DavisBrian/seqMeta?branch=master)](https://ci.appveyor.com/project/DavisBrian/seqMeta) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/seqMeta)](http://cran.r-project.org/package=seqMeta)
+[![Build Status](https://travis-ci.org/DavisBrian/seqMeta.svg?branch=master)](https://travis-ci.org/DavisBrian) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/DavisBrian/seqMeta?branch=master)](https://ci.appveyor.com/project/DavisBrian/seqMeta) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/seqMeta)](https://CRAN.R-project.org/package=seqMeta)
 
 Meta-Analysis of Region-Based Tests of Rare DNA Variants
 
@@ -32,7 +32,8 @@ seqMet 1.6.6
 ------------
 
 -   Export c.seqMeta
--   Fixed version 1.4.2 of CompQuadForm changing the *name* of the result.
+-   Fixed version 1.4.2 of CompQuadForm changing the *name* of the result
+-   Fixed canonical form CRAN url
 
 seqMeta 1.6.5
 -------------
