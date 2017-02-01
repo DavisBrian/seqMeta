@@ -14,7 +14,7 @@ Depends:
 Imports:
     Matrix,
     coxme (>= 2.2-4),
-    CompQuadForm
+    CompQuadForm (>= 1.4.2)
 Suggests:
     SKAT,
     kinship2,
