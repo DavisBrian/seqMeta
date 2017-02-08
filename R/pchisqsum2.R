@@ -20,11 +20,11 @@ pchisqsum2 <- function(Q, lambda, delta = rep(0,length(lambda)), method=c("saddl
 		  delta <- delta[lambda > 0]
 		  lambda <- lambda[lambda > 0]
 		  tmp <- CompQuadForm::farebrother(q=Q,lambda=lambda,delta=delta)
-#		  tmp$Qq <- tmp$res
-		  ## version 1.4.2 of CompQuadForm changed the *name* of the result. Grr.
-		  if ("Qq" %in% names(tmp)) tmp$Qq else tmp$res
 		}
-    return(list(p = tmp$Qq, errflag = 0))
+      #		  tmp$Qq <- tmp$res
+		  ## version 1.4.2 of CompQuadForm changed the *name* of the result. Grr.
+		Qq <- if ("Qq" %in% names(tmp)) tmp$Qq else tmp$res
+    return(list(p = Qq, errflag = 0))
 	}
 	
   if(method == "liu"){
