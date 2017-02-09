@@ -28,6 +28,11 @@ You can install:
 
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/DavisBrian/seqMeta/issues).
 
+seqMeta 1.6.7
+-------------
+
+-   CRAN win-oldrel build error fixed.
+
 seqMeta 1.6.6
 -------------
 
