@@ -10,5 +10,13 @@ This release fixes CRAN Windows old-release build error.
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
+There was 1 NOTE on Win-Builder:
+
+* checking CRAN incoming feasibility ... NOTE
+  Possibly mis-spelled words in DESCRIPTION:
+  SKAT (14:43)
+
+SKAT is not mis-spelled it is a commonly used acronym in the genetics field.
+
 ## Downstream dependencies
 There are no downstream dependencies.
