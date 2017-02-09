@@ -1,6 +1,12 @@
 language: r
 sudo: false
 cache: packages
+
+#env
+env:
+  global:
+  - _R_CHECK_FORCE_SUGGESTS_=false
+  
 r:
   - oldrel
   - release
