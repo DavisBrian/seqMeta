@@ -12,4 +12,3 @@ Computes necessary information to meta analyze region-based tests for rare genet
 To learn more about seqMeta, start with the vignettes:
 \code{browseVignettes(package = "seqMeta")}
 }
-

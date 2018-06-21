@@ -170,9 +170,6 @@ legend("bottomright", lwd=2,lty=2,col=2,legend="Bonferroni correction")
 }
 
 }
-\author{
-Arie Voorman, Jennifer Brody
-}
 \references{
 Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X.
   (2011) Rare Variant Association Testing for Sequencing Data Using the
@@ -188,4 +185,6 @@ Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X.
 \code{\link{burdenMeta}} 
 \code{\link{singlesnpMeta}}
 }
-
+\author{
+Arie Voorman, Jennifer Brody
+}

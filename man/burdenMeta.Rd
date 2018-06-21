@@ -95,12 +95,11 @@ plot(y=out$p,x=burden.p, ylab = "burden meta p-values", xlab = "complete data p-
 }
 
 }
-\author{
-Arie Voorman, Jennifer Brody
-}
 \seealso{
 \code{\link{skatMeta}}
 \code{\link{skatOMeta}}
 \code{\link{prepScores}}
 }
-
+\author{
+Arie Voorman, Jennifer Brody
+}

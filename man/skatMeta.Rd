@@ -136,9 +136,6 @@ abline(0,1)
 }
 
 }
-\author{
-Arie Voorman, Jennifer Brody
-}
 \references{
 Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X.
   (2011) Rare Variant Association Testing for Sequencing Data Using the
@@ -151,4 +148,6 @@ Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X.
 \code{\link{singlesnpMeta}}
 \code{\link{skatOMeta}}
 }
-
+\author{
+Arie Voorman, Jennifer Brody
+}

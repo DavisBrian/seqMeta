@@ -149,9 +149,6 @@ out <- skatMeta(cohort1, SNPInfo = SNPInfo)
 head(out)
 }
 }
-\author{
-Arie Voorman, Jennifer Brody
-}
 \references{
 Wu, M.C., Lee, S., Cai, T., Li, Y., Boehnke, M., and Lin, X. (2011) Rare Variant Association Testing for Sequencing Data Using the Sequence Kernel Association Test (SKAT). American Journal of Human Genetics.
 
@@ -162,4 +159,6 @@ Lin, DY and Zeng, D. On the relative efficiency of using summary statistics vers
 \seealso{
 \code{\link[seqMeta]{skatMeta}} \code{\link[seqMeta]{burdenMeta}} \code{\link[seqMeta]{singlesnpMeta}} \code{\link[seqMeta]{skatOMeta}} \code{\link[survival]{coxph}}
 }
-
+\author{
+Arie Voorman, Jennifer Brody
+}

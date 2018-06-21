@@ -1,7 +1,7 @@
 Package: seqMeta
 Type: Package
 Title: Meta-Analysis of Region-Based Tests of Rare DNA Variants
-Version: 1.6.7
+Version: 1.6.7.1
 Date: 2016-09-24
 Author: Arie Voorman, Jennifer Brody, Han Chen, Thomas Lumley, Brian Davis
 Maintainer: Brian Davis <Brian.Davis281@gmail.com>
@@ -24,4 +24,4 @@ Description: Computes necessary information to meta analyze region-based
     performs meta analysis.
 License: GPL (>= 2)
 NeedsCompilation: yes
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

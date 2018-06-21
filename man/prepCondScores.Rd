@@ -99,13 +99,12 @@ out.ss <- singlesnpMeta(cohort1.adj,cohort2.adj, SNPInfo = SNPInfo.sub)
 head(out.ss)
 
 }
-\author{
-Arie Voorman, Jennifer Brody
-}
 \seealso{
 \code{\link{prepScores}}
 \code{\link{skatMeta}}
 \code{\link{burdenMeta}}
 \code{\link{singlesnpMeta}}
 }
-
+\author{
+Arie Voorman, Jennifer Brody
+}

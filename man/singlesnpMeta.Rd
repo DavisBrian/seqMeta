@@ -90,9 +90,6 @@ out3 <- apply(bigZ, 2, function(z) {
       ylab="meta-analysis (Score)", main="p-values"); abline(0,1)
  }
 }
-\author{
-Arie Voorman, Jennifer Brody
-}
 \references{
 Lin, DY and Zeng, D. On the relative efficiency of using summary statistics versus individual-level data in meta-analysis. Biometrika. 2010.
 }
@@ -102,4 +99,6 @@ Lin, DY and Zeng, D. On the relative efficiency of using summary statistics vers
 \code{\link{skatMeta}}
 \code{\link{skatOMeta}}
 }
-
+\author{
+Arie Voorman, Jennifer Brody
+}
