@@ -1,6 +1,6 @@
 ---
-name: Bug report
-about: Create a bug report to help us improve
+name: Issue template
+about: Describe this issue template's purpose here.
 
 ---
 
